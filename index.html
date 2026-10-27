@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#111111" name="theme-color"/><link href="./manifest.webmanifest" rel="manifest"/>
-<title>Climb 7A — v0.9</title>
+<title>Climb 7A — v0.9.1</title>
 <style>
 :root{--bg:#f4f4f1;--card:#fff;--ink:#151515;--muted:#666;--line:#ddd;--ok:#1d6b3b;--warn:#9a6400}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
@@ -30,7 +30,7 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 
 .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.calday{padding:9px 2px;min-height:83px;background:#f0f0f0;color:#111;border:1px solid #ddd;border-radius:10px;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:space-around;overflow-wrap:anywhere}.calday.selected{outline:3px solid #111}.calday.ok{background:#d8f4df}.calday.partial{background:#fff0c9}.calday.skip{background:#e9e9e9;color:#666}.calday.move{background:#dce9ff}.calday b{font-size:15px}.mini{font-size:11px;color:#555}.editrow{border-bottom:1px solid #eee;padding:10px 0}.editrow textarea{margin:5px 0}.coachbox{background:#f2f7f3;border-left:4px solid #266847;border-radius:12px;padding:12px;margin:8px 0}.wraprow{display:flex;flex-wrap:wrap;gap:6px}.wraprow button{font-size:12px} 
 
-/* v0.9: barra compatta e sezioni espandibili */
+/* v0.9.1: barra compatta e sezioni espandibili */
 .app{padding-bottom:calc(94px + env(safe-area-inset-bottom,0px))}
 header{padding:11px 16px 9px}.brand{font-size:23px}.sub{font-size:11px}.profilebar{margin-top:6px}.profilebar select{padding:8px;margin:0}.profilebar button{padding:9px;font-size:12px}
 nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-radius:18px 18px 0 0}
@@ -44,7 +44,7 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 </style>
 </head>
 <body><div class="app">
-<header><div class="brand">CLIMB 7A</div><div class="sub">v0.9 · AD personalizzato</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.9.1 · AD personalizzato</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
 <main>
 <section class="screen active" id="home">
 <div class="hero"><div class="small">OBIETTIVO DEL CICLO</div><div class="big">7a ONSIGHT</div><div class="progress"><div id="goalbar"></div></div><div class="small" id="goalText">Base: 6a+ OS · 6c lavorato</div></div>
@@ -119,11 +119,11 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <div class="card"><h3>Applica una proposta AD</h3><p class="small">Le modifiche valgono solo per la quantità dell’esercizio scelto e per la seduta indicata. Nessuna modifica automatica.</p>
 <div class="status partial" id="adDecision"></div>
 <label for="adDay">Giorno da adattare</label><select id="adDay" onchange="renderADProposal()"></select>
-<label for="adExercise">Esercizio (tipo invariato)</label><select id="adExercise" onchange="renderADProposalPreview()"></select>
+<label for="adExercise">Esercizio (tipo invariato)</label><select id="adExercise" onchange="prepareADSuggestion()"></select>
 <label for="adAmount">Nuova quantità</label><input type="number" id="adAmount" min="0.5" max="1000" step="0.5" placeholder="es. 4" oninput="renderADProposalPreview()"/>
 <label for="adUnit">Unità</label><select id="adUnit" onchange="renderADProposalPreview()"><option value="ripetizioni">Ripetizioni</option><option value="secondi">Secondi</option><option value="minuti">Minuti</option></select>
-<p class="small" id="adPreview"></p><div class="row"><button onclick="applyADProposal()" type="button">Conferma modifica</button><button class="secondary" onclick="dismissADProposal()" type="button">Ignora proposta</button></div>
-<p class="small">Per aumentare un carico zavorrato non usare questo campo: la quantità riguarda ripetizioni o tempo. Eventuali variazioni della zavorra richiedono una valutazione specifica.</p></div>
+<p class="small" id="adPreview"></p><div class="row"><button class="secondary" onclick="saveADGuidance()" type="button">Salva indicazione AD</button><button onclick="applyADProposal()" type="button">Conferma modifica</button><button class="secondary" onclick="dismissADProposal()" type="button">Ignora proposta</button></div>
+<p class="small" id="adSavedNote"></p><details class="collapsible"><summary>Ultime indicazioni salvate</summary><div id="adHistory" class="small"></div></details><p class="small">Per aumentare un carico zavorrato non usare questo campo: la quantità riguarda ripetizioni o tempo. Eventuali variazioni della zavorra richiedono una valutazione specifica.</p></div>
 <div class="card"><h3>Monitoraggio dedicato</h3><p class="small">Dolore e recupero sono raccolti in una schermata distinta per mantenere semplice il consuntivo.</p><button onclick="show('paintracker')">Apri Salute e recupero</button></div><p class="small">Indicazioni prudenziali e orientative; nessuna variazione automatica del piano.</p></section>
 <section class="screen" id="profiles"><h2>Profili atleti</h2>
 <div class="notice">Ogni persona ha dati, test, vie, sedute completate e settimana del programma indipendenti. I dati sono salvati su questo dispositivo, non sincronizzati tra telefoni.</div>
@@ -135,7 +135,7 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <section class="screen" id="more"><h2>Altro</h2>
 <div class="card"><h3>Profilo e programma</h3><div class="menu-stack"><button onclick="show('profiles')">👥 Profili atleti</button><button onclick="show('tests')">📋 Test e retest</button><button onclick="show('climb')">🧗 Diario vie</button></div></div>
 <div class="card"><h3>AD e benessere</h3><div class="menu-stack"><button onclick="show('adpage')">◉ Analisi AD completa</button><button onclick="show('paintracker')">♡ Salute e recupero</button></div></div>
-<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.9. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
+<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.9.1. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
 <nav><button aria-current="page" aria-label="Home" class="active" id="nh" onclick="show('home')" type="button"><span aria-hidden="true" class="nav-icon">⌂</span><span class="nav-label">Home</span></button><button aria-label="Calendario" id="np" onclick="show('plan')" type="button"><span aria-hidden="true" class="nav-icon">▦</span><span class="nav-label">Calendario</span></button><button aria-label="Allenati" id="nw" onclick="loadWorkout()" type="button"><span aria-hidden="true" class="nav-icon">◉</span><span class="nav-label">Allenati</span></button><button aria-label="Progressi" id="npr" onclick="show('progress')" type="button"><span aria-hidden="true" class="nav-icon">▥</span><span class="nav-label">Progressi</span></button><button aria-label="Altro" id="nm" onclick="show('more')" type="button"><span aria-hidden="true" class="nav-icon">☰</span><span class="nav-label">Altro</span></button></nav><div class="toast" id="toast"></div>
 </div>
 <script>
@@ -416,7 +416,7 @@ function renderPainModule(){
  $('painHistory').innerHTML=rows.length?rows.slice(-12).reverse().map(x=>`<div class="editrow"><b>${esc(x.date)} · ${esc(x.area)} · ${esc(x.intensity)}/10</b> · ${x.state==='present'?'Presente':'Risolto'}<br>${esc(x.detail||'')} ${esc(x.trigger||'')} ${esc(x.note||'')}</div>`).join(''):'Nessuna rilevazione nel modulo.';
 }
 
-// v0.9: riepilogo e conferma delle modifiche, separati per profilo.
+// v0.9.1: riepilogo e conferma delle modifiche, separati per profilo.
 function adDecisionKey(){return scopedKey('ad_decisions')}
 function adTarget(){return {week:selectedWeek,day:Number($('adDay')?.value||selectedDay)}}
 function weeklyAD(){
@@ -428,38 +428,76 @@ function weeklyAD(){
  const avgFatigue=fatigue.length?(fatigue.reduce((a,b)=>a+Number(b.fatigueEnd),0)/fatigue.length).toFixed(1):'—';
  return `${completed.length} completate · ${partial.length} parziali · ${skipped} saltate. RPE medio ${mean}/10 · fatica finale media ${avgFatigue}/10. ${activePain()?'Dolore attuale segnalato: sospendere progressioni delle dita.':'Confronta sempre la risposta delle sedute comparabili prima di progredire.'}`;
 }
+// La proposta numerica è formulata solo quando il testo o una dose personalizzata
+// forniscono una quantità affidabile. Mai inventare serie/ripetizioni/carichi.
+function adBaseline(w,d,i){
+ const saved=customDose(w,d)[i];
+ if(saved&&Number(saved.amount)>0)return {amount:Number(saved.amount),unit:saved.unit,source:'dose salvata'};
+ const text=baseExFor(d,w)[i]||'';
+ let m=text.match(/(?:^|[^\d])\d+\s*[×x]\s*(\d+(?:[.,]\d+)?)\s*(?:ripetizioni|reps?|\b(?:corpo libero|con \+))/i);
+ if(m)return {amount:Number(m[1].replace(',','.')),unit:'ripetizioni',source:'piano base'};
+ m=text.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(?:minuti|min\b)/i);
+ if(m)return {amount:Number(m[1].replace(',','.')),unit:'minuti',source:'piano base'};
+ m=text.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(?:secondi|sec\b|[″"])/i);
+ if(m)return {amount:Number(m[1].replace(',','.')),unit:'secondi',source:'piano base'};
+ return null;
+}
 function renderADProposal(){
  const old=$('adDay').value;
  $('adDay').innerHTML=Array.from({length:7},(_,i)=>`<option value="${i+1}">${T[i+1][0]} · ${esc(T[i+1][2])}</option>`).join('');
- $('adDay').value=old||String(selectedDay);
+ $('adDay').value=(old&&Number(old)>=1&&Number(old)<=7)?old:String(selectedDay);
  const d=Number($('adDay').value),list=baseExFor(d,selectedWeek),previous=$('adExercise').value;
  $('adExercise').innerHTML=list.map((x,i)=>`<option value="${i}">${i+1}. ${esc(x.length>83?x.slice(0,80)+'…':x)}</option>`).join('');
- $('adExercise').value=Number(previous)<list.length?previous:'0';
- const saved=customDose(selectedWeek,d)[Number($('adExercise').value)];
- $('adAmount').value=saved?.amount??'';$('adUnit').value=saved?.unit||'ripetizioni';
- const assessment=adAssess(load(KS),activeProfile(),d);
- $('adDecision').textContent=assessment.heading+'. '+assessment.basis;
+ $('adExercise').value=(previous!==''&&Number(previous)<list.length)?previous:'0';
+ prepareADSuggestion();renderADHistory();
+}
+function prepareADSuggestion(){
+ const d=Number($('adDay').value),i=Number($('adExercise').value);
+ const assessment=adAssess(load(KS),activeProfile(),d),base=adBaseline(selectedWeek,d,i);
+ $('adDecision').textContent=assessment.heading+'. '+assessment.basis+'. '+assessment.message;
+ $('adAmount').value='';$('adUnit').value=base?.unit||'ripetizioni';
+ if(base){
+   if(assessment.kind==='riduci'){
+     // Riduzione facoltativa della dose in caso di fatica; con dolore la scelta
+     // di sospendere l'esercizio doloroso ha sempre priorità.
+     const adjusted=base.unit==='ripetizioni'?Math.max(1,Math.floor(base.amount*.75)):Math.max(.5,Math.round(base.amount*.75*2)/2);
+     if(adjusted<base.amount)$('adAmount').value=adjusted;
+   }else if(assessment.kind==='aumenta'&&!activePain()){
+     $('adAmount').value=base.unit==='ripetizioni'?base.amount+1:Math.round((base.amount*1.05)*2)/2;
+   }else if(assessment.kind==='mantieni'||assessment.kind==='dati')$('adAmount').value=base.amount;
+ }
  renderADProposalPreview();
 }
 function renderADProposalPreview(){
  const d=Number($('adDay').value),i=Number($('adExercise').value),a=adAssess(load(KS),activeProfile(),d);
- const text=baseExFor(d,selectedWeek)[i]||'';
- $('adPreview').textContent='Esercizio invariato: '+text+' · Quantità proposta: '+($('adAmount').value||'da definire')+' '+$('adUnit').value+'. Indicazione AD: '+a.heading+'.';
+ const text=baseExFor(d,selectedWeek)[i]||'',base=adBaseline(selectedWeek,d,i),raw=$('adAmount').value;
+ let note=base?'Dose di partenza: '+base.amount+' '+base.unit+' ('+base.source+'). ':'Nessuna dose numerica certa ricavabile dall’esercizio. ';
+ if(activePain())note+='Dolore attivo: evita o sospendi gli esercizi che lo provocano; una riduzione non garantisce che siano sicuri. ';
+ $('adPreview').textContent=note+' '+(raw?'Valore nel campo: '+raw+' '+$('adUnit').value+'. ':'Nessuna variazione numerica proposta. ')+'Puoi sempre salvare la valutazione AD senza cambiare il piano.';
+}
+function saveADGuidance(){
+ const {week,day}=adTarget(),a=adAssess(load(KS),activeProfile(),day);
+ const log=load(adDecisionKey());log.push({week,day,decision:'indicazione salvata',adKind:a.kind,heading:a.heading,basis:a.basis,message:a.message,at:new Date().toISOString()});
+ save(adDecisionKey(),log);renderADHistory();$('adSavedNote').textContent='Indicazione AD salvata per '+T[day][0]+' (settimana '+week+'). Nessuna modifica al programma.';toast('Indicazione salvata');
+}
+function renderADHistory(){
+ const list=load(adDecisionKey()).slice(-8).reverse();
+ $('adHistory').innerHTML=list.length?list.map(x=>'<div class="editrow"><b>'+esc(String(x.decision||''))+'</b> · S'+Number(x.week)+' '+esc(T[Number(x.day)]?.[0]||'')+' · '+esc(x.heading||x.adKind||'')+'<br><span class="small">'+esc((x.at||'').slice(0,10))+'</span></div>').join(''):'Nessuna indicazione salvata.';
 }
 function applyADProposal(){
  const {week,day}=adTarget(),i=Number($('adExercise').value),amount=Number($('adAmount').value),unit=$('adUnit').value;
  if(isCompleted(week,day)){toast('Riapri la seduta completata prima di modificarla');return}
  if(!Number.isFinite(amount)||amount<=0||amount>1000||!['ripetizioni','secondi','minuti'].includes(unit)){toast('Indica quantità e unità valide');return}
  const advice=adAssess(load(KS),activeProfile(),day);
- const prior=customDose(week,day)[i];
- if(activePain() && (!prior || prior.unit!==unit || amount>Number(prior.amount))){toast('Dolore presente: puoi soltanto ridurre una quantità già registrata con la stessa unità');return}
- if(advice.kind==='riduci' && prior && prior.unit===unit && amount>Number(prior.amount)){toast('AD suggerisce riduzione: non aumentare la dose in questa condizione');return}
+ const prior=adBaseline(week,day,i);
+ if(activePain() && (!prior || prior.unit!==unit || amount>=Number(prior.amount))){toast('Dolore presente: AD non può applicare aumenti o dosi non verificabili. Puoi salvare la sola indicazione.');return}
+ if(advice.kind==='riduci' && (!prior || prior.unit!==unit || amount>Number(prior.amount))){toast('AD suggerisce riduzione: non applicare un aumento o una dose senza riferimento.');return}
  if(!confirm('Applicare '+amount+' '+unit+' all’esercizio '+(i+1)+' di '+T[day][0]+' S'+week+'? Il tipo di esercizio non cambierà.'))return;
  const edits=load(KE),key=sessionKey(week,day),values=customDose(week,day).slice();values[i]={amount,unit};edits[key]={type:'dose_only',values};save(KE,edits);
  const log=load(adDecisionKey());log.push({week,day,exercise:i,amount,unit,decision:'applicata',adKind:advice.kind,at:new Date().toISOString()});save(adDecisionKey(),log);
- if(selectedDay===day)loadWorkout();refresh();toast('Quantità aggiornata nella seduta');
+ if(selectedDay===day)loadWorkout();refresh();$('adSavedNote').textContent='Modifica applicata e salvata per '+T[day][0]+' · settimana '+week;toast('Quantità aggiornata nella seduta');
 }
-function dismissADProposal(){const {week,day}=adTarget(),a=load(adDecisionKey());a.push({week,day,decision:'ignorata',at:new Date().toISOString()});save(adDecisionKey(),a);toast('Proposta ignorata: programma invariato')}
+function dismissADProposal(){const {week,day}=adTarget(),a=load(adDecisionKey());a.push({week,day,decision:'ignorata',at:new Date().toISOString()});save(adDecisionKey(),a);renderADHistory();$('adSavedNote').textContent='Proposta ignorata: programma invariato.';toast('Proposta ignorata: programma invariato')}
 function renderADModule(){if(!$('adWeekly'))return;$('adWeekly').textContent=weeklyAD();renderADProposal()}
 function coachText(s,r){const a=adAssess(s,activeProfile(),selectedDay);return activePain()?'AD: attenzione, dolore attuale segnalato. Apri Salute e recupero per i dettagli.':a.heading+'. '+(a.kind==='riduci'?'Apri l’analisi completa.':'Consulta la valutazione AD.');}
 function showADWorkout(){const s=load(KS);const a=adAssess(s,activeProfile(),selectedDay);$('adWorkoutAdvice').textContent=a.heading+'. '+(a.kind==='riduci'?'Verifica le indicazioni in AD.':'Dettagli nella schermata AD.');}
