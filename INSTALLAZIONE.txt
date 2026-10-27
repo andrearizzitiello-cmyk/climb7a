@@ -1,4 +1,1 @@
-Climb 7A v0.9.1 — AD personalizzato
-Sostituisci tutti i file nel repository GitHub Pages, senza cambiare URL.
-La nuova versione non modifica le chiavi localStorage: conserva profili e dati esistenti sullo stesso dispositivo.
-Apri nuovamente la PWA per ricevere l’aggiornamento. Prima di aggiornare, conserva una copia del repository.
+Climb 7A v0.9.2. Sostituisci tutti i sei file nel repository GitHub Pages. Mantieni stesso URL e profilo: i dati locali non sono cancellati. Aggiornata cronologia, date, dati AD e grafici. Esegui un backup prima di sostituire i file.
