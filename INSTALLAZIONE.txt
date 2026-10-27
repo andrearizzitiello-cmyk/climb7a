@@ -1,0 +1,9 @@
+CLIMB 7A — PWA v0.3
+
+Per installarla sul telefono:
+1. I file devono essere pubblicati su un indirizzo HTTPS.
+2. Apri l'indirizzo con Chrome (Android) o Safari (iPhone).
+3. Android: menu ⋮ → Installa app / Aggiungi alla schermata Home.
+4. iPhone: Condividi → Aggiungi alla schermata Home.
+
+Nota: il semplice file index.html aperto dal PC non basta per l'installazione PWA; serve un hosting HTTPS.

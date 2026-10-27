@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111111"><link rel="manifest" href="./manifest.webmanifest">
+<title>Climb 7A — v0.2</title>
+<style>
+:root{--bg:#f4f4f1;--card:#fff;--ink:#151515;--muted:#666;--line:#ddd;--ok:#1d6b3b;--warn:#9a6400}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
+.app{max-width:560px;margin:auto;min-height:100vh;padding-bottom:82px}header{padding:20px 18px 12px;position:sticky;top:0;background:rgba(244,244,241,.96);backdrop-filter:blur(8px);z-index:5}
+.brand{font-size:29px;font-weight:850;letter-spacing:-1.2px}.sub{font-size:12px;color:var(--muted);margin-top:3px}
+main{padding:8px 15px}.screen{display:none}.screen.active{display:block}
+h2{font-size:22px;margin:15px 2px 12px}h3{margin:6px 0 8px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px}
+.hero{background:#111;color:#fff;border-radius:20px;padding:20px;margin-bottom:13px}.hero .big{font-size:35px;font-weight:850}.small{font-size:12px;color:var(--muted)}.hero .small{color:#ccc}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{font-size:27px;font-weight:800}.label{font-size:11px;color:var(--muted);margin-top:4px}
+.progress{height:9px;background:#ddd;border-radius:99px;overflow:hidden;margin-top:12px}.progress>div{height:100%;background:#fff;width:55%}
+button{border:0;background:#111;color:#fff;border-radius:11px;padding:11px 13px;font-weight:750;cursor:pointer}button.secondary{background:#eee;color:#111}button.ghost{background:transparent;color:#111;border:1px solid var(--line)}
+.row{display:flex;gap:8px}.row>*{flex:1}
+input,select,textarea{width:100%;border:1px solid #ccc;border-radius:10px;padding:10px;margin:4px 0 11px;background:#fff;font:inherit}
+.check{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #eee}.check input{width:auto;margin:0}.done{color:var(--ok);text-decoration:line-through}
+.tag{display:inline-block;background:#eee;border-radius:99px;padding:5px 9px;font-size:11px;margin:2px}.tag.dark{background:#111;color:#fff}
+.list{padding:0;margin:0;list-style:none}.list li{padding:10px 0;border-bottom:1px solid #eee}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(560px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:#fff;border-top:1px solid #ddd;z-index:10}
+nav button{background:#fff;color:#666;border-radius:0;padding:11px 2px;font-size:10px}nav button.active{color:#111;font-weight:850}
+.toast{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:12px;font-size:12px;z-index:20}
+table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;padding:8px 5px;border-bottom:1px solid #eee}
+.week{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.week button{font-size:11px;padding:9px 3px;background:#eee;color:#111}.week button.sel{background:#111;color:#fff}
+</style>
+</head>
+<body><div class="app">
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.2 · percorso personalizzato verso il 7a a vista</div></header>
+<main>
+
+<section id="home" class="screen active">
+<div class="hero"><div class="small">OBIETTIVO DEL CICLO</div><div class="big">7a ONSIGHT</div><div class="progress"><div id="goalbar"></div></div><div class="small" id="goalText">Base: 6a+ OS · 6c lavorato</div></div>
+<div class="grid">
+<div class="card"><div id="hWeek" class="metric">1/12</div><div class="label">settimana</div></div>
+<div class="card"><div id="hSessions" class="metric">0</div><div class="label">sedute completate</div></div>
+<div class="card"><div id="hRpe" class="metric">—</div><div class="label">RPE medio</div></div>
+<div class="card"><div id="hOS" class="metric">6a+</div><div class="label">miglior OS</div></div>
+</div>
+<div class="card"><span class="tag dark" id="todayTag">Lunedì</span><h3 id="todayTitle">Forza dita + trazioni + core</h3><p class="small" id="todayDesc">Seduta prevista dal piano. Completa gli esercizi e registra il carico.</p><button onclick="show('workout')">Apri seduta</button></div>
+<div class="card"><h3>Regola del ciclo</h3><p class="small">3 stimoli di arrampicata: boulder forza/potenza, lead indoor specifica e outdoor performance. Le sedute a casa completano forza e recupero.</p></div>
+</section>
+
+<section id="plan" class="screen">
+<h2>Programma 12 settimane</h2>
+<div class="card"><div class="week" id="weekBtns"></div></div>
+<div class="card"><span class="tag dark" id="phase"></span><span class="tag" id="weekFocus"></span><h3 id="weekTitle"></h3><p class="small" id="weekNote"></p></div>
+<div id="planDays"></div>
+</section>
+
+<section id="workout" class="screen">
+<h2>Allenamento del giorno</h2>
+<div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div></div>
+<div class="card"><h3>Consuntivo</h3>
+<label>Durata (min)</label><input id="dur" type="number">
+<label>RPE 1–10</label><input id="rpe" type="number" min="1" max="10">
+<label>Grado massimo OS</label><input id="osg" placeholder="es. 6b+">
+<label>Grado massimo progetto</label><input id="prg" placeholder="es. 7a">
+<label>Carico trave totale (kg)</label><input id="hang" type="number">
+<label>Carico trazioni totale (kg)</label><input id="pull" type="number">
+<label>Note</label><textarea id="notes" rows="3"></textarea>
+<button onclick="completeWorkout()">Salva seduta</button>
+</div></section>
+
+<section id="climb" class="screen">
+<h2>Diario vie</h2><div class="card">
+<label>Data</label><input id="rd" type="date"><label>Via</label><input id="route" placeholder="Nome via">
+<div class="row"><div><label>Grado</label><input id="grade" placeholder="6c"></div><div><label>Esito</label><select id="result"><option>OS</option><option>Flash</option><option>RP</option><option>Caduta</option><option>Non completata</option></select></div></div>
+<label>Tentativi</label><input id="attempts" type="number" value="1"><label>Stile</label><input id="style" placeholder="placca, strapiombo, tacche...">
+<label>Difficoltà percepita 1–10</label><input id="diff" type="number" min="1" max="10"><label>Note</label><textarea id="rnotes"></textarea>
+<button onclick="saveRoute()">Salva via</button></div>
+<div class="card"><table><thead><tr><th>Data</th><th>Via</th><th>Grado</th><th>Esito</th></tr></thead><tbody id="routes"></tbody></table></div>
+</section>
+
+<section id="tests" class="screen"><h2>Test iniziali</h2><div class="card">
+<label>Peso (kg)</label><input id="tw" type="number" value="89"><label>Trazioni max</label><input id="tpu" type="number" value="10">
+<label>Trazione zavorrata — carico totale (kg)</label><input id="twp" type="number"><label>Trave 2,5 cm — carico totale (kg)</label><input id="thw" type="number">
+<label>Trave — tempo massimo (s)</label><input id="tht" type="number"><label>Protocollo attuale</label><input value="5 s lavoro / 5 s riposo × 5 × 5" disabled>
+<label>Lead indoor miglior OS</label><input id="tlo" value="6a+"><label>Falesia miglior OS</label><input id="tfo"><label>Power-endurance</label><input id="tpe" placeholder="da definire"><label>Note</label><textarea id="tn"></textarea>
+<button onclick="saveTests()">Salva test</button></div>
+<div class="card"><h3>Prossimi test</h3><p class="small">Il protocollo power-endurance verrà fissato dopo i primi test, per evitare di scegliere un test non adatto al tuo livello.</p></div>
+</section>
+
+<section id="progress" class="screen"><h2>Progressi</h2>
+<div class="grid"><div class="card"><div id="ph" class="metric">—</div><div class="label">ultimo carico trave</div></div><div class="card"><div id="pp" class="metric">—</div><div class="label">ultimo carico trazioni</div></div><div class="card"><div id="pm" class="metric">0</div><div class="label">minuti allenati</div></div><div class="card"><div id="pr" class="metric">0</div><div class="label">vie registrate</div></div></div>
+<div class="card"><h3>Onsight</h3><div id="osStats" class="small">Nessun dato.</div></div>
+<div class="card"><h3>Ultime sedute</h3><div id="sessionTable" class="small"></div></div>
+</section>
+
+</main>
+<nav>
+<button id="nh" class="active" onclick="show('home')">Home</button>
+<button id="np" onclick="show('plan')">Programma</button>
+<button id="nw" onclick="show('workout')">Allenamento</button>
+<button id="nc" onclick="show('climb')">Vie</button>
+<button id="npr" onclick="show('progress')">Progressi</button>
+</nav><div id="toast" class="toast"></div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id), KS='c7a2_sessions', KR='c7a2_routes', KT='c7a2_tests';
+const load=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const today=new Date(); const iso=today.toISOString().slice(0,10);
+let selectedWeek=1, selectedDay=today.getDay()===0?7:today.getDay();
+
+const weeks=[
+["Base","Tecnica + forza","Costruzione tecnica, forza dita e forza generale."],
+["Base","Tecnica + forza","Aumentare qualità e consistenza senza accumulare fatica."],
+["Base","Forza","Introduzione alla progressione dei carichi."],
+["Base","Scarico","Riduzione volume e consolidamento."],
+["Sviluppo","Forza","Forza dita e trazioni con maggiore intensità."],
+["Sviluppo","Power-endurance","Trasferire forza a sequenze più lunghe."],
+["Sviluppo","Power-endurance","Aumentare densità e tolleranza al pompaggio."],
+["Sviluppo","Scarico","Riduzione del carico e mantenimento dell'intensità."],
+["Specificità 7a","Onsight","Lettura, ritmo, riposi e qualità del primo tentativo."],
+["Specificità 7a","Performance","Boulder duro + resistenza specifica + lead."],
+["Specificità 7a","Performance","Simulazioni outdoor e tentativi a vista."],
+["Peak","Test 7a","Scarico e tentativo di prestazione."]
+];
+
+const templates={
+1:["Lun","Casa","Forza dita + trazioni + core",["Riscaldamento dita 15'","Trave: protocollo tecnico, intensità controllata","Trazioni 4×5, recupero 3'","Core 3 esercizi","Mobilità 10'"]],
+2:["Mar","Boulder","Forza + potenza",["Riscaldamento 20'","Boulder limite: 6–8 problemi, recupero 3–4'","System Wall: 4–6 blocchi di qualità","Core breve","Defaticamento"]],
+3:["Mer","Casa","Recupero",["Mobilità 20–30'","Respirazione/recupero","Nessun lavoro intenso"]],
+4:["Gio","Lead indoor","Onsight + resistenza",["Riscaldamento progressivo","4–6 vie a vista in progressione","1–2 vie al limite senza sovraccarico di tentativi","Tecnica: piedi e lettura","Defaticamento"]],
+5:["Ven","Casa","Forza complementare",["Riscaldamento","Squat/RDL con bilanciere: tecnica","Trazioni leggere o forza, senza cedimento","Core + stabilità","Mobilità"]],
+6:["Sab","Falesia / Montagna","Performance outdoor",["Riscaldamento su vie facili","2–4 vie OS a gradi progressivi","1–2 tentativi performance su grado alto","Annota lettura, ritmo, riposi e motivo del fallimento"]],
+7:["Dom","Riposo","Recupero",["Riposo completo","Passeggiata leggera opzionale","Mobilità facoltativa 15'"]]
+};
+
+function show(id){
+document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active")); $(id).classList.add("active");
+document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+const map={home:"nh",plan:"np",workout:"nw",climb:"nc",progress:"npr"}; $(map[id]).classList.add("active");
+refresh();
+}
+function renderPlan(){
+$("weekBtns").innerHTML=weeks.map((w,i)=>`<button class="${i+1===selectedWeek?"sel":""}" onclick="selectedWeek=${i+1};renderPlan()">${i+1}</button>`).join("");
+const w=weeks[selectedWeek-1]; $("phase").textContent=w[0]; $("weekFocus").textContent=w[1]; $("weekTitle").textContent=`Settimana ${selectedWeek}`; $("weekNote").textContent=w[2];
+$("planDays").innerHTML=Array.from({length:7},(_,i)=>{
+const d=i+1,t=templates[d]; return `<div class="card"><span class="tag">${t[0]}</span><span class="tag">${t[1]}</span><h3>${t[2]}</h3><ul class="list">${t[3].map(x=>`<li class="small">${x}</li>`).join("")}</ul><button class="secondary" onclick="selectedDay=${d};loadWorkout()">Apri</button></div>`}).join("");
+}
+function loadWorkout(){
+const t=templates[selectedDay]; $("wTag").textContent=t[0]+" · "+t[1]; $("wTitle").textContent=t[2]; $("wObjective").textContent=weeks[selectedWeek-1][2];
+$("exerciseList").innerHTML=t[3].map((x,i)=>`<label class="check"><input type="checkbox" id="ex${i}"><span>${x}</span></label>`).join("");
+show("workout");
+}
+function completeWorkout(){
+const s=load(KS); s.push({date:iso,week:selectedWeek,day:selectedDay,title:templates[selectedDay][2],duration:+$("dur").value||0,rpe:+$("rpe").value||0,os:$("osg").value,proj:$("prg").value,hang:+$("hang").value||0,pull:+$("pull").value||0,note:$("notes").value}); save(KS,s); toast("Seduta salvata"); refresh();
+}
+function saveRoute(){
+const r=load(KR); r.push({date:$("rd").value||iso,route:$("route").value,grade:$("grade").value,result:$("result").value,attempts:+$("attempts").value||1,style:$("style").value,diff:+$("diff").value||0,note:$("rnotes").value}); save(KR,r); toast("Via salvata"); refresh();
+}
+function saveTests(){save(KT,[{date:iso,weight:+$("tw").value,pullups:+$("tpu").value,weighted:+$("twp").value,hang:+$("thw").value,time:+$("tht").value,lead:$("tlo").value,outdoor:$("tfo").value,pe:$("tpe").value,note:$("tn").value}]);toast("Test salvati")}
+function refresh(){
+renderPlan(); const s=load(KS),r=load(KR); $("hWeek").textContent=selectedWeek+"/12"; $("hSessions").textContent=s.length;
+const rr=s.filter(x=>x.rpe); $("hRpe").textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):"—";
+const os=r.filter(x=>x.result==="OS"&&x.grade); $("hOS").textContent=os.length?os[os.length-1].grade:"6a+";
+$("ph").textContent=(s.filter(x=>x.hang).at(-1)?.hang||"—")+" kg"; $("pp").textContent=(s.filter(x=>x.pull).at(-1)?.pull||"—")+" kg"; $("pm").textContent=s.reduce((a,b)=>a+b.duration,0); $("pr").textContent=r.length;
+$("routes").innerHTML=r.slice(-15).reverse().map(x=>`<tr><td>${x.date}</td><td>${x.route||"-"}</td><td>${x.grade||"-"}</td><td>${x.result}</td></tr>`).join("");
+$("osStats").textContent=r.length?`${r.length} vie registrate · ${r.filter(x=>x.result==="OS").length} OS · ${r.filter(x=>x.result==="Flash").length} flash`:"Nessun dato.";
+$("sessionTable").innerHTML=s.slice(-8).reverse().map(x=>`${x.date} · S${x.week} · ${x.title} · RPE ${x.rpe||"—"}<br>`).join("");
+}
+$("rd").value=iso; refresh(); loadWorkout();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"))}</script></body></html>
