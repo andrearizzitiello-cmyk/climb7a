@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#111111" name="theme-color"/><link href="./manifest.webmanifest" rel="manifest"/>
-<title>Climb 7A — v0.8</title>
+<title>Climb 7A — v0.9</title>
 <style>
 :root{--bg:#f4f4f1;--card:#fff;--ink:#151515;--muted:#666;--line:#ddd;--ok:#1d6b3b;--warn:#9a6400}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
@@ -30,7 +30,7 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 
 .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.calday{padding:9px 2px;min-height:83px;background:#f0f0f0;color:#111;border:1px solid #ddd;border-radius:10px;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:space-around;overflow-wrap:anywhere}.calday.selected{outline:3px solid #111}.calday.ok{background:#d8f4df}.calday.partial{background:#fff0c9}.calday.skip{background:#e9e9e9;color:#666}.calday.move{background:#dce9ff}.calday b{font-size:15px}.mini{font-size:11px;color:#555}.editrow{border-bottom:1px solid #eee;padding:10px 0}.editrow textarea{margin:5px 0}.coachbox{background:#f2f7f3;border-left:4px solid #266847;border-radius:12px;padding:12px;margin:8px 0}.wraprow{display:flex;flex-wrap:wrap;gap:6px}.wraprow button{font-size:12px} 
 
-/* v0.8: barra compatta e sezioni espandibili */
+/* v0.9: barra compatta e sezioni espandibili */
 .app{padding-bottom:calc(94px + env(safe-area-inset-bottom,0px))}
 header{padding:11px 16px 9px}.brand{font-size:23px}.sub{font-size:11px}.profilebar{margin-top:6px}.profilebar select{padding:8px;margin:0}.profilebar button{padding:9px;font-size:12px}
 nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-radius:18px 18px 0 0}
@@ -44,7 +44,7 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 </style>
 </head>
 <body><div class="app">
-<header><div class="brand">CLIMB 7A</div><div class="sub">v0.8 · Interfaccia compatta</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.9 · AD personalizzato</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
 <main>
 <section class="screen active" id="home">
 <div class="hero"><div class="small">OBIETTIVO DEL CICLO</div><div class="big">7a ONSIGHT</div><div class="progress"><div id="goalbar"></div></div><div class="small" id="goalText">Base: 6a+ OS · 6c lavorato</div></div>
@@ -115,7 +115,16 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <details class="card collapsible"><summary>Storico rilevazioni</summary><div class="small" id="painHistory">Nessuna rilevazione.</div></details>
 <div class="notice">Con dolore ancora presente, evita gli esercizi che lo provocano e gli incrementi di carico sulle strutture coinvolte. Se persiste o peggiora, chiedi una valutazione professionale. Dichiarare “risolto” non significa automaticamente che sia sicuro riprendere i massimali.</div>
 </section>
-<section class="screen" id="adpage"><h2>AD · Analisi dettagliata</h2><div class="card"><h3>Indicazioni per l’atleta selezionato</h3><p class="small" id="adFullText"></p><div class="coachbox small" id="coachDetails"></div></div><div class="card"><h3>Monitoraggio dedicato</h3><p class="small">Dolore e recupero sono raccolti in una schermata distinta per mantenere semplice il consuntivo.</p><button onclick="show('paintracker')">Apri Salute e recupero</button></div><p class="small">Indicazioni prudenziali e orientative; nessuna variazione automatica del piano.</p></section>
+<section class="screen" id="adpage"><h2>AD · Analisi dettagliata</h2><div class="card"><h3>Indicazioni per l’atleta selezionato</h3><p class="small" id="adFullText"></p><div class="coachbox small" id="coachDetails"></div></div><details class="card collapsible" open><summary>Riepilogo della settimana</summary><div id="adWeekly" class="small"></div></details>
+<div class="card"><h3>Applica una proposta AD</h3><p class="small">Le modifiche valgono solo per la quantità dell’esercizio scelto e per la seduta indicata. Nessuna modifica automatica.</p>
+<div class="status partial" id="adDecision"></div>
+<label for="adDay">Giorno da adattare</label><select id="adDay" onchange="renderADProposal()"></select>
+<label for="adExercise">Esercizio (tipo invariato)</label><select id="adExercise" onchange="renderADProposalPreview()"></select>
+<label for="adAmount">Nuova quantità</label><input type="number" id="adAmount" min="0.5" max="1000" step="0.5" placeholder="es. 4" oninput="renderADProposalPreview()"/>
+<label for="adUnit">Unità</label><select id="adUnit" onchange="renderADProposalPreview()"><option value="ripetizioni">Ripetizioni</option><option value="secondi">Secondi</option><option value="minuti">Minuti</option></select>
+<p class="small" id="adPreview"></p><div class="row"><button onclick="applyADProposal()" type="button">Conferma modifica</button><button class="secondary" onclick="dismissADProposal()" type="button">Ignora proposta</button></div>
+<p class="small">Per aumentare un carico zavorrato non usare questo campo: la quantità riguarda ripetizioni o tempo. Eventuali variazioni della zavorra richiedono una valutazione specifica.</p></div>
+<div class="card"><h3>Monitoraggio dedicato</h3><p class="small">Dolore e recupero sono raccolti in una schermata distinta per mantenere semplice il consuntivo.</p><button onclick="show('paintracker')">Apri Salute e recupero</button></div><p class="small">Indicazioni prudenziali e orientative; nessuna variazione automatica del piano.</p></section>
 <section class="screen" id="profiles"><h2>Profili atleti</h2>
 <div class="notice">Ogni persona ha dati, test, vie, sedute completate e settimana del programma indipendenti. I dati sono salvati su questo dispositivo, non sincronizzati tra telefoni.</div>
 <div class="card"><h3>Seleziona atleta</h3><div id="profileList"></div></div>
@@ -126,7 +135,7 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <section class="screen" id="more"><h2>Altro</h2>
 <div class="card"><h3>Profilo e programma</h3><div class="menu-stack"><button onclick="show('profiles')">👥 Profili atleti</button><button onclick="show('tests')">📋 Test e retest</button><button onclick="show('climb')">🧗 Diario vie</button></div></div>
 <div class="card"><h3>AD e benessere</h3><div class="menu-stack"><button onclick="show('adpage')">◉ Analisi AD completa</button><button onclick="show('paintracker')">♡ Salute e recupero</button></div></div>
-<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.8. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
+<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.9. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
 <nav><button aria-current="page" aria-label="Home" class="active" id="nh" onclick="show('home')" type="button"><span aria-hidden="true" class="nav-icon">⌂</span><span class="nav-label">Home</span></button><button aria-label="Calendario" id="np" onclick="show('plan')" type="button"><span aria-hidden="true" class="nav-icon">▦</span><span class="nav-label">Calendario</span></button><button aria-label="Allenati" id="nw" onclick="loadWorkout()" type="button"><span aria-hidden="true" class="nav-icon">◉</span><span class="nav-label">Allenati</span></button><button aria-label="Progressi" id="npr" onclick="show('progress')" type="button"><span aria-hidden="true" class="nav-icon">▥</span><span class="nav-label">Progressi</span></button><button aria-label="Altro" id="nm" onclick="show('more')" type="button"><span aria-hidden="true" class="nav-icon">☰</span><span class="nav-label">Altro</span></button></nav><div class="toast" id="toast"></div>
 </div>
 <script>
@@ -267,6 +276,7 @@ function resetExercises(){
  const w=selectedWeek,d=selectedDay,profile=activeProfile().name;
  if(!confirm('Eliminare DEFINITIVAMENTE tutte le registrazioni della seduta '+T[d][0]+' (settimana '+w+') di '+profile+'? Verranno azzerati consuntivo, spunte, bozze, storico e quantità personalizzate SOLTANTO di questa seduta. Gli altri allenamenti resteranno invariati.'))return;
  const edits=load(KE);delete edits[sessionKey(w,d)];save(KE,edits);
+ const decisionLog=load(adDecisionKey()).filter(x=>!(+x.week===+w&&+x.day===+d));save(adDecisionKey(),decisionLog);
  const removed=clearWorkoutRecord(w,d);
  updateCalendar(w,d,null);
  $('exerciseEditor').style.display='none';
@@ -363,7 +373,7 @@ function saveTests(){const ts=load(KT);ts.push({date:$('td').value||iso,week:+$(
 const grades=['4','4+','5a','5a+','5b','5b+','5c','5c+','6a','6a+','6b','6b+','6c','6c+','7a','7a+','7b','7b+','7c'];
 function bestOS(routes){let valid=routes.filter(x=>x.result==='OS'&&grades.includes(x.grade));return valid.length?valid.reduce((a,b)=>grades.indexOf(a.grade)>grades.indexOf(b.grade)?a:b).grade:'6a+';}
 function plot(id,values,label){const c=$(id),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#666';ctx.font='12px Arial';if(!values.length){ctx.fillText('Ancora nessuna serie di dati registrata',14,30);return}const max=Math.max(...values.map(v=>v.v),1),min=Math.min(0,...values.map(v=>v.v));ctx.strokeStyle='#ddd';ctx.beginPath();ctx.moveTo(35,15);ctx.lineTo(35,150);ctx.lineTo(w-10,150);ctx.stroke();ctx.fillText(label,40,15);ctx.fillText(String(max),4,24);ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.beginPath();values.forEach((p,i)=>{const x=45+i*(w-65)/Math.max(1,values.length-1),y=145-(p.v-min)/(max-min||1)*110;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();values.forEach((p,i)=>{let x=45+i*(w-65)/Math.max(1,values.length-1),y=145-(p.v-min)/(max-min||1)*110;ctx.beginPath();ctx.arc(x,y,4,0,7);ctx.fillStyle='#111';ctx.fill();ctx.fillStyle='#777';ctx.fillText(String(p.label).slice(0,5),Math.max(0,x-13),168)});}
-function refresh(){renderPlan();compactPlanDays();const s=load(KS),r=load(KR),t=load(KT);$('hWeek').textContent=selectedWeek+'/12';$('hSessions').textContent=s.filter(x=>x.completed===true).length;const rr=s.filter(x=>x.rpe);$('hRpe').textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):'—';$('hOS').textContent=r.some(x=>x.result==='OS')?bestOS(r):(activeProfile().grade||'—');$('ph').textContent=(s.filter(x=>x.hang!==undefined).at(-1)?.hang??'—')+' kg +';$('pp').textContent=(s.filter(x=>x.pull!==undefined).at(-1)?.pull??'—')+' kg +';$('pm').textContent=s.reduce((a,b)=>a+(b.duration||0),0);$('pr').textContent=r.length;$('profileSummary').textContent=`${activeProfile().name} · ${activeProfile().weight||'—'} kg · ${activeProfile().pullups??'—'} trazioni · OS ${activeProfile().grade||'—'} · obiettivo ${activeProfile().goal||'—'}`;const nowDay=(new Date().getDay()||7),todayPlan=workoutForDate(localISO(new Date()));$('todayTag').textContent='Oggi · '+T[todayPlan?.day||nowDay][0];$('todayTitle').textContent=T[todayPlan?.day||nowDay][2];$('todayDesc').textContent='Seduta proposta per oggi nella settimana '+selectedWeek+' del ciclo '+(todayPlan?.moved?'(riprogrammata)':'')+'.';$('coachAdvice').textContent=coachText(s,r);$('coachDetails').textContent=coachDetails(s,r);$('adFullText').textContent=coachText(s,r)+' '+(activePain()?'È registrato dolore ancora presente.':'');renderPainModule();$('weekStatus').textContent=`${Array.from({length:7},(_,i)=>isCompleted(selectedWeek,i+1)).filter(Boolean).length} / 7 giorni segnati completati nella settimana ${selectedWeek}`;
+function refresh(){renderPlan();compactPlanDays();const s=load(KS),r=load(KR),t=load(KT);$('hWeek').textContent=selectedWeek+'/12';$('hSessions').textContent=s.filter(x=>x.completed===true).length;const rr=s.filter(x=>x.rpe);$('hRpe').textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):'—';$('hOS').textContent=r.some(x=>x.result==='OS')?bestOS(r):(activeProfile().grade||'—');$('ph').textContent=(s.filter(x=>x.hang!==undefined).at(-1)?.hang??'—')+' kg +';$('pp').textContent=(s.filter(x=>x.pull!==undefined).at(-1)?.pull??'—')+' kg +';$('pm').textContent=s.reduce((a,b)=>a+(b.duration||0),0);$('pr').textContent=r.length;$('profileSummary').textContent=`${activeProfile().name} · ${activeProfile().weight||'—'} kg · ${activeProfile().pullups??'—'} trazioni · OS ${activeProfile().grade||'—'} · obiettivo ${activeProfile().goal||'—'}`;const nowDay=(new Date().getDay()||7),todayPlan=workoutForDate(localISO(new Date()));$('todayTag').textContent='Oggi · '+T[todayPlan?.day||nowDay][0];$('todayTitle').textContent=T[todayPlan?.day||nowDay][2];$('todayDesc').textContent='Seduta proposta per oggi nella settimana '+selectedWeek+' del ciclo '+(todayPlan?.moved?'(riprogrammata)':'')+'.';$('coachAdvice').textContent=coachText(s,r);$('coachDetails').textContent=coachDetails(s,r);$('adFullText').textContent=coachText(s,r)+' '+(activePain()?'È registrato dolore ancora presente.':'');renderPainModule();renderADModule();$('weekStatus').textContent=`${Array.from({length:7},(_,i)=>isCompleted(selectedWeek,i+1)).filter(Boolean).length} / 7 giorni segnati completati nella settimana ${selectedWeek}`;
 $('routes').innerHTML=r.slice(-15).reverse().map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.route||'-')}</td><td>${esc(x.grade||'-')}</td><td>${esc(x.result)}</td></tr>`).join('');const attempted=r.filter(x=>x.result==='OS'||x.result==='Flash'||x.result==='RP'||x.result==='Caduta'||x.result==='Non completata');$('osStats').textContent=r.length?`${r.length} vie registrate · ${r.filter(x=>x.result==='OS').length} OS · migliore OS ${bestOS(r)}. Percentuale OS sulle vie registrate: ${attempted.length?Math.round(100*r.filter(x=>x.result==='OS').length/attempted.length):0}% (non è la percentuale dei soli tentativi a vista se registri anche i progetti).`:'Nessun dato.';$('sessionTable').innerHTML=s.slice(-8).reverse().map(x=>`${esc(x.date)} · S${esc(x.week)} · ${esc(x.title)} · ${x.completed===true?'✓ Completato':'◐ Parziale'} · RPE ${esc(x.rpe||'—')} · ${x.exercises?x.exercises.filter(e=>e.done).length+'/'+x.exercises.length+' esercizi':''}<br>`).join('');$('testHistory').innerHTML=t.length?t.slice().reverse().map(x=>`${esc(x.date)} · ${x.week?'S'+esc(x.week):'Base'} · ${x.weight} kg corporei · ${x.pullups} trazioni · trazione +${x.weighted} kg · trave +${x.hang} kg${x.time?' / '+x.time+' s':''}<br>`).join(''):'Nessun retest salvato. I valori iniziali confermati sono mostrati sopra.';
 updateWorkoutStatus();showADWorkout();plot('rpeChart',rr.slice(-10).map(x=>({label:x.date.slice(5),v:x.rpe})),'RPE (1–10)');plot('pullChart',t.filter(x=>x.weighted!==undefined).slice(-8).map(x=>({label:x.week?'S'+x.week:'Base',v:x.unit==='additional_kg'?x.weighted:Math.max(0,x.weighted-(x.weight||89))})),'Zavorra aggiunta (kg)');}
 function toast(msg){let el=$('toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2100)}
@@ -406,6 +416,51 @@ function renderPainModule(){
  $('painHistory').innerHTML=rows.length?rows.slice(-12).reverse().map(x=>`<div class="editrow"><b>${esc(x.date)} · ${esc(x.area)} · ${esc(x.intensity)}/10</b> · ${x.state==='present'?'Presente':'Risolto'}<br>${esc(x.detail||'')} ${esc(x.trigger||'')} ${esc(x.note||'')}</div>`).join(''):'Nessuna rilevazione nel modulo.';
 }
 
+// v0.9: riepilogo e conferma delle modifiche, separati per profilo.
+function adDecisionKey(){return scopedKey('ad_decisions')}
+function adTarget(){return {week:selectedWeek,day:Number($('adDay')?.value||selectedDay)}}
+function weeklyAD(){
+ const s=load(KS).filter(x=>Number(x.week)===selectedWeek),completed=s.filter(x=>x.completed===true),partial=s.filter(x=>x.completed!==true);
+ const vals=completed.filter(x=>+x.rpe>=1&&+x.rpe<=10);
+ const mean=vals.length?(vals.reduce((a,b)=>a+Number(b.rpe),0)/vals.length).toFixed(1):'—';
+ const skipped=Array.from({length:7},(_,i)=>i+1).filter(d=>calendarEntry(selectedWeek,d).status==='skipped').length;
+ const fatigue=completed.filter(x=>+x.fatigueEnd>=1&&+x.fatigueEnd<=10);
+ const avgFatigue=fatigue.length?(fatigue.reduce((a,b)=>a+Number(b.fatigueEnd),0)/fatigue.length).toFixed(1):'—';
+ return `${completed.length} completate · ${partial.length} parziali · ${skipped} saltate. RPE medio ${mean}/10 · fatica finale media ${avgFatigue}/10. ${activePain()?'Dolore attuale segnalato: sospendere progressioni delle dita.':'Confronta sempre la risposta delle sedute comparabili prima di progredire.'}`;
+}
+function renderADProposal(){
+ const old=$('adDay').value;
+ $('adDay').innerHTML=Array.from({length:7},(_,i)=>`<option value="${i+1}">${T[i+1][0]} · ${esc(T[i+1][2])}</option>`).join('');
+ $('adDay').value=old||String(selectedDay);
+ const d=Number($('adDay').value),list=baseExFor(d,selectedWeek),previous=$('adExercise').value;
+ $('adExercise').innerHTML=list.map((x,i)=>`<option value="${i}">${i+1}. ${esc(x.length>83?x.slice(0,80)+'…':x)}</option>`).join('');
+ $('adExercise').value=Number(previous)<list.length?previous:'0';
+ const saved=customDose(selectedWeek,d)[Number($('adExercise').value)];
+ $('adAmount').value=saved?.amount??'';$('adUnit').value=saved?.unit||'ripetizioni';
+ const assessment=adAssess(load(KS),activeProfile(),d);
+ $('adDecision').textContent=assessment.heading+'. '+assessment.basis;
+ renderADProposalPreview();
+}
+function renderADProposalPreview(){
+ const d=Number($('adDay').value),i=Number($('adExercise').value),a=adAssess(load(KS),activeProfile(),d);
+ const text=baseExFor(d,selectedWeek)[i]||'';
+ $('adPreview').textContent='Esercizio invariato: '+text+' · Quantità proposta: '+($('adAmount').value||'da definire')+' '+$('adUnit').value+'. Indicazione AD: '+a.heading+'.';
+}
+function applyADProposal(){
+ const {week,day}=adTarget(),i=Number($('adExercise').value),amount=Number($('adAmount').value),unit=$('adUnit').value;
+ if(isCompleted(week,day)){toast('Riapri la seduta completata prima di modificarla');return}
+ if(!Number.isFinite(amount)||amount<=0||amount>1000||!['ripetizioni','secondi','minuti'].includes(unit)){toast('Indica quantità e unità valide');return}
+ const advice=adAssess(load(KS),activeProfile(),day);
+ const prior=customDose(week,day)[i];
+ if(activePain() && (!prior || prior.unit!==unit || amount>Number(prior.amount))){toast('Dolore presente: puoi soltanto ridurre una quantità già registrata con la stessa unità');return}
+ if(advice.kind==='riduci' && prior && prior.unit===unit && amount>Number(prior.amount)){toast('AD suggerisce riduzione: non aumentare la dose in questa condizione');return}
+ if(!confirm('Applicare '+amount+' '+unit+' all’esercizio '+(i+1)+' di '+T[day][0]+' S'+week+'? Il tipo di esercizio non cambierà.'))return;
+ const edits=load(KE),key=sessionKey(week,day),values=customDose(week,day).slice();values[i]={amount,unit};edits[key]={type:'dose_only',values};save(KE,edits);
+ const log=load(adDecisionKey());log.push({week,day,exercise:i,amount,unit,decision:'applicata',adKind:advice.kind,at:new Date().toISOString()});save(adDecisionKey(),log);
+ if(selectedDay===day)loadWorkout();refresh();toast('Quantità aggiornata nella seduta');
+}
+function dismissADProposal(){const {week,day}=adTarget(),a=load(adDecisionKey());a.push({week,day,decision:'ignorata',at:new Date().toISOString()});save(adDecisionKey(),a);toast('Proposta ignorata: programma invariato')}
+function renderADModule(){if(!$('adWeekly'))return;$('adWeekly').textContent=weeklyAD();renderADProposal()}
 function coachText(s,r){const a=adAssess(s,activeProfile(),selectedDay);return activePain()?'AD: attenzione, dolore attuale segnalato. Apri Salute e recupero per i dettagli.':a.heading+'. '+(a.kind==='riduci'?'Apri l’analisi completa.':'Consulta la valutazione AD.');}
 function showADWorkout(){const s=load(KS);const a=adAssess(s,activeProfile(),selectedDay);$('adWorkoutAdvice').textContent=a.heading+'. '+(a.kind==='riduci'?'Verifica le indicazioni in AD.':'Dettagli nella schermata AD.');}
 $('painDate').value=iso;$('painArea').value='dita';$('painIntensity').value='';$('painCurrent').value='present';$('rd').value=iso;$('td').value=iso;$('planDate').value=iso;$('workoutDate').value=iso;
