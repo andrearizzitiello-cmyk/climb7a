@@ -1,10 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111111"><link rel="manifest" href="./manifest.webmanifest">
-<title>Climb 7A — v0.6.4</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#111111" name="theme-color"/><link href="./manifest.webmanifest" rel="manifest"/>
+<title>Climb 7A — v0.8</title>
 <style>
 :root{--bg:#f4f4f1;--card:#fff;--ink:#151515;--muted:#666;--line:#ddd;--ok:#1d6b3b;--warn:#9a6400}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
@@ -28,104 +29,106 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 .week{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.week button{font-size:11px;padding:9px 3px;background:#eee;color:#111}.week button.sel{background:#111;color:#fff}
 
 .calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.calday{padding:9px 2px;min-height:83px;background:#f0f0f0;color:#111;border:1px solid #ddd;border-radius:10px;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:space-around;overflow-wrap:anywhere}.calday.selected{outline:3px solid #111}.calday.ok{background:#d8f4df}.calday.partial{background:#fff0c9}.calday.skip{background:#e9e9e9;color:#666}.calday.move{background:#dce9ff}.calday b{font-size:15px}.mini{font-size:11px;color:#555}.editrow{border-bottom:1px solid #eee;padding:10px 0}.editrow textarea{margin:5px 0}.coachbox{background:#f2f7f3;border-left:4px solid #266847;border-radius:12px;padding:12px;margin:8px 0}.wraprow{display:flex;flex-wrap:wrap;gap:6px}.wraprow button{font-size:12px} 
+
+/* v0.8: barra compatta e sezioni espandibili */
+.app{padding-bottom:calc(94px + env(safe-area-inset-bottom,0px))}
+header{padding:11px 16px 9px}.brand{font-size:23px}.sub{font-size:11px}.profilebar{margin-top:6px}.profilebar select{padding:8px;margin:0}.profilebar button{padding:9px;font-size:12px}
+nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));border-radius:18px 18px 0 0}
+nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:58px;padding:6px 1px;font-size:10px;font-weight:700;background:transparent;border-radius:12px;white-space:nowrap}
+nav button.active{background:#111;color:#fff}nav .nav-icon{font-size:23px;line-height:24px;font-weight:850}nav .nav-label{font-size:10px}
+nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radius:11px;display:grid;place-items:center}nav #nw.active .nav-icon{background:white;color:#111}
+.collapsible{padding:0;overflow:hidden}.collapsible summary{list-style:none;cursor:pointer;padding:16px;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px}.collapsible summary::-webkit-details-marker{display:none}.collapsible summary:after{content:'⌄';color:#666;font-size:20px}.collapsible[open] summary:after{content:'⌃'}.collapsible[open]>:not(summary){margin-left:14px;margin-right:14px}.collapsible[open]>:last-child{margin-bottom:15px}.collapsible summary:focus-visible{outline:3px solid #226a4d;outline-offset:-3px}
+.menu-stack{display:grid;gap:8px}.menu-stack button{text-align:left;min-height:49px;background:#f0f0ed;color:#111}
+.plan-fold{margin:9px 0}.plan-fold summary{font-weight:700;cursor:pointer;padding:7px 0}.plan-fold ul{padding-left:0}
+@media(max-width:370px){nav .nav-label{font-size:9px}header .profilebar button{font-size:11px}.calendar{gap:3px}.calday{font-size:10px}}
 </style>
 </head>
 <body><div class="app">
-<header><div class="brand">CLIMB 7A</div><div class="sub">v0.7.1 · Navigazione semplificata</div><div class="profilebar"><select id="profileSelect" aria-label="Seleziona atleta" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Profili</button></div></header>
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.8 · Interfaccia compatta</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
 <main>
-
-<section id="home" class="screen active">
+<section class="screen active" id="home">
 <div class="hero"><div class="small">OBIETTIVO DEL CICLO</div><div class="big">7a ONSIGHT</div><div class="progress"><div id="goalbar"></div></div><div class="small" id="goalText">Base: 6a+ OS · 6c lavorato</div></div>
 <div class="grid">
-<div class="card"><div id="hWeek" class="metric">1/12</div><div class="label">settimana</div></div>
-<div class="card"><div id="hSessions" class="metric">0</div><div class="label">sedute completate</div></div>
-<div class="card"><div id="hRpe" class="metric">—</div><div class="label">RPE medio</div></div>
-<div class="card"><div id="hOS" class="metric">6a+</div><div class="label">miglior OS</div></div>
+<div class="card"><div class="metric" id="hWeek">1/12</div><div class="label">settimana</div></div>
+<div class="card"><div class="metric" id="hSessions">0</div><div class="label">sedute completate</div></div>
+<div class="card"><div class="metric" id="hRpe">—</div><div class="label">RPE medio</div></div>
+<div class="card"><div class="metric" id="hOS">6a+</div><div class="label">miglior OS</div></div>
 </div>
 <div class="card"><span class="tag dark" id="todayTag">Lunedì</span><h3 id="todayTitle">Forza dita + trazioni + core</h3><p class="small" id="todayDesc">Seduta prevista dal piano. Completa gli esercizi e registra il carico.</p><button onclick="openToday()">Apri allenamento di oggi</button></div>
-<div class="card"><h3>Dati dell’atleta selezionato</h3><div id="profileSummary" class="small"></div></div><div class="card coach"><h3>AD · Riepilogo</h3><p id="coachAdvice" class="small"></p><div class="wraprow"><button class="secondary" onclick="show('paintracker')">Salute e recupero</button><button class="secondary" onclick="show('adpage')">Analisi AD completa</button></div></div><div class="card"><h3>Regola del ciclo</h3><p class="small">3 stimoli di arrampicata: boulder forza/potenza, lead indoor specifica e outdoor performance. Le sedute a casa completano forza e recupero.</p></div>
+<div class="card coach"><h3>AD · Riepilogo</h3><p class="small" id="coachAdvice"></p><div class="wraprow"><button class="secondary" onclick="show('paintracker')">Salute e recupero</button><button class="secondary" onclick="show('adpage')">Analisi AD completa</button></div></div><details class="card collapsible"><summary>Regola del ciclo</summary><p class="small">3 stimoli di arrampicata: boulder forza/potenza, lead indoor specifica e outdoor performance. Le sedute a casa completano forza e recupero.</p></details>
 </section>
-
-<section id="plan" class="screen">
+<section class="screen" id="plan">
 <h2>Programma 12 settimane</h2>
 <div class="card"><div class="week" id="weekBtns"></div></div>
-<div class="card"><label for="planDate">Vai a una data</label><input id="planDate" type="date" onchange="openWorkoutForDate(this.value)"><p class="small">Per le date senza riprogrammazioni viene proposta la seduta del giorno della settimana scelto (nella settimana del ciclo attualmente selezionata).</p></div><div class="card"><h3>Calendario settimanale</h3><p class="small">Tocca un giorno per aprire la seduta. ✓ completata · ◐ parziale · – saltata · ↪ spostata.</p><div id="calendar" class="calendar"></div><p id="calendarSummary" class="small"></p></div>
-<div class="card"><div id="weekStatus" class="small"></div><span class="tag dark" id="phase"></span><span class="tag" id="weekFocus"></span><h3 id="weekTitle"></h3><p class="small" id="weekNote"></p></div>
+<div class="card"><label for="planDate">Vai a una data</label><input id="planDate" onchange="openWorkoutForDate(this.value)" type="date"/><p class="small">Per le date senza riprogrammazioni viene proposta la seduta del giorno della settimana scelto (nella settimana del ciclo attualmente selezionata).</p></div><details class="card collapsible" open=""><summary>Calendario settimanale</summary><p class="small">Tocca un giorno per aprire la seduta. ✓ completata · ◐ parziale · – saltata · ↪ spostata.</p><div class="calendar" id="calendar"></div><p class="small" id="calendarSummary"></p></details>
+<div class="card"><div class="small" id="weekStatus"></div><span class="tag dark" id="phase"></span><span class="tag" id="weekFocus"></span><h3 id="weekTitle"></h3><p class="small" id="weekNote"></p></div>
 <div class="notice">La sessione outdoor può essere spostata a domenica: in quel caso sabato è riposo. Se salti la lead, non aggiungere automaticamente una seconda seduta intensa.</div><div id="planDays"></div>
 </section>
-
-<section id="workout" class="screen">
+<section class="screen" id="workout">
 <h2>Allenamento del giorno</h2>
-<div class="card"><h3>Calendario e allenamento della data</h3><label for="workoutDate">Seleziona una data</label><input id="workoutDate" type="date" onchange="onWorkoutDateChanged(this.value)"><div class="small" id="dateInfo">Scegli una data per aprire l’allenamento previsto. Le sedute riprogrammate hanno priorità.</div><button type="button" class="secondary" onclick="openToday()">Vai a oggi</button></div>
-<div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div><div class="wraprow" style="margin-top:12px"><button type="button" class="secondary" onclick="openEditor()">✎ Modifica ripetizioni / tempi</button><button type="button" class="ghost" onclick="resetExercises()">Ripristina seduta e consuntivo</button></div><div id="exerciseEditor" style="display:none;margin-top:10px"><p class="small">Modifica soltanto quantità (ripetizioni o tempo) per ciascun esercizio. Il tipo di esercizio è fisso e non può essere sostituito.</p><div id="editorRows"></div><button type="button" onclick="saveExerciseEdits()">Salva modifiche</button></div></div>
-<div class="card"><h3>Organizza la seduta</h3><label>Data prevista (facoltativa)</label><input id="scheduledDate" type="date"><div class="wraprow"><button class="secondary" onclick="markSkipped()">Segna saltata</button><button class="secondary" onclick="rescheduleWorkout()">Riprogramma alla data scelta</button><button class="ghost" onclick="clearSchedule()">Annulla stato</button></div><p class="small">Una seduta riprogrammata mantiene il proprio giorno nel piano, ma appare con la nuova data. Non duplicare due sessioni intense nello stesso giorno.</p></div>
-<div class="card"><h3>Consuntivo</h3>
-<label>Durata (min)</label><input id="dur" type="number">
-<label>RPE 1–10</label><input id="rpe" type="number" min="1" max="10">
-<label>Grado massimo OS</label><input id="osg" placeholder="es. 6b+">
-<label>Grado massimo progetto</label><input id="prg" placeholder="es. 7a">
-<label>Zavorra trave aggiunta (kg; 0 = corpo libero)</label><input id="hang" type="number">
-<label>Zavorra trazioni aggiunta (kg; 0 = corpo libero)</label><input id="pull" type="number">
-<label>Fatica iniziale (1–10)</label><input id="fatigue" type="number" min="1" max="10" placeholder="es. 4"><label>Fatica finale (1–10)</label><input id="fatigueEnd" type="number" min="1" max="10" placeholder="es. 6"><div class="notice">Il dolore si registra in <button class="secondary" type="button" onclick="show('paintracker')">Salute e recupero</button>. AD tiene conto di questo monitoraggio.</div><label>Note</label><textarea id="notes" rows="3"></textarea><div class="small">Se compare dolore alle dita o ai gomiti, interrompi l’esercizio provocante. Non progredire il carico in presenza di dolore.</div>
-<div class="notice"><b>AD · Sintesi</b><p id="adWorkoutAdvice" class="small">Registra RPE e fatica.</p><button type="button" class="secondary" onclick="show('adpage')">Apri analisi completa</button></div><div id="workoutSavedStatus" class="status partial">Non ancora completato</div><div id="reopenActions" style="display:none;margin:8px 0"><button type="button" class="secondary" onclick="reopenWorkout()">↶ Riapri seduta completata</button><p class="small">Riaprendo, lo stato torna Parziale; gli esercizi e i dati registrati restano modificabili.</p></div><p class="small">Con “Termina e segna completato” la seduta risulterà completata anche se alcuni esercizi sono stati saltati; il dettaglio rimane nello storico.</p><div class="row"><button onclick="completeWorkout(true)">✓ Termina e segna completato</button><button class="secondary" onclick="completeWorkout(false)">Salva parziale</button></div>
-</div></section>
-
-<section id="climb" class="screen">
+<details class="card collapsible"><summary>Calendario e allenamento della data</summary><label for="workoutDate">Seleziona una data</label><input id="workoutDate" onchange="onWorkoutDateChanged(this.value)" type="date"/><div class="small" id="dateInfo">Scegli una data per aprire l’allenamento previsto. Le sedute riprogrammate hanno priorità.</div><button class="secondary" onclick="openToday()" type="button">Vai a oggi</button></details>
+<div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div><div class="wraprow" style="margin-top:12px"><button class="secondary" onclick="openEditor()" type="button">✎ Modifica ripetizioni / tempi</button><button class="ghost" onclick="resetExercises()" type="button">Ripristina seduta e consuntivo</button></div><div id="exerciseEditor" style="display:none;margin-top:10px"><p class="small">Modifica soltanto quantità (ripetizioni o tempo) per ciascun esercizio. Il tipo di esercizio è fisso e non può essere sostituito.</p><div id="editorRows"></div><button onclick="saveExerciseEdits()" type="button">Salva modifiche</button></div></div>
+<details class="card collapsible"><summary>Organizza la seduta</summary><label>Data prevista (facoltativa)</label><input id="scheduledDate" type="date"/><div class="wraprow"><button class="secondary" onclick="markSkipped()">Segna saltata</button><button class="secondary" onclick="rescheduleWorkout()">Riprogramma alla data scelta</button><button class="ghost" onclick="clearSchedule()">Annulla stato</button></div><p class="small">Una seduta riprogrammata mantiene il proprio giorno nel piano, ma appare con la nuova data. Non duplicare due sessioni intense nello stesso giorno.</p></details>
+<details class="card collapsible" open=""><summary>Consuntivo</summary>
+<label>Durata (min)</label><input id="dur" type="number"/>
+<label>RPE 1–10</label><input id="rpe" max="10" min="1" type="number"/>
+<label>Grado massimo OS</label><input id="osg" placeholder="es. 6b+"/>
+<label>Grado massimo progetto</label><input id="prg" placeholder="es. 7a"/>
+<label>Zavorra trave aggiunta (kg; 0 = corpo libero)</label><input id="hang" type="number"/>
+<label>Zavorra trazioni aggiunta (kg; 0 = corpo libero)</label><input id="pull" type="number"/>
+<label>Fatica iniziale (1–10)</label><input id="fatigue" max="10" min="1" placeholder="es. 4" type="number"/><label>Fatica finale (1–10)</label><input id="fatigueEnd" max="10" min="1" placeholder="es. 6" type="number"/><div class="notice">Il dolore si registra in <button class="secondary" onclick="show('paintracker')" type="button">Salute e recupero</button>. AD tiene conto di questo monitoraggio.</div><label>Note</label><textarea id="notes" rows="3"></textarea><div class="small">Se compare dolore alle dita o ai gomiti, interrompi l’esercizio provocante. Non progredire il carico in presenza di dolore.</div>
+<div class="notice"><b>AD · Sintesi</b><p class="small" id="adWorkoutAdvice">Registra RPE e fatica.</p><button class="secondary" onclick="show('adpage')" type="button">Apri analisi completa</button></div><div class="status partial" id="workoutSavedStatus">Non ancora completato</div><div id="reopenActions" style="display:none;margin:8px 0"><button class="secondary" onclick="reopenWorkout()" type="button">↶ Riapri seduta completata</button><p class="small">Riaprendo, lo stato torna Parziale; gli esercizi e i dati registrati restano modificabili.</p></div><p class="small">Con “Termina e segna completato” la seduta risulterà completata anche se alcuni esercizi sono stati saltati; il dettaglio rimane nello storico.</p><div class="row"><button onclick="completeWorkout(true)">✓ Termina e segna completato</button><button class="secondary" onclick="completeWorkout(false)">Salva parziale</button></div>
+</details></section>
+<section class="screen" id="climb">
 <h2>Diario vie</h2><div class="card">
-<label>Data</label><input id="rd" type="date"><label>Via</label><input id="route" placeholder="Nome via">
-<div class="row"><div><label>Grado</label><input id="grade" placeholder="6c"></div><div><label>Esito</label><select id="result"><option>OS</option><option>Flash</option><option>RP</option><option>Caduta</option><option>Non completata</option></select></div></div>
-<label>Tentativi</label><input id="attempts" type="number" value="1"><label>Motivo principale del fallimento</label><select id="failure"><option value="">—</option><option>Lettura</option><option>Tecnica piedi/bacino</option><option>Forza</option><option>Resistenza/pompaggio</option><option>Gestione riposi</option><option>Altro</option></select><label>Stile</label><input id="style" placeholder="placca, strapiombo, tacche...">
-<label>Difficoltà percepita 1–10</label><input id="diff" type="number" min="1" max="10"><label>Note</label><textarea id="rnotes"></textarea>
+<label>Data</label><input id="rd" type="date"/><label>Via</label><input id="route" placeholder="Nome via"/>
+<div class="row"><div><label>Grado</label><input id="grade" placeholder="6c"/></div><div><label>Esito</label><select id="result"><option>OS</option><option>Flash</option><option>RP</option><option>Caduta</option><option>Non completata</option></select></div></div>
+<label>Tentativi</label><input id="attempts" type="number" value="1"/><label>Motivo principale del fallimento</label><select id="failure"><option value="">—</option><option>Lettura</option><option>Tecnica piedi/bacino</option><option>Forza</option><option>Resistenza/pompaggio</option><option>Gestione riposi</option><option>Altro</option></select><label>Stile</label><input id="style" placeholder="placca, strapiombo, tacche..."/>
+<label>Difficoltà percepita 1–10</label><input id="diff" max="10" min="1" type="number"/><label>Note</label><textarea id="rnotes"></textarea>
 <button onclick="saveRoute()">Salva via</button></div>
 <div class="card"><table><thead><tr><th>Data</th><th>Via</th><th>Grado</th><th>Esito</th></tr></thead><tbody id="routes"></tbody></table></div>
 </section>
-
-<section id="tests" class="screen"><h2>Test e retest</h2>
+<section class="screen" id="tests"><h2>Test e retest</h2>
 <div class="notice" id="testNotice">Inserisci test e retest dell’atleta attivo. Tutte le zavorre sono aggiuntive al peso corporeo.</div>
 <div class="card"><label>Settimana di verifica</label><select id="testWeek"><option value="0">Iniziale</option><option value="4">Settimana 4</option><option value="8">Settimana 8</option><option value="12">Settimana 12</option></select>
-<label>Data</label><input id="td" type="date"><label>Peso corporeo (kg)</label><input id="tw" type="number" value="89"><label>Trazioni massime (rip.)</label><input id="tpu" type="number" value="10">
-<label>Trazione singola: zavorra aggiunta (kg)</label><input id="twp" type="number" value="25"><label>Trazione: RPE</label><input id="twr" type="number" min="1" max="10" value="8">
-<label>Trave 25 mm: zavorra aggiunta (kg)</label><input id="thw" type="number" value="5"><label>Durata sospensione (s)</label><input id="tht" type="number" placeholder="da rilevare"><label>Trave: RPE</label><input id="thr" type="number" min="1" max="10" value="8">
+<label>Data</label><input id="td" type="date"/><label>Peso corporeo (kg)</label><input id="tw" type="number" value="89"/><label>Trazioni massime (rip.)</label><input id="tpu" type="number" value="10"/>
+<label>Trazione singola: zavorra aggiunta (kg)</label><input id="twp" type="number" value="25"/><label>Trazione: RPE</label><input id="twr" max="10" min="1" type="number" value="8"/>
+<label>Trave 25 mm: zavorra aggiunta (kg)</label><input id="thw" type="number" value="5"/><label>Durata sospensione (s)</label><input id="tht" placeholder="da rilevare" type="number"/><label>Trave: RPE</label><input id="thr" max="10" min="1" type="number" value="8"/>
 <label>Protocollo intermittente completato?</label><select id="tint"><option value="yes">5 serie × 5 ripetizioni completate</option><option value="partial">Parziale</option><option value="no">Non eseguito</option></select>
-<label>Miglior OS indoor</label><input id="tlo" value="6a+"><label>Miglior OS in falesia</label><input id="tfo" placeholder="da registrare"><label>Note</label><textarea id="tn"></textarea><button onclick="saveTests()">Salva rilevazione</button></div>
-<div class="card"><h3>Storico test</h3><div id="testHistory" class="small"></div></div></section>
-
-<section id="progress" class="screen"><h2>Progressi</h2>
-<div class="grid"><div class="card"><div id="ph" class="metric">—</div><div class="label">ultimo carico trave</div></div><div class="card"><div id="pp" class="metric">—</div><div class="label">ultimo carico trazioni</div></div><div class="card"><div id="pm" class="metric">0</div><div class="label">minuti allenati</div></div><div class="card"><div id="pr" class="metric">0</div><div class="label">vie registrate</div></div></div>
-<div class="card"><h3>Onsight</h3><div id="osStats" class="small">Nessun dato.</div></div>
-<div class="card"><h3>Andamento RPE sedute</h3><canvas id="rpeChart" width="500" height="180" aria-label="Grafico RPE"></canvas></div><div class="card"><h3>Storico zavorra trazioni ai test</h3><canvas id="pullChart" width="500" height="180" aria-label="Grafico carichi trazioni"></canvas></div><div class="card"><h3>Ultime sedute</h3><div id="sessionTable" class="small"></div></div>
+<label>Miglior OS indoor</label><input id="tlo" value="6a+"/><label>Miglior OS in falesia</label><input id="tfo" placeholder="da registrare"/><label>Note</label><textarea id="tn"></textarea><button onclick="saveTests()">Salva rilevazione</button></div>
+<details class="card collapsible"><summary>Storico test</summary><div class="small" id="testHistory"></div></details></section>
+<section class="screen" id="progress"><h2>Progressi</h2><div class="card quicklinks"><h3>Altri strumenti</h3><div class="wraprow"><button class="secondary" onclick="show('climb')">Diario vie</button><button class="secondary" onclick="show('tests')">Test e retest</button></div></div>
+<div class="grid"><div class="card"><div class="metric" id="ph">—</div><div class="label">ultimo carico trave</div></div><div class="card"><div class="metric" id="pp">—</div><div class="label">ultimo carico trazioni</div></div><div class="card"><div class="metric" id="pm">0</div><div class="label">minuti allenati</div></div><div class="card"><div class="metric" id="pr">0</div><div class="label">vie registrate</div></div></div>
+<details class="card collapsible"><summary>Onsight</summary><div class="small" id="osStats">Nessun dato.</div></details>
+<details class="card collapsible"><summary>Andamento RPE sedute</summary><canvas aria-label="Grafico RPE" height="180" id="rpeChart" width="500"></canvas></details><details class="card collapsible"><summary>Storico zavorra trazioni ai test</summary><canvas aria-label="Grafico carichi trazioni" height="180" id="pullChart" width="500"></canvas></details><details class="card collapsible"><summary>Ultime sedute</summary><div class="small" id="sessionTable"></div></details>
 </section>
-<section id="paintracker" class="screen"><h2>Salute e recupero</h2>
-<div class="card"><p class="small">Modulo separato per l’atleta selezionato. Registra il dolore anche nei giorni senza allenamento. Le informazioni non costituiscono una diagnosi.</p><div id="painStatus" class="status partial"></div>
-<label for="painDate">Data</label><input type="date" id="painDate">
+<section class="screen" id="paintracker"><h2>Salute e recupero</h2>
+<div class="card"><p class="small">Modulo separato per l’atleta selezionato. Registra il dolore anche nei giorni senza allenamento. Le informazioni non costituiscono una diagnosi.</p><div class="status partial" id="painStatus"></div>
+<label for="painDate">Data</label><input id="painDate" type="date"/>
 <label for="painArea">Zona interessata</label><select id="painArea"><option value="dita">Dita</option><option value="gomito interno">Gomito interno</option><option value="gomito esterno">Gomito esterno</option><option value="polso">Polso</option><option value="spalla">Spalla</option><option value="altro">Altro</option></select>
-<label for="painDetail">Dettaglio (facoltativo: dito o articolazione)</label><input id="painDetail" placeholder="Es. anulare mano destra">
-<label for="painIntensity">Intensità (0–10)</label><input id="painIntensity" type="number" min="0" max="10" step="1" placeholder="Es. 4">
+<label for="painDetail">Dettaglio (facoltativo: dito o articolazione)</label><input id="painDetail" placeholder="Es. anulare mano destra"/>
+<label for="painIntensity">Intensità (0–10)</label><input id="painIntensity" max="10" min="0" placeholder="Es. 4" step="1" type="number"/>
 <label for="painCurrent">Stato</label><select id="painCurrent"><option value="present">Presente</option><option value="resolved">Risolto</option></select>
 <label for="painTrigger">Quando compare?</label><select id="painTrigger"><option value="">Non specificato</option><option value="prese">Quando stringo le prese</option><option value="dopo">Dopo l’allenamento</option><option value="riposo">Anche a riposo</option><option value="altro">Altro</option></select>
-<label for="painMemo">Note</label><textarea id="painMemo" rows="2" placeholder="Movimenti che lo provocano, andamento..."></textarea>
-<button type="button" onclick="savePainEntry()">Salva rilevazione</button></div>
-<div class="card"><h3>Storico rilevazioni</h3><div id="painHistory" class="small">Nessuna rilevazione.</div></div>
+<label for="painMemo">Note</label><textarea id="painMemo" placeholder="Movimenti che lo provocano, andamento..." rows="2"></textarea>
+<button onclick="savePainEntry()" type="button">Salva rilevazione</button></div>
+<details class="card collapsible"><summary>Storico rilevazioni</summary><div class="small" id="painHistory">Nessuna rilevazione.</div></details>
 <div class="notice">Con dolore ancora presente, evita gli esercizi che lo provocano e gli incrementi di carico sulle strutture coinvolte. Se persiste o peggiora, chiedi una valutazione professionale. Dichiarare “risolto” non significa automaticamente che sia sicuro riprendere i massimali.</div>
 </section>
-<section id="adpage" class="screen"><h2>AD · Analisi dettagliata</h2><div class="card"><h3>Indicazioni per l’atleta selezionato</h3><p id="adFullText" class="small"></p><div id="coachDetails" class="coachbox small"></div></div><div class="card"><h3>Monitoraggio dedicato</h3><p class="small">Dolore e recupero sono raccolti in una schermata distinta per mantenere semplice il consuntivo.</p><button onclick="show('paintracker')">Apri Salute e recupero</button></div><p class="small">Indicazioni prudenziali e orientative; nessuna variazione automatica del piano.</p></section>
-<section id="profiles" class="screen"><h2>Profili atleti</h2>
+<section class="screen" id="adpage"><h2>AD · Analisi dettagliata</h2><div class="card"><h3>Indicazioni per l’atleta selezionato</h3><p class="small" id="adFullText"></p><div class="coachbox small" id="coachDetails"></div></div><div class="card"><h3>Monitoraggio dedicato</h3><p class="small">Dolore e recupero sono raccolti in una schermata distinta per mantenere semplice il consuntivo.</p><button onclick="show('paintracker')">Apri Salute e recupero</button></div><p class="small">Indicazioni prudenziali e orientative; nessuna variazione automatica del piano.</p></section>
+<section class="screen" id="profiles"><h2>Profili atleti</h2>
 <div class="notice">Ogni persona ha dati, test, vie, sedute completate e settimana del programma indipendenti. I dati sono salvati su questo dispositivo, non sincronizzati tra telefoni.</div>
 <div class="card"><h3>Seleziona atleta</h3><div id="profileList"></div></div>
-<div class="card"><h3>Nuovo profilo</h3><label>Nome o soprannome</label><input id="newName" maxlength="55" placeholder="Es. Marco"><label>Peso (kg)</label><input id="newWeight" type="number" min="20" max="300" step="0.1"><label>Trazioni a corpo libero (ripetizioni)</label><input id="newPullups" type="number" min="0" max="100"><label>Grado a vista attuale</label><input id="newGrade" placeholder="es. 6a"><label>Obiettivo</label><input id="newGoal" placeholder="es. 6c a vista" value="7a a vista"><button onclick="addProfile()">Crea profilo</button></div>
-<div class="card"><h3>Modifica atleta selezionato</h3><label>Nome</label><input id="editName" maxlength="55"><label>Peso (kg)</label><input id="editWeight" type="number" min="20" max="300" step="0.1"><label>Trazioni massime</label><input id="editPullups" type="number" min="0" max="100"><label>Grado a vista attuale</label><input id="editGrade"><label>Obiettivo</label><input id="editGoal"><button onclick="updateProfile()">Salva profilo</button></div>
+<div class="card"><h3>Nuovo profilo</h3><label>Nome o soprannome</label><input id="newName" maxlength="55" placeholder="Es. Marco"/><label>Peso (kg)</label><input id="newWeight" max="300" min="20" step="0.1" type="number"/><label>Trazioni a corpo libero (ripetizioni)</label><input id="newPullups" max="100" min="0" type="number"/><label>Grado a vista attuale</label><input id="newGrade" placeholder="es. 6a"/><label>Obiettivo</label><input id="newGoal" placeholder="es. 6c a vista" value="7a a vista"/><button onclick="addProfile()">Crea profilo</button></div>
+<div class="card"><h3>Modifica atleta selezionato</h3><label>Nome</label><input id="editName" maxlength="55"/><label>Peso (kg)</label><input id="editWeight" max="300" min="20" step="0.1" type="number"/><label>Trazioni massime</label><input id="editPullups" max="100" min="0" type="number"/><label>Grado a vista attuale</label><input id="editGrade"/><label>Obiettivo</label><input id="editGoal"/><button onclick="updateProfile()">Salva profilo</button></div>
 <div class="card"><h3>Settimana attiva</h3><label>Settimana di allenamento del profilo</label><select id="profileWeek" onchange="setProfileWeek(this.value)"></select><p class="small">La settimana è indipendente per ciascun atleta. Le sedute completate restano associate alla settimana in cui sono state registrate.</p></div>
 </section>
-</main>
-<nav>
-<button id="nh" class="active" onclick="show('home')">Home</button>
-<button id="np" onclick="show('plan')">Programma</button>
-<button id="nw" onclick="loadWorkout()">Allenamento</button>
-<button id="nc" onclick="show('climb')">Vie</button>
-<button id="npr" onclick="show('progress')">Progressi</button><button id="nt" onclick="show('tests')">Test</button><button id="nprofiles" onclick="show('profiles')">Profili</button>
-</nav><div id="toast" class="toast"></div>
+<section class="screen" id="more"><h2>Altro</h2>
+<div class="card"><h3>Profilo e programma</h3><div class="menu-stack"><button onclick="show('profiles')">👥 Profili atleti</button><button onclick="show('tests')">📋 Test e retest</button><button onclick="show('climb')">🧗 Diario vie</button></div></div>
+<div class="card"><h3>AD e benessere</h3><div class="menu-stack"><button onclick="show('adpage')">◉ Analisi AD completa</button><button onclick="show('paintracker')">♡ Salute e recupero</button></div></div>
+<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.8. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
+<nav><button aria-current="page" aria-label="Home" class="active" id="nh" onclick="show('home')" type="button"><span aria-hidden="true" class="nav-icon">⌂</span><span class="nav-label">Home</span></button><button aria-label="Calendario" id="np" onclick="show('plan')" type="button"><span aria-hidden="true" class="nav-icon">▦</span><span class="nav-label">Calendario</span></button><button aria-label="Allenati" id="nw" onclick="loadWorkout()" type="button"><span aria-hidden="true" class="nav-icon">◉</span><span class="nav-label">Allenati</span></button><button aria-label="Progressi" id="npr" onclick="show('progress')" type="button"><span aria-hidden="true" class="nav-icon">▥</span><span class="nav-label">Progressi</span></button><button aria-label="Altro" id="nm" onclick="show('more')" type="button"><span aria-hidden="true" class="nav-icon">☰</span><span class="nav-label">Altro</span></button></nav><div class="toast" id="toast"></div>
 </div>
-
 <script>
 const $=id=>document.getElementById(id);
 const DRAFT_SUFFIX='_drafts';
@@ -301,8 +304,22 @@ function adAssess(sessions, profile, day){
  return {kind:'mantieni',heading:'Mantieni il carico',message:'La risposta è gestibile, ma non c’è ancora un margine ripetuto sufficiente per aumentare. Mantieni quantità e qualità, e rivaluta dopo la prossima seduta.',basis:`ultima seduta: RPE ${r}, fatica ${fi}→${ff}`};
 }
 function coachDetails(s,r){const a=adAssess(s,activeProfile(),selectedDay),done=s.filter(x=>x.completed===true).slice(-4),mean=done.filter(x=>+x.rpe>0).map(x=>+x.rpe),average=mean.length?(mean.reduce((p,c)=>p+c,0)/mean.length).toFixed(1):'—';return `Ultime ${done.length} sedute completate: RPE medio ${average}. ${a.heading}. Motivo: ${a.basis}. ${a.message}`}
-function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));const m={home:'nh',plan:'np',workout:'nw',climb:'nc',progress:'npr',tests:'nt',profiles:'nprofiles'};if(m[id])$(m[id]).classList.add('active');refresh();}
+function show(id){
+ document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===id));
+ document.querySelectorAll('nav button').forEach(x=>{x.classList.remove('active');x.removeAttribute('aria-current')});
+ const m={home:'nh',plan:'np',workout:'nw',progress:'npr',climb:'npr',tests:'nm',profiles:'nm',paintracker:'nm',adpage:'nm',more:'nm'};
+ if(m[id]){$(m[id]).classList.add('active');$(m[id]).setAttribute('aria-current','page')}
+ refresh();window.scrollTo(0,0);
+}
 function renderPlan(){$('weekBtns').innerHTML=weeks.map((w,i)=>`<button class="${i+1===selectedWeek?'sel':''}" onclick="setProfileWeek(${i+1})">${i+1}</button>`).join('');const w=weeks[selectedWeek-1];$('phase').textContent=w[0];$('weekFocus').textContent=w[1];$('weekTitle').textContent='Settimana '+selectedWeek;$('weekNote').textContent=w[2];renderCalendar();$('planDays').innerHTML=Array.from({length:7},(_,i)=>{const d=i+1,t=T[d];return `<div class="card"><div class="status ${isCompleted(selectedWeek,d)?'ok':'partial'}">${isCompleted(selectedWeek,d)?'✓ Completato':isPartial(selectedWeek,d)?'◐ Parziale':calendarEntry(selectedWeek,d).status==='skipped'?'– Saltata':calendarEntry(selectedWeek,d).status==='moved'?'↪ Riprogrammata '+(calendarEntry(selectedWeek,d).date||''):'○ Da fare'}</div><br><span class="tag">${t[0]}</span><span class="tag">${t[1]}</span><h3>${t[2]}</h3><ul class="list">${exFor(d,selectedWeek).map(x=>`<li class="small">${esc(x)}</li>`).join('')}</ul><button class="secondary" onclick="openCalendarDay(${d})">Apri seduta</button></div>`}).join('');}
+function compactPlanDays(){
+ document.querySelectorAll('#planDays > .card').forEach(card=>{
+  const list=card.querySelector('ul.list');if(!list||list.parentElement.tagName==='DETAILS')return;
+  const details=document.createElement('details');details.className='plan-fold';
+  const summary=document.createElement('summary');summary.textContent='Mostra esercizi e dettagli';
+  list.parentNode.insertBefore(details,list);details.append(summary,list);
+ });
+}
 function savedWorkout(w=selectedWeek,d=selectedDay){const a=load(KS).filter(x=>+x.week===+w&&+x.day===+d);return a.length?a[a.length-1]:null}
 function isCompleted(w,d){return savedWorkout(w,d)?.completed===true}
 function isPartial(w,d){const x=savedWorkout(w,d);return !!x&&x.completed!==true}
@@ -346,7 +363,7 @@ function saveTests(){const ts=load(KT);ts.push({date:$('td').value||iso,week:+$(
 const grades=['4','4+','5a','5a+','5b','5b+','5c','5c+','6a','6a+','6b','6b+','6c','6c+','7a','7a+','7b','7b+','7c'];
 function bestOS(routes){let valid=routes.filter(x=>x.result==='OS'&&grades.includes(x.grade));return valid.length?valid.reduce((a,b)=>grades.indexOf(a.grade)>grades.indexOf(b.grade)?a:b).grade:'6a+';}
 function plot(id,values,label){const c=$(id),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#666';ctx.font='12px Arial';if(!values.length){ctx.fillText('Ancora nessuna serie di dati registrata',14,30);return}const max=Math.max(...values.map(v=>v.v),1),min=Math.min(0,...values.map(v=>v.v));ctx.strokeStyle='#ddd';ctx.beginPath();ctx.moveTo(35,15);ctx.lineTo(35,150);ctx.lineTo(w-10,150);ctx.stroke();ctx.fillText(label,40,15);ctx.fillText(String(max),4,24);ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.beginPath();values.forEach((p,i)=>{const x=45+i*(w-65)/Math.max(1,values.length-1),y=145-(p.v-min)/(max-min||1)*110;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();values.forEach((p,i)=>{let x=45+i*(w-65)/Math.max(1,values.length-1),y=145-(p.v-min)/(max-min||1)*110;ctx.beginPath();ctx.arc(x,y,4,0,7);ctx.fillStyle='#111';ctx.fill();ctx.fillStyle='#777';ctx.fillText(String(p.label).slice(0,5),Math.max(0,x-13),168)});}
-function refresh(){renderPlan();const s=load(KS),r=load(KR),t=load(KT);$('hWeek').textContent=selectedWeek+'/12';$('hSessions').textContent=s.filter(x=>x.completed===true).length;const rr=s.filter(x=>x.rpe);$('hRpe').textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):'—';$('hOS').textContent=r.some(x=>x.result==='OS')?bestOS(r):(activeProfile().grade||'—');$('ph').textContent=(s.filter(x=>x.hang!==undefined).at(-1)?.hang??'—')+' kg +';$('pp').textContent=(s.filter(x=>x.pull!==undefined).at(-1)?.pull??'—')+' kg +';$('pm').textContent=s.reduce((a,b)=>a+(b.duration||0),0);$('pr').textContent=r.length;$('profileSummary').textContent=`${activeProfile().name} · ${activeProfile().weight||'—'} kg · ${activeProfile().pullups??'—'} trazioni · OS ${activeProfile().grade||'—'} · obiettivo ${activeProfile().goal||'—'}`;const nowDay=(new Date().getDay()||7),todayPlan=workoutForDate(localISO(new Date()));$('todayTag').textContent='Oggi · '+T[todayPlan?.day||nowDay][0];$('todayTitle').textContent=T[todayPlan?.day||nowDay][2];$('todayDesc').textContent='Seduta proposta per oggi nella settimana '+selectedWeek+' del ciclo '+(todayPlan?.moved?'(riprogrammata)':'')+'.';$('coachAdvice').textContent=coachText(s,r);$('coachDetails').textContent=coachDetails(s,r);$('adFullText').textContent=coachText(s,r)+' '+(activePain()?'È registrato dolore ancora presente.':'');renderPainModule();$('weekStatus').textContent=`${Array.from({length:7},(_,i)=>isCompleted(selectedWeek,i+1)).filter(Boolean).length} / 7 giorni segnati completati nella settimana ${selectedWeek}`;
+function refresh(){renderPlan();compactPlanDays();const s=load(KS),r=load(KR),t=load(KT);$('hWeek').textContent=selectedWeek+'/12';$('hSessions').textContent=s.filter(x=>x.completed===true).length;const rr=s.filter(x=>x.rpe);$('hRpe').textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):'—';$('hOS').textContent=r.some(x=>x.result==='OS')?bestOS(r):(activeProfile().grade||'—');$('ph').textContent=(s.filter(x=>x.hang!==undefined).at(-1)?.hang??'—')+' kg +';$('pp').textContent=(s.filter(x=>x.pull!==undefined).at(-1)?.pull??'—')+' kg +';$('pm').textContent=s.reduce((a,b)=>a+(b.duration||0),0);$('pr').textContent=r.length;$('profileSummary').textContent=`${activeProfile().name} · ${activeProfile().weight||'—'} kg · ${activeProfile().pullups??'—'} trazioni · OS ${activeProfile().grade||'—'} · obiettivo ${activeProfile().goal||'—'}`;const nowDay=(new Date().getDay()||7),todayPlan=workoutForDate(localISO(new Date()));$('todayTag').textContent='Oggi · '+T[todayPlan?.day||nowDay][0];$('todayTitle').textContent=T[todayPlan?.day||nowDay][2];$('todayDesc').textContent='Seduta proposta per oggi nella settimana '+selectedWeek+' del ciclo '+(todayPlan?.moved?'(riprogrammata)':'')+'.';$('coachAdvice').textContent=coachText(s,r);$('coachDetails').textContent=coachDetails(s,r);$('adFullText').textContent=coachText(s,r)+' '+(activePain()?'È registrato dolore ancora presente.':'');renderPainModule();$('weekStatus').textContent=`${Array.from({length:7},(_,i)=>isCompleted(selectedWeek,i+1)).filter(Boolean).length} / 7 giorni segnati completati nella settimana ${selectedWeek}`;
 $('routes').innerHTML=r.slice(-15).reverse().map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.route||'-')}</td><td>${esc(x.grade||'-')}</td><td>${esc(x.result)}</td></tr>`).join('');const attempted=r.filter(x=>x.result==='OS'||x.result==='Flash'||x.result==='RP'||x.result==='Caduta'||x.result==='Non completata');$('osStats').textContent=r.length?`${r.length} vie registrate · ${r.filter(x=>x.result==='OS').length} OS · migliore OS ${bestOS(r)}. Percentuale OS sulle vie registrate: ${attempted.length?Math.round(100*r.filter(x=>x.result==='OS').length/attempted.length):0}% (non è la percentuale dei soli tentativi a vista se registri anche i progetti).`:'Nessun dato.';$('sessionTable').innerHTML=s.slice(-8).reverse().map(x=>`${esc(x.date)} · S${esc(x.week)} · ${esc(x.title)} · ${x.completed===true?'✓ Completato':'◐ Parziale'} · RPE ${esc(x.rpe||'—')} · ${x.exercises?x.exercises.filter(e=>e.done).length+'/'+x.exercises.length+' esercizi':''}<br>`).join('');$('testHistory').innerHTML=t.length?t.slice().reverse().map(x=>`${esc(x.date)} · ${x.week?'S'+esc(x.week):'Base'} · ${x.weight} kg corporei · ${x.pullups} trazioni · trazione +${x.weighted} kg · trave +${x.hang} kg${x.time?' / '+x.time+' s':''}<br>`).join(''):'Nessun retest salvato. I valori iniziali confermati sono mostrati sopra.';
 updateWorkoutStatus();showADWorkout();plot('rpeChart',rr.slice(-10).map(x=>({label:x.date.slice(5),v:x.rpe})),'RPE (1–10)');plot('pullChart',t.filter(x=>x.weighted!==undefined).slice(-8).map(x=>({label:x.week?'S'+x.week:'Base',v:x.unit==='additional_kg'?x.weighted:Math.max(0,x.weighted-(x.weight||89))})),'Zavorra aggiunta (kg)');}
 function toast(msg){let el=$('toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2100)}

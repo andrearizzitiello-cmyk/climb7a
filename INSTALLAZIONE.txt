@@ -1,1 +1,4 @@
-Climb 7A v0.7.1 — modulo Salute e recupero separato. Sostituisci i sei file del repository GitHub Pages. I dati per ogni atleta restano nel localStorage dello stesso indirizzo. Il modulo salva nuove rilevazioni in un archivio separato, senza cancellare quelle precedenti.
+Climb 7A v0.8 — Interfaccia compatta
+Sostituisci tutti i file nel repository GitHub Pages, senza cambiare URL.
+La nuova versione non modifica le chiavi localStorage: conserva profili e dati esistenti sullo stesso dispositivo.
+Apri nuovamente la PWA per ricevere l’aggiornamento. Prima di aggiornare, conserva una copia del repository.
