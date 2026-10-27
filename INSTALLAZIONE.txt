@@ -3,3 +3,6 @@ Sostituire i sei file nel repository GitHub Pages. I dati locali precedenti rest
 ATTENZIONE: le registrazioni vecchie prive del campo completed=true verranno visualizzate come PARZIALI (non piu completate automaticamente). Riaprire le sedute interessate e confermare il completamento.
 
 Versione 0.6.3: Ripristina seduta e consuntivo elimina solo i dati storici del profilo/settimana/giorno selezionati. Non elimina altri allenamenti.
+
+VERSIONE 0.6.4: ripristino cancella anche lo storico della sola seduta; editor limitato alle quantità (ripetizioni / tempo).
+Se sul telefono compare una versione precedente, chiudi e riapri la PWA dopo il commit su GitHub Pages.

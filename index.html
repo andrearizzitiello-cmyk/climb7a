@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111111"><link rel="manifest" href="./manifest.webmanifest">
-<title>Climb 7A — v0.6.2</title>
+<title>Climb 7A — v0.6.4</title>
 <style>
 :root{--bg:#f4f4f1;--card:#fff;--ink:#151515;--muted:#666;--line:#ddd;--ok:#1d6b3b;--warn:#9a6400}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
@@ -31,7 +31,7 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 </style>
 </head>
 <body><div class="app">
-<header><div class="brand">CLIMB 7A</div><div class="sub">v0.6.2 · calendario e salvataggio bozze</div><div class="profilebar"><select id="profileSelect" aria-label="Seleziona atleta" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Profili</button></div></header>
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.6.4 · ripristino storico e quantità esercizi</div><div class="profilebar"><select id="profileSelect" aria-label="Seleziona atleta" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Profili</button></div></header>
 <main>
 
 <section id="home" class="screen active">
@@ -57,7 +57,7 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 <section id="workout" class="screen">
 <h2>Allenamento del giorno</h2>
 <div class="card"><h3>Calendario e allenamento della data</h3><label for="workoutDate">Seleziona una data</label><input id="workoutDate" type="date" onchange="onWorkoutDateChanged(this.value)"><div class="small" id="dateInfo">Scegli una data per aprire l’allenamento previsto. Le sedute riprogrammate hanno priorità.</div><button type="button" class="secondary" onclick="openToday()">Vai a oggi</button></div>
-<div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div><div class="wraprow" style="margin-top:12px"><button type="button" class="secondary" onclick="openEditor()">✎ Modifica esercizi</button><button type="button" class="ghost" onclick="resetExercises()">Ripristina seduta e consuntivo</button></div><div id="exerciseEditor" style="display:none;margin-top:10px"><p class="small">Le modifiche valgono soltanto per questo atleta, questa settimana e questa giornata.</p><div id="editorRows"></div><button type="button" class="secondary" onclick="addExerciseRow()">+ Aggiungi esercizio</button> <button type="button" onclick="saveExerciseEdits()">Salva modifiche</button></div></div>
+<div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div><div class="wraprow" style="margin-top:12px"><button type="button" class="secondary" onclick="openEditor()">✎ Modifica ripetizioni / tempi</button><button type="button" class="ghost" onclick="resetExercises()">Ripristina seduta e consuntivo</button></div><div id="exerciseEditor" style="display:none;margin-top:10px"><p class="small">Modifica soltanto quantità (ripetizioni o tempo) per ciascun esercizio. Il tipo di esercizio è fisso e non può essere sostituito.</p><div id="editorRows"></div><button type="button" onclick="saveExerciseEdits()">Salva modifiche</button></div></div>
 <div class="card"><h3>Organizza la seduta</h3><label>Data prevista (facoltativa)</label><input id="scheduledDate" type="date"><div class="wraprow"><button class="secondary" onclick="markSkipped()">Segna saltata</button><button class="secondary" onclick="rescheduleWorkout()">Riprogramma alla data scelta</button><button class="ghost" onclick="clearSchedule()">Annulla stato</button></div><p class="small">Una seduta riprogrammata mantiene il proprio giorno nel piano, ma appare con la nuova data. Non duplicare due sessioni intense nello stesso giorno.</p></div>
 <div class="card"><h3>Consuntivo</h3>
 <label>Durata (min)</label><input id="dur" type="number">
@@ -189,11 +189,14 @@ function collectFields(){let data={};for(const id of ['dur','rpe','osg','prg','h
 function saveDraft(){if(!document.getElementById('workout').classList.contains('active'))return;const a=load(draftKey());a[sessionKey(selectedWeek,selectedDay)]={exercises:[...$('exerciseList').querySelectorAll('input[type=checkbox]')].map(e=>e.checked),fields:collectFields(),updatedAt:new Date().toISOString()};save(draftKey(),a);updateWorkoutStatus()}
 // Cancella ESCLUSIVAMENTE il consuntivo relativo a profilo corrente, settimana e giorno selezionati.
 // Rimuove tutte le vecchie copie della medesima seduta, comprese eventuali duplicazioni legacy.
+function sameWorkout(x,w,d){return x&&Number(x.week)===Number(w)&&Number(x.day)===Number(d)}
 function clearWorkoutRecord(w,d){
-  const s=load(KS);
-  const remaining=s.filter(x=>!(+x.week===+w&&+x.day===+d));
-  if(remaining.length!==s.length)save(KS,remaining);
+  // Tutti i record storici duplicati della stessa seduta, inclusi vecchi
+  // salvataggi, devono sparire. Gli altri record non vengono toccati.
+  const records=load(KS),kept=records.filter(x=>!sameWorkout(x,w,d));
+  save(KS,kept);
   clearDraft(w,d);
+  return records.length-kept.length;
 }
 function localISO(date){return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-')}
 function dayFromISO(v){const d=new Date(v+'T12:00:00');return isNaN(d.valueOf())?null:(d.getDay()||7)}
@@ -203,24 +206,55 @@ function openToday(){openWorkoutForDate(localISO(new Date()))}
 function onWorkoutDateChanged(v){openWorkoutForDate(v)}
 function openCalendarDay(day){const base=new Date(($('planDate').value||localISO(new Date()))+'T12:00:00');const delta=day-(base.getDay()||7);base.setDate(base.getDate()+delta);selectedDay=day;loadWorkout();$('workoutDate').value=localISO(base);$('dateInfo').textContent='Seduta prevista per '+localISO(base)+' · settimana '+selectedWeek;}
 
-function customEx(w,d){const edits=load(KE);return edits[sessionKey(w,d)]}
-function exFor(d,w){const custom=customEx(w,d);return Array.isArray(custom)?[...custom]:baseExFor(d,w)}
+// Il piano di allenamento è immutabile: le personalizzazioni consentono SOLO
+// la dose (quantità di ripetizioni o durata). I vecchi editor liberi non
+// possono più sostituire tipi di esercizio.
+function customDose(w,d){const x=load(KE)[sessionKey(w,d)];return x&&x.type==='dose_only'&&Array.isArray(x.values)?x.values:[]}
+function exFor(d,w){const base=baseExFor(d,w),dose=customDose(w,d);return base.map((exercise,i)=>{const v=dose[i];if(!v||!(+v.amount>0)||!['ripetizioni','secondi','minuti'].includes(v.unit))return exercise;return exercise+'  |  DOSE PERSONALIZZATA: '+v.amount+' '+v.unit;})}
 function calendarEntry(w,d){return load(KC)[sessionKey(w,d)]||{}}
 function updateCalendar(w,d,entry){const all=load(KC);if(entry===null)delete all[sessionKey(w,d)];else all[sessionKey(w,d)]=entry;save(KC,all)}
-function openEditor(){const ed=$('exerciseEditor');ed.style.display=ed.style.display==='none'?'block':'none';if(ed.style.display==='block'){$('editorRows').innerHTML='';exFor(selectedDay,selectedWeek).forEach(x=>addExerciseRow(x));}}
-function addExerciseRow(value=''){const el=document.createElement('div');el.className='editrow';const ta=document.createElement('textarea');ta.rows=2;ta.placeholder='Esercizio, serie, recupero, intensità';ta.value=value;el.append(ta);const b=document.createElement('button');b.type='button';b.className='ghost';b.textContent='Rimuovi';b.onclick=()=>el.remove();el.append(b);$('editorRows').append(el)}
-function saveExerciseEdits(){const arr=[...$('editorRows').querySelectorAll('textarea')].map(x=>x.value.trim()).filter(Boolean);if(!arr.length){toast('Inserisci almeno un esercizio');return}const a=load(KE);a[sessionKey(selectedWeek,selectedDay)]=arr;save(KE,a);$('exerciseEditor').style.display='none';loadWorkout();toast('Esercizi personalizzati salvati')}
+function openEditor(){
+const ed=$('exerciseEditor');ed.style.display=ed.style.display==='none'?'block':'none';
+if(ed.style.display!=='block')return;
+const dose=customDose(selectedWeek,selectedDay);
+$('editorRows').innerHTML='';
+baseExFor(selectedDay,selectedWeek).forEach((exercise,i)=>{
+  const row=document.createElement('div');row.className='editrow';
+  const heading=document.createElement('div');heading.className='small';heading.style.fontWeight='750';heading.textContent=(i+1)+'. '+exercise;
+  const label=document.createElement('label');label.textContent='Quantità personalizzata (facoltativa)';
+  const input=document.createElement('input');input.type='number';input.min='0.5';input.max='1000';input.step='0.5';input.placeholder='Nessuna modifica';input.value=dose[i]?.amount??'';input.setAttribute('aria-label','Quantità esercizio '+(i+1));input.className='doseAmount';
+  const unit=document.createElement('select');unit.className='doseUnit';unit.setAttribute('aria-label','Unità esercizio '+(i+1));
+  for(const u of ['ripetizioni','secondi','minuti']){const o=document.createElement('option');o.value=u;o.textContent=u;unit.append(o)}
+  unit.value=dose[i]?.unit||'ripetizioni';
+  row.append(heading,label,input,unit);$('editorRows').append(row);
+});
+}
+function saveExerciseEdits(){
+ const rows=[...$('editorRows').querySelectorAll('.editrow')],values=[];
+ for(const row of rows){const raw=row.querySelector('.doseAmount').value,unit=row.querySelector('.doseUnit').value;
+  if(!raw){values.push(null);continue}
+  const amount=Number(raw);if(!Number.isFinite(amount)||amount<=0||amount>1000){toast('Usa una quantità positiva, fino a 1000');return}
+  values.push({amount,unit});
+ }
+ const edits=load(KE),key=sessionKey(selectedWeek,selectedDay);
+ if(values.some(Boolean))edits[key]={type:'dose_only',values};else delete edits[key];
+ save(KE,edits);$('exerciseEditor').style.display='none';
+ // Non eliminare le spunte: vengono preservate per posizione esercizio.
+ loadWorkout();toast('Modificate soltanto ripetizioni o durate');
+}
 function resetExercises(){
-const w=selectedWeek,d=selectedDay;
-if(!confirm('Ripristinare completamente questa seduta? Verranno eliminati esercizi spuntati, consuntivo (durata, RPE, carichi, note) e TUTTE le registrazioni storiche relative SOLO a questo atleta, settimana '+w+', giorno '+T[d][0]+'. Le altre sedute e gli altri atleti non saranno modificati.'))return;
-const edits=load(KE);delete edits[sessionKey(w,d)];save(KE,edits);
-clearWorkoutRecord(w,d);
-updateCalendar(w,d,null);
-$('exerciseEditor').style.display='none';
-loadWorkout();
-// loadWorkout rilegge i valori dallo storage. Non esiste più alcun consuntivo per questa seduta.
-refresh();
-toast('Seduta ripristinata: dati, spunte e storico della sola seduta eliminati');
+ const w=selectedWeek,d=selectedDay,profile=activeProfile().name;
+ if(!confirm('Eliminare DEFINITIVAMENTE tutte le registrazioni della seduta '+T[d][0]+' (settimana '+w+') di '+profile+'? Verranno azzerati consuntivo, spunte, bozze, storico e quantità personalizzate SOLTANTO di questa seduta. Gli altri allenamenti resteranno invariati.'))return;
+ const edits=load(KE);delete edits[sessionKey(w,d)];save(KE,edits);
+ const removed=clearWorkoutRecord(w,d);
+ updateCalendar(w,d,null);
+ $('exerciseEditor').style.display='none';
+ // Azzera anche i controlli a schermo, evitando dati rimasti in memoria/UI.
+ [...$('exerciseList').querySelectorAll('input[type=checkbox]')].forEach(x=>x.checked=false);
+ for(const id of ['dur','rpe','osg','prg','hang','pull','fatigue','notes'])$(id).value='';
+ $('pain').value='no';
+ loadWorkout();refresh();
+ toast('Ripristinata '+T[d][0]+' S'+w+': '+removed+' registrazioni eliminate');
 }
 function markSkipped(){if(isCompleted(selectedWeek,selectedDay)){toast('Prima riapri la seduta completata');return;}updateCalendar(selectedWeek,selectedDay,{status:'skipped'});refresh();toast('Seduta segnata saltata')}
 function rescheduleWorkout(){const date=$('scheduledDate').value;if(!date){toast('Scegli prima una data');return}updateCalendar(selectedWeek,selectedDay,{status:'moved',date});refresh();toast('Seduta riprogrammata al '+date)}
@@ -267,7 +301,7 @@ save(KS,s);loadWorkout();toast('Seduta riaperta e stato aggiornato');
 function completeWorkout(completed){let rpe=+$('rpe').value,f=+$('fatigue').value;if(rpe&&(rpe<1||rpe>10)){toast('RPE deve essere tra 1 e 10');return}if(f&&(f<1||f>10)){toast('Fatica deve essere tra 1 e 10');return}
 if(completed&&!confirm('Confermi di avere terminato questa seduta e di volerla segnare come COMPLETATA?'))return;
 const checked=[...$('exerciseList').querySelectorAll('input')], ex=exFor(selectedDay,selectedWeek).map((name,i)=>({name,done:checked[i]?.checked||false}));const s=load(KS),old=savedWorkout();const obj={date:old?.date||iso,week:selectedWeek,day:selectedDay,title:T[selectedDay][2],scheduledDate:calendarEntry(selectedWeek,selectedDay).date||'',duration:+$('dur').value||0,rpe,os:$('osg').value,proj:$('prg').value,hang:+$('hang').value||0,pull:+$('pull').value||0,fatigue:f,pain:$('pain').value,exercises:ex,note:$('notes').value,completed:completed===true,updatedAt:new Date().toISOString()};
-const prior=s.findIndex(x=>x.week===selectedWeek&&x.day===selectedDay);if(prior>=0)s.splice(prior,1);s.push(obj);save(KS,s);clearDraft(selectedWeek,selectedDay);if(completed)updateCalendar(selectedWeek,selectedDay,null);toast(completed?'✓ Allenamento completato':'Allenamento parziale salvato');refresh();}
+const updated=s.filter(x=>!sameWorkout(x,selectedWeek,selectedDay));updated.push(obj);save(KS,updated);clearDraft(selectedWeek,selectedDay);if(completed)updateCalendar(selectedWeek,selectedDay,null);toast(completed?'✓ Allenamento completato':'Allenamento parziale salvato');refresh();}
 function saveRoute(){if(!$('grade').value.trim()){toast('Inserisci il grado della via');return}const r=load(KR);r.push({date:$('rd').value||iso,route:$('route').value,grade:$('grade').value.trim(),result:$('result').value,attempts:+$('attempts').value||1,style:$('style').value,diff:+$('diff').value||0,failure:$('failure').value,note:$('rnotes').value});save(KR,r);toast('Via salvata');refresh();}
 function saveTests(){const ts=load(KT);ts.push({date:$('td').value||iso,week:+$('testWeek').value,weight:+$('tw').value||0,pullups:+$('tpu').value||0,weighted:+$('twp').value||0,weightedRpe:+$('twr').value||0,hang:+$('thw').value||0,hangRpe:+$('thr').value||0,time:+$('tht').value||0,intermittent:$('tint').value,lead:$('tlo').value,outdoor:$('tfo').value,note:$('tn').value,unit:'additional_kg'});save(KT,ts);toast('Test salvato nello storico');refresh();}
 const grades=['4','4+','5a','5a+','5b','5b+','5c','5c+','6a','6a+','6b','6b+','6c','6c+','7a','7a+','7b','7b+','7c'];
