@@ -1,1 +1,1 @@
-Climb 7A v0.9.2. Sostituisci tutti i sei file nel repository GitHub Pages. Mantieni stesso URL e profilo: i dati locali non sono cancellati. Aggiornata cronologia, date, dati AD e grafici. Esegui un backup prima di sostituire i file.
+Climb 7A v0.9.3 - Correzione caricamento dashboard/AD/Progressi. Sostituire tutti i file su GitHub Pages. Non cancellare i dati del browser.
