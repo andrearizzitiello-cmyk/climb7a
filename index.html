@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111111"><link rel="manifest" href="./manifest.webmanifest">
-<title>Climb 7A — v0.2</title>
+<title>Climb 7A — v0.4</title>
 <style>
 :root{--bg:#f4f4f1;--card:#fff;--ink:#151515;--muted:#666;--line:#ddd;--ok:#1d6b3b;--warn:#9a6400}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
@@ -21,15 +21,15 @@ input,select,textarea{width:100%;border:1px solid #ccc;border-radius:10px;paddin
 .check{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #eee}.check input{width:auto;margin:0}.done{color:var(--ok);text-decoration:line-through}
 .tag{display:inline-block;background:#eee;border-radius:99px;padding:5px 9px;font-size:11px;margin:2px}.tag.dark{background:#111;color:#fff}
 .list{padding:0;margin:0;list-style:none}.list li{padding:10px 0;border-bottom:1px solid #eee}
-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(560px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:#fff;border-top:1px solid #ddd;z-index:10}
-nav button{background:#fff;color:#666;border-radius:0;padding:11px 2px;font-size:10px}nav button.active{color:#111;font-weight:850}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(560px,100%);display:grid;grid-template-columns:repeat(6,1fr);background:#fff;border-top:1px solid #ddd;z-index:10}
+#chart canvas{display:block;width:100%;height:180px} .notice{padding:12px;background:#f2f7f3;border-left:3px solid #427858;border-radius:9px;font-size:12px;margin:10px 0} nav button{background:#fff;color:#666;border-radius:0;padding:11px 2px;font-size:10px}nav button.active{color:#111;font-weight:850}
 .toast{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:12px;font-size:12px;z-index:20}
 table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;padding:8px 5px;border-bottom:1px solid #eee}
 .week{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.week button{font-size:11px;padding:9px 3px;background:#eee;color:#111}.week button.sel{background:#111;color:#fff}
 </style>
 </head>
 <body><div class="app">
-<header><div class="brand">CLIMB 7A</div><div class="sub">v0.2 · percorso personalizzato verso il 7a a vista</div></header>
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.4 · percorso personalizzato verso il 7a a vista</div></header>
 <main>
 
 <section id="home" class="screen active">
@@ -41,14 +41,14 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 <div class="card"><div id="hOS" class="metric">6a+</div><div class="label">miglior OS</div></div>
 </div>
 <div class="card"><span class="tag dark" id="todayTag">Lunedì</span><h3 id="todayTitle">Forza dita + trazioni + core</h3><p class="small" id="todayDesc">Seduta prevista dal piano. Completa gli esercizi e registra il carico.</p><button onclick="show('workout')">Apri seduta</button></div>
-<div class="card"><h3>Regola del ciclo</h3><p class="small">3 stimoli di arrampicata: boulder forza/potenza, lead indoor specifica e outdoor performance. Le sedute a casa completano forza e recupero.</p></div>
+<div class="card"><h3>Profilo iniziale verificato</h3><div class="small">89 kg · 10 trazioni · 1 ripetizione con +25 kg · sospensione 25 mm con +5 kg · 5 serie × 5 ripetizioni 5″/5″. I carichi di trave e trazioni sono zavorre <b>aggiunte</b> al peso corporeo.</div></div><div class="card"><h3>Regola del ciclo</h3><p class="small">3 stimoli di arrampicata: boulder forza/potenza, lead indoor specifica e outdoor performance. Le sedute a casa completano forza e recupero.</p></div>
 </section>
 
 <section id="plan" class="screen">
 <h2>Programma 12 settimane</h2>
 <div class="card"><div class="week" id="weekBtns"></div></div>
 <div class="card"><span class="tag dark" id="phase"></span><span class="tag" id="weekFocus"></span><h3 id="weekTitle"></h3><p class="small" id="weekNote"></p></div>
-<div id="planDays"></div>
+<div class="notice">La sessione outdoor può essere spostata a domenica: in quel caso sabato è riposo. Se salti la lead, non aggiungere automaticamente una seconda seduta intensa.</div><div id="planDays"></div>
 </section>
 
 <section id="workout" class="screen">
@@ -59,9 +59,9 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 <label>RPE 1–10</label><input id="rpe" type="number" min="1" max="10">
 <label>Grado massimo OS</label><input id="osg" placeholder="es. 6b+">
 <label>Grado massimo progetto</label><input id="prg" placeholder="es. 7a">
-<label>Carico trave totale (kg)</label><input id="hang" type="number">
-<label>Carico trazioni totale (kg)</label><input id="pull" type="number">
-<label>Note</label><textarea id="notes" rows="3"></textarea>
+<label>Zavorra trave aggiunta (kg; 0 = corpo libero)</label><input id="hang" type="number">
+<label>Zavorra trazioni aggiunta (kg; 0 = corpo libero)</label><input id="pull" type="number">
+<label>Fatica prima di iniziare (1–10)</label><input id="fatigue" type="number" min="1" max="10" placeholder="es. 4"><label>Dolore alle dita / gomiti?</label><select id="pain"><option value="no">No</option><option value="yes">Sì</option></select><label>Note</label><textarea id="notes" rows="3"></textarea><div class="small">Se compare dolore alle dita o ai gomiti, interrompi l’esercizio provocante. Non progredire il carico in presenza di dolore.</div>
 <button onclick="completeWorkout()">Salva seduta</button>
 </div></section>
 
@@ -69,25 +69,26 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 <h2>Diario vie</h2><div class="card">
 <label>Data</label><input id="rd" type="date"><label>Via</label><input id="route" placeholder="Nome via">
 <div class="row"><div><label>Grado</label><input id="grade" placeholder="6c"></div><div><label>Esito</label><select id="result"><option>OS</option><option>Flash</option><option>RP</option><option>Caduta</option><option>Non completata</option></select></div></div>
-<label>Tentativi</label><input id="attempts" type="number" value="1"><label>Stile</label><input id="style" placeholder="placca, strapiombo, tacche...">
+<label>Tentativi</label><input id="attempts" type="number" value="1"><label>Motivo principale del fallimento</label><select id="failure"><option value="">—</option><option>Lettura</option><option>Tecnica piedi/bacino</option><option>Forza</option><option>Resistenza/pompaggio</option><option>Gestione riposi</option><option>Altro</option></select><label>Stile</label><input id="style" placeholder="placca, strapiombo, tacche...">
 <label>Difficoltà percepita 1–10</label><input id="diff" type="number" min="1" max="10"><label>Note</label><textarea id="rnotes"></textarea>
 <button onclick="saveRoute()">Salva via</button></div>
 <div class="card"><table><thead><tr><th>Data</th><th>Via</th><th>Grado</th><th>Esito</th></tr></thead><tbody id="routes"></tbody></table></div>
 </section>
 
-<section id="tests" class="screen"><h2>Test iniziali</h2><div class="card">
-<label>Peso (kg)</label><input id="tw" type="number" value="89"><label>Trazioni max</label><input id="tpu" type="number" value="10">
-<label>Trazione zavorrata — carico totale (kg)</label><input id="twp" type="number"><label>Trave 2,5 cm — carico totale (kg)</label><input id="thw" type="number">
-<label>Trave — tempo massimo (s)</label><input id="tht" type="number"><label>Protocollo attuale</label><input value="5 s lavoro / 5 s riposo × 5 × 5" disabled>
-<label>Lead indoor miglior OS</label><input id="tlo" value="6a+"><label>Falesia miglior OS</label><input id="tfo"><label>Power-endurance</label><input id="tpe" placeholder="da definire"><label>Note</label><textarea id="tn"></textarea>
-<button onclick="saveTests()">Salva test</button></div>
-<div class="card"><h3>Prossimi test</h3><p class="small">Il protocollo power-endurance verrà fissato dopo i primi test, per evitare di scegliere un test non adatto al tuo livello.</p></div>
-</section>
+<section id="tests" class="screen"><h2>Test e retest</h2>
+<div class="notice">Riferimento iniziale: peso 89 kg, 10 trazioni, trazione singola con +25 kg (RPE 8), sospensione 25 mm con +5 kg (RPE 8; durata da verificare), 5×5 ripetizioni 5″/5″ (RPE 7). La sospensione con +5 kg non viene trattata come 1RM certificato.</div>
+<div class="card"><label>Settimana di verifica</label><select id="testWeek"><option value="0">Iniziale</option><option value="4">Settimana 4</option><option value="8">Settimana 8</option><option value="12">Settimana 12</option></select>
+<label>Data</label><input id="td" type="date"><label>Peso corporeo (kg)</label><input id="tw" type="number" value="89"><label>Trazioni massime (rip.)</label><input id="tpu" type="number" value="10">
+<label>Trazione singola: zavorra aggiunta (kg)</label><input id="twp" type="number" value="25"><label>Trazione: RPE</label><input id="twr" type="number" min="1" max="10" value="8">
+<label>Trave 25 mm: zavorra aggiunta (kg)</label><input id="thw" type="number" value="5"><label>Durata sospensione (s)</label><input id="tht" type="number" placeholder="da rilevare"><label>Trave: RPE</label><input id="thr" type="number" min="1" max="10" value="8">
+<label>Protocollo intermittente completato?</label><select id="tint"><option value="yes">5 serie × 5 ripetizioni completate</option><option value="partial">Parziale</option><option value="no">Non eseguito</option></select>
+<label>Miglior OS indoor</label><input id="tlo" value="6a+"><label>Miglior OS in falesia</label><input id="tfo" placeholder="da registrare"><label>Note</label><textarea id="tn"></textarea><button onclick="saveTests()">Salva rilevazione</button></div>
+<div class="card"><h3>Storico test</h3><div id="testHistory" class="small"></div></div></section>
 
 <section id="progress" class="screen"><h2>Progressi</h2>
 <div class="grid"><div class="card"><div id="ph" class="metric">—</div><div class="label">ultimo carico trave</div></div><div class="card"><div id="pp" class="metric">—</div><div class="label">ultimo carico trazioni</div></div><div class="card"><div id="pm" class="metric">0</div><div class="label">minuti allenati</div></div><div class="card"><div id="pr" class="metric">0</div><div class="label">vie registrate</div></div></div>
 <div class="card"><h3>Onsight</h3><div id="osStats" class="small">Nessun dato.</div></div>
-<div class="card"><h3>Ultime sedute</h3><div id="sessionTable" class="small"></div></div>
+<div class="card"><h3>Andamento RPE sedute</h3><canvas id="rpeChart" width="500" height="180" aria-label="Grafico RPE"></canvas></div><div class="card"><h3>Storico zavorra trazioni ai test</h3><canvas id="pullChart" width="500" height="180" aria-label="Grafico carichi trazioni"></canvas></div><div class="card"><h3>Ultime sedute</h3><div id="sessionTable" class="small"></div></div>
 </section>
 
 </main>
@@ -96,74 +97,86 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 <button id="np" onclick="show('plan')">Programma</button>
 <button id="nw" onclick="show('workout')">Allenamento</button>
 <button id="nc" onclick="show('climb')">Vie</button>
-<button id="npr" onclick="show('progress')">Progressi</button>
+<button id="npr" onclick="show('progress')">Progressi</button><button id="nt" onclick="show('tests')">Test</button>
 </nav><div id="toast" class="toast"></div>
 </div>
 
 <script>
 const $=id=>document.getElementById(id), KS='c7a2_sessions', KR='c7a2_routes', KT='c7a2_tests';
-const load=k=>JSON.parse(localStorage.getItem(k)||'[]'), save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-const today=new Date(); const iso=today.toISOString().slice(0,10);
-let selectedWeek=1, selectedDay=today.getDay()===0?7:today.getDay();
-
+const load=k=>{try{return JSON.parse(localStorage.getItem(k)||'[]')}catch{return []}}, save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=new Date(), iso=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
+let selectedWeek=1, selectedDay=today.getDay()||7;
 const weeks=[
-["Base","Tecnica + forza","Costruzione tecnica, forza dita e forza generale."],
-["Base","Tecnica + forza","Aumentare qualità e consistenza senza accumulare fatica."],
-["Base","Forza","Introduzione alla progressione dei carichi."],
-["Base","Scarico","Riduzione volume e consolidamento."],
-["Sviluppo","Forza","Forza dita e trazioni con maggiore intensità."],
-["Sviluppo","Power-endurance","Trasferire forza a sequenze più lunghe."],
-["Sviluppo","Power-endurance","Aumentare densità e tolleranza al pompaggio."],
-["Sviluppo","Scarico","Riduzione del carico e mantenimento dell'intensità."],
-["Specificità 7a","Onsight","Lettura, ritmo, riposi e qualità del primo tentativo."],
-["Specificità 7a","Performance","Boulder duro + resistenza specifica + lead."],
-["Specificità 7a","Performance","Simulazioni outdoor e tentativi a vista."],
-["Peak","Test 7a","Scarico e tentativo di prestazione."]
-];
-
-const templates={
-1:["Lun","Casa","Forza dita + trazioni + core",["Riscaldamento dita 15'","Trave: protocollo tecnico, intensità controllata","Trazioni 4×5, recupero 3'","Core 3 esercizi","Mobilità 10'"]],
-2:["Mar","Boulder","Forza + potenza",["Riscaldamento 20'","Boulder limite: 6–8 problemi, recupero 3–4'","System Wall: 4–6 blocchi di qualità","Core breve","Defaticamento"]],
-3:["Mer","Casa","Recupero",["Mobilità 20–30'","Respirazione/recupero","Nessun lavoro intenso"]],
-4:["Gio","Lead indoor","Onsight + resistenza",["Riscaldamento progressivo","4–6 vie a vista in progressione","1–2 vie al limite senza sovraccarico di tentativi","Tecnica: piedi e lettura","Defaticamento"]],
-5:["Ven","Casa","Forza complementare",["Riscaldamento","Squat/RDL con bilanciere: tecnica","Trazioni leggere o forza, senza cedimento","Core + stabilità","Mobilità"]],
-6:["Sab","Falesia / Montagna","Performance outdoor",["Riscaldamento su vie facili","2–4 vie OS a gradi progressivi","1–2 tentativi performance su grado alto","Annota lettura, ritmo, riposi e motivo del fallimento"]],
-7:["Dom","Riposo","Recupero",["Riposo completo","Passeggiata leggera opzionale","Mobilità facoltativa 15'"]]
+['Base','Tecnica + forza','Acquisire tecnica del movimento e misurare la risposta alla fatica.'],
+['Base','Qualità','Aumentare qualità delle vie e controllo sui piedi, senza cercare massimali.'],
+['Base','Forza controllata','Piccola progressione soltanto se RPE e recupero lo permettono.'],
+['Base','Scarico + retest','Riduci il volume di circa 40% e registra un retest non massimale se affaticato.'],
+['Sviluppo','Forza','Forza dita submassimale e qualità di movimento.'],
+['Sviluppo','Resistenza specifica','Sequenze medio-lunghe con riposi completi e tecnica.'],
+['Sviluppo','Continuità','Aumenta leggermente il volume specifico se ben recuperato.'],
+['Sviluppo','Scarico + retest','Scarico circa 40%; confronta i risultati con il test iniziale.'],
+['Specificità','Vista','Lettura, gestione del ritmo, sezioni chiave, posizioni di riposo.'],
+['Specificità','Performance','Consolidamento 6b+/6c con tentativi di qualità.'],
+['Specificità','Simulazione','Preparazione mentale e pratica a vista senza affaticamento superfluo.'],
+['Peak','Scarico + obiettivo','Poche sedute fresche, test finali e tentativo 7a a vista se le condizioni lo consentono.']];
+const T={
+1:['Lun','Casa','Forza generale + trave',[
+ 'Riscaldamento generale e mobilità dita/spalle · 15 min',
+ 'Trave su 25 mm · 5 s ON / 5 s OFF × 5 ripetizioni × 3 serie iniziali, recupero 3 min; presa confortevole, peso corporeo o assistita',
+ 'Trazioni a corpo libero · 4×4 (S1), 4×5 (S2), 4×4 +5 kg solo se facile (S3); recupero 3 min',
+ 'Core · 3×30–40 s plank + 3×8 dead bug',
+ 'Mobilità/defaticamento · 10 min']],
+2:['Mar','Boulder','Boulder tecnica + potenza',[
+ 'Riscaldamento progressivo · 20 min, blocchi facili',
+ 'Tecnica piedi silenziosi / bacino vicino / rotazioni · 15–20 min',
+ 'Boulder impegnativi di qualità · 4–6 blocchi, 2–4 tentativi ciascuno, recupero 3–4 min',
+ 'System wall · 3–4 sequenze controllate; interrompi al decadere della precisione',
+ 'Defaticamento · 10 min']],
+3:['Mer','Recupero','Recupero attivo',[
+ 'Passeggiata o mobilità generale · 20–30 min',
+ 'Spalle / estensori dita · mobilità dolce 10 min',
+ 'Niente dita intense, niente trazioni massimali']],
+4:['Gio','Lead indoor','Lettura vie + continuità',[
+ 'Riscaldamento · 2–3 vie facili e riposi',
+ 'Lettura dal basso · individuare piedi, crux e possibili riposi · 5 min per via',
+ 'Vie a vista · 3–5 vie di difficoltà progressiva, iniziare sotto il limite',
+ 'Via impegnativa · massimo 1–2 tentativi di qualità, recupero ampio',
+ 'Annotare causa dei fallimenti e qualità dei riposi']],
+5:['Ven','Casa','Complementari leggeri',[
+ 'Mobilità spalle/anche e riscaldamento · 10 min',
+ 'Squat o stacco rumeno bilanciere leggero · 3×8, RPE massimo 6',
+ 'Stabilità scapolare e core · 3×10, senza cedimento',
+ 'Mobilità e recupero · 10–15 min; prima della falesia evitare fatica residua']],
+6:['Sab','Falesia','Outdoor: qualità onsight',[
+ 'Riscaldamento progressivo su 1–2 vie facili',
+ 'Vie a vista · 2–3 tentativi su vie nuove gestibili, riposo ampio',
+ 'Una via sfidante, solo se recuperato e in condizioni adeguate',
+ 'Annotare lettura, ritmo, piedi, pompaggio e riposi']],
+7:['Dom','Riposo','Riposo o falesia al posto di sabato',[
+ 'Riposo se sei uscito sabato',
+ 'Se vai in falesia oggi, usa il piano di sabato e riposa sabato',
+ 'Mobilità dolce opzionale 10 min']]
 };
-
-function show(id){
-document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active")); $(id).classList.add("active");
-document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
-const map={home:"nh",plan:"np",workout:"nw",climb:"nc",progress:"npr"}; $(map[id]).classList.add("active");
-refresh();
-}
-function renderPlan(){
-$("weekBtns").innerHTML=weeks.map((w,i)=>`<button class="${i+1===selectedWeek?"sel":""}" onclick="selectedWeek=${i+1};renderPlan()">${i+1}</button>`).join("");
-const w=weeks[selectedWeek-1]; $("phase").textContent=w[0]; $("weekFocus").textContent=w[1]; $("weekTitle").textContent=`Settimana ${selectedWeek}`; $("weekNote").textContent=w[2];
-$("planDays").innerHTML=Array.from({length:7},(_,i)=>{
-const d=i+1,t=templates[d]; return `<div class="card"><span class="tag">${t[0]}</span><span class="tag">${t[1]}</span><h3>${t[2]}</h3><ul class="list">${t[3].map(x=>`<li class="small">${x}</li>`).join("")}</ul><button class="secondary" onclick="selectedDay=${d};loadWorkout()">Apri</button></div>`}).join("");
-}
-function loadWorkout(){
-const t=templates[selectedDay]; $("wTag").textContent=t[0]+" · "+t[1]; $("wTitle").textContent=t[2]; $("wObjective").textContent=weeks[selectedWeek-1][2];
-$("exerciseList").innerHTML=t[3].map((x,i)=>`<label class="check"><input type="checkbox" id="ex${i}"><span>${x}</span></label>`).join("");
-show("workout");
-}
-function completeWorkout(){
-const s=load(KS); s.push({date:iso,week:selectedWeek,day:selectedDay,title:templates[selectedDay][2],duration:+$("dur").value||0,rpe:+$("rpe").value||0,os:$("osg").value,proj:$("prg").value,hang:+$("hang").value||0,pull:+$("pull").value||0,note:$("notes").value}); save(KS,s); toast("Seduta salvata"); refresh();
-}
-function saveRoute(){
-const r=load(KR); r.push({date:$("rd").value||iso,route:$("route").value,grade:$("grade").value,result:$("result").value,attempts:+$("attempts").value||1,style:$("style").value,diff:+$("diff").value||0,note:$("rnotes").value}); save(KR,r); toast("Via salvata"); refresh();
-}
-function saveTests(){save(KT,[{date:iso,weight:+$("tw").value,pullups:+$("tpu").value,weighted:+$("twp").value,hang:+$("thw").value,time:+$("tht").value,lead:$("tlo").value,outdoor:$("tfo").value,pe:$("tpe").value,note:$("tn").value}]);toast("Test salvati")}
-function refresh(){
-renderPlan(); const s=load(KS),r=load(KR); $("hWeek").textContent=selectedWeek+"/12"; $("hSessions").textContent=s.length;
-const rr=s.filter(x=>x.rpe); $("hRpe").textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):"—";
-const os=r.filter(x=>x.result==="OS"&&x.grade); $("hOS").textContent=os.length?os[os.length-1].grade:"6a+";
-$("ph").textContent=(s.filter(x=>x.hang).at(-1)?.hang||"—")+" kg"; $("pp").textContent=(s.filter(x=>x.pull).at(-1)?.pull||"—")+" kg"; $("pm").textContent=s.reduce((a,b)=>a+b.duration,0); $("pr").textContent=r.length;
-$("routes").innerHTML=r.slice(-15).reverse().map(x=>`<tr><td>${x.date}</td><td>${x.route||"-"}</td><td>${x.grade||"-"}</td><td>${x.result}</td></tr>`).join("");
-$("osStats").textContent=r.length?`${r.length} vie registrate · ${r.filter(x=>x.result==="OS").length} OS · ${r.filter(x=>x.result==="Flash").length} flash`:"Nessun dato.";
-$("sessionTable").innerHTML=s.slice(-8).reverse().map(x=>`${x.date} · S${x.week} · ${x.title} · RPE ${x.rpe||"—"}<br>`).join("");
-}
-$("rd").value=iso; refresh(); loadWorkout();
+function exFor(day,w){let a=[...T[day][3]];if(day===1){a[2]=w===1?'Trazioni 4×4 corpo libero · recupero 3 min, lascia 2–3 ripetizioni in riserva':w===2?'Trazioni 4×5 corpo libero · recupero 3 min, senza cedimento':w===3?'Trazioni 4×4 con +5 kg solo se 4×5 precedenti facili; altrimenti corpo libero':w===4?'Scarico: trazioni 3×4 corpo libero, nessun massimale':w>=9?'Trazioni mantenimento 3×3–4 a corpo libero, senza cedimento':'Trazioni 4×4 a corpo libero; +2,5/+5 kg solo se RPE ≤7, senza dolore';a[1]=w===4||w===8||w===12?'Trave: scarico · 2 serie leggere 5″/5″, senza zavorra, sospendi se affaticato':'Trave 25 mm · 5″/5″ × 5 ripetizioni × '+(w<=2?'3':'3–4')+' serie, recupero 3 min; carico comodo, NON applicare automaticamente +5 kg';}
+if([4,8,12].includes(w)){a=a.map(x=>x.replace('4–6 blocchi','3–4 blocchi').replace('3–5 vie','2–3 vie').replace('2–3 tentativi','1–2 tentativi'));if([2,4,6].includes(day))a.push('SETTIMANA DI SCARICO: riduci volume ~40%, conserva qualità e tecnica');}
+if(w===12&&[1,2,4,5].includes(day))a.push('SETTIMANA 12: intensità moderata, priorità al recupero prima dell’uscita');
+return a;}
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));const m={home:'nh',plan:'np',workout:'nw',climb:'nc',progress:'npr',tests:'nt'};$(m[id]).classList.add('active');refresh();}
+function renderPlan(){$('weekBtns').innerHTML=weeks.map((w,i)=>`<button class="${i+1===selectedWeek?'sel':''}" onclick="selectedWeek=${i+1};renderPlan()">${i+1}</button>`).join('');const w=weeks[selectedWeek-1];$('phase').textContent=w[0];$('weekFocus').textContent=w[1];$('weekTitle').textContent='Settimana '+selectedWeek;$('weekNote').textContent=w[2];$('planDays').innerHTML=Array.from({length:7},(_,i)=>{const d=i+1,t=T[d];return `<div class="card"><span class="tag">${t[0]}</span><span class="tag">${t[1]}</span><h3>${t[2]}</h3><ul class="list">${exFor(d,selectedWeek).map(x=>`<li class="small">${esc(x)}</li>`).join('')}</ul><button class="secondary" onclick="selectedDay=${d};loadWorkout()">Apri seduta</button></div>`}).join('');}
+function loadWorkout(){const t=T[selectedDay];$('wTag').textContent=`S${selectedWeek} · ${t[0]} · ${t[1]}`;$('wTitle').textContent=t[2];$('wObjective').textContent=weeks[selectedWeek-1][2];$('exerciseList').innerHTML=exFor(selectedDay,selectedWeek).map((x,i)=>`<label class="check"><input type="checkbox" id="ex${i}"><span>${esc(x)}</span></label>`).join('');show('workout');}
+function completeWorkout(){let rpe=+$('rpe').value,f=+$('fatigue').value;if(rpe&& (rpe<1||rpe>10)){toast('RPE deve essere tra 1 e 10');return}if(f&&(f<1||f>10)){toast('Fatica deve essere tra 1 e 10');return}const checked=[...$('exerciseList').querySelectorAll('input')], ex=exFor(selectedDay,selectedWeek).map((name,i)=>({name,done:checked[i]?.checked||false}));const s=load(KS);s.push({date:iso,week:selectedWeek,day:selectedDay,title:T[selectedDay][2],duration:+$('dur').value||0,rpe,os:$('osg').value,proj:$('prg').value,hang:+$('hang').value||0,pull:+$('pull').value||0,fatigue:f,pain:$('pain').value,exercises:ex,note:$('notes').value});save(KS,s);toast('Seduta salvata');refresh();}
+function saveRoute(){if(!$('grade').value.trim()){toast('Inserisci il grado della via');return}const r=load(KR);r.push({date:$('rd').value||iso,route:$('route').value,grade:$('grade').value.trim(),result:$('result').value,attempts:+$('attempts').value||1,style:$('style').value,diff:+$('diff').value||0,failure:$('failure').value,note:$('rnotes').value});save(KR,r);toast('Via salvata');refresh();}
+function saveTests(){const ts=load(KT);ts.push({date:$('td').value||iso,week:+$('testWeek').value,weight:+$('tw').value||0,pullups:+$('tpu').value||0,weighted:+$('twp').value||0,weightedRpe:+$('twr').value||0,hang:+$('thw').value||0,hangRpe:+$('thr').value||0,time:+$('tht').value||0,intermittent:$('tint').value,lead:$('tlo').value,outdoor:$('tfo').value,note:$('tn').value,unit:'additional_kg'});save(KT,ts);toast('Test salvato nello storico');refresh();}
+const grades=['4','4+','5a','5a+','5b','5b+','5c','5c+','6a','6a+','6b','6b+','6c','6c+','7a','7a+','7b','7b+','7c'];
+function bestOS(routes){let valid=routes.filter(x=>x.result==='OS'&&grades.includes(x.grade));return valid.length?valid.reduce((a,b)=>grades.indexOf(a.grade)>grades.indexOf(b.grade)?a:b).grade:'6a+';}
+function plot(id,values,label){const c=$(id),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#666';ctx.font='12px Arial';if(!values.length){ctx.fillText('Ancora nessuna serie di dati registrata',14,30);return}const max=Math.max(...values.map(v=>v.v),1),min=Math.min(0,...values.map(v=>v.v));ctx.strokeStyle='#ddd';ctx.beginPath();ctx.moveTo(35,15);ctx.lineTo(35,150);ctx.lineTo(w-10,150);ctx.stroke();ctx.fillText(label,40,15);ctx.fillText(String(max),4,24);ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.beginPath();values.forEach((p,i)=>{const x=45+i*(w-65)/Math.max(1,values.length-1),y=145-(p.v-min)/(max-min||1)*110;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();values.forEach((p,i)=>{let x=45+i*(w-65)/Math.max(1,values.length-1),y=145-(p.v-min)/(max-min||1)*110;ctx.beginPath();ctx.arc(x,y,4,0,7);ctx.fillStyle='#111';ctx.fill();ctx.fillStyle='#777';ctx.fillText(String(p.label).slice(0,5),Math.max(0,x-13),168)});}
+function refresh(){renderPlan();const s=load(KS),r=load(KR),t=load(KT);$('hWeek').textContent=selectedWeek+'/12';$('hSessions').textContent=s.length;const rr=s.filter(x=>x.rpe);$('hRpe').textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):'—';$('hOS').textContent=bestOS(r);$('ph').textContent=(s.filter(x=>x.hang!==undefined).at(-1)?.hang??'—')+' kg +';$('pp').textContent=(s.filter(x=>x.pull!==undefined).at(-1)?.pull??'—')+' kg +';$('pm').textContent=s.reduce((a,b)=>a+(b.duration||0),0);$('pr').textContent=r.length;
+$('routes').innerHTML=r.slice(-15).reverse().map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.route||'-')}</td><td>${esc(x.grade||'-')}</td><td>${esc(x.result)}</td></tr>`).join('');const attempted=r.filter(x=>x.result==='OS'||x.result==='Flash'||x.result==='RP'||x.result==='Caduta'||x.result==='Non completata');$('osStats').textContent=r.length?`${r.length} vie registrate · ${r.filter(x=>x.result==='OS').length} OS · migliore OS ${bestOS(r)}. Percentuale OS sulle vie registrate: ${attempted.length?Math.round(100*r.filter(x=>x.result==='OS').length/attempted.length):0}% (non è la percentuale dei soli tentativi a vista se registri anche i progetti).`:'Nessun dato.';$('sessionTable').innerHTML=s.slice(-8).reverse().map(x=>`${esc(x.date)} · S${esc(x.week)} · ${esc(x.title)} · RPE ${esc(x.rpe||'—')} · ${x.exercises?x.exercises.filter(e=>e.done).length+'/'+x.exercises.length+' esercizi':''}<br>`).join('');$('testHistory').innerHTML=t.length?t.slice().reverse().map(x=>`${esc(x.date)} · ${x.week?'S'+esc(x.week):'Base'} · ${x.weight} kg corporei · ${x.pullups} trazioni · trazione +${x.weighted} kg · trave +${x.hang} kg${x.time?' / '+x.time+' s':''}<br>`).join(''):'Nessun retest salvato. I valori iniziali confermati sono mostrati sopra.';
+plot('rpeChart',rr.slice(-10).map(x=>({label:x.date.slice(5),v:x.rpe})),'RPE (1–10)');plot('pullChart',t.filter(x=>x.weighted!==undefined).slice(-8).map(x=>({label:x.week?'S'+x.week:'Base',v:x.unit==='additional_kg'?x.weighted:Math.max(0,x.weighted-(x.weight||89))})),'Zavorra aggiunta (kg)');}
+function toast(msg){let el=$('toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2100)}
+$('rd').value=iso;$('td').value=iso;
+if(!localStorage.getItem('c7a4_seeded')&&load(KT).length===0){save(KT,[{date:iso,week:0,weight:89,pullups:10,weighted:25,weightedRpe:8,hang:5,hangRpe:8,time:0,intermittent:'yes',lead:'6a+',outdoor:'',note:'Valori iniziali confermati in conversazione. Durata sospensione da verificare. 5×5 ripetizioni a 5 s on / 5 s off completate; RPE 7.',unit:'additional_kg'}]);}localStorage.setItem('c7a4_seeded','1');
+refresh();loadWorkout();
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"))}</script></body></html>

@@ -1,9 +1,9 @@
-CLIMB 7A — PWA v0.3
+CLIMB 7A v0.4 — AGGIORNAMENTO
+1. Estrai ZIP.
+2. Carica tutti i file direttamente nella radice del repository GitHub Pages, sostituendo i precedenti.
+3. Esegui Commit changes.
+4. Apri la PWA connesso a Internet, ricarica; se serve chiudi e riapri.
+5. I dati già salvati restano nel localStorage dello stesso sito/dispositivo. NON cancellare i dati del sito né cambiare URL/origine.
+6. Per precauzione fai una copia dei dati importanti prima di aggiornare.
 
-Per installarla sul telefono:
-1. I file devono essere pubblicati su un indirizzo HTTPS.
-2. Apri l'indirizzo con Chrome (Android) o Safari (iPhone).
-3. Android: menu ⋮ → Installa app / Aggiungi alla schermata Home.
-4. iPhone: Condividi → Aggiungi alla schermata Home.
-
-Nota: il semplice file index.html aperto dal PC non basta per l'installazione PWA; serve un hosting HTTPS.
+NOTA: la seed dei test confermati si attiva solo se non esistono test precedenti. Lo storico delle sessioni e vie precedenti viene mantenuto.
