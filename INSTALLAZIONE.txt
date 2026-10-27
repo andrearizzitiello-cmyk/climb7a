@@ -1,3 +1,5 @@
 Climb 7A PWA v0.6.1 — correzione stato completato e riapertura sedute.
 Sostituire i sei file nel repository GitHub Pages. I dati locali precedenti restano salvati.
 ATTENZIONE: le registrazioni vecchie prive del campo completed=true verranno visualizzate come PARZIALI (non piu completate automaticamente). Riaprire le sedute interessate e confermare il completamento.
+
+Versione 0.6.3: Ripristina seduta e consuntivo elimina solo i dati storici del profilo/settimana/giorno selezionati. Non elimina altri allenamenti.

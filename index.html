@@ -57,7 +57,7 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 <section id="workout" class="screen">
 <h2>Allenamento del giorno</h2>
 <div class="card"><h3>Calendario e allenamento della data</h3><label for="workoutDate">Seleziona una data</label><input id="workoutDate" type="date" onchange="onWorkoutDateChanged(this.value)"><div class="small" id="dateInfo">Scegli una data per aprire l’allenamento previsto. Le sedute riprogrammate hanno priorità.</div><button type="button" class="secondary" onclick="openToday()">Vai a oggi</button></div>
-<div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div><div class="wraprow" style="margin-top:12px"><button type="button" class="secondary" onclick="openEditor()">✎ Modifica esercizi</button><button type="button" class="ghost" onclick="resetExercises()">Ripristina piano</button></div><div id="exerciseEditor" style="display:none;margin-top:10px"><p class="small">Le modifiche valgono soltanto per questo atleta, questa settimana e questa giornata.</p><div id="editorRows"></div><button type="button" class="secondary" onclick="addExerciseRow()">+ Aggiungi esercizio</button> <button type="button" onclick="saveExerciseEdits()">Salva modifiche</button></div></div>
+<div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div><div class="wraprow" style="margin-top:12px"><button type="button" class="secondary" onclick="openEditor()">✎ Modifica esercizi</button><button type="button" class="ghost" onclick="resetExercises()">Ripristina seduta e consuntivo</button></div><div id="exerciseEditor" style="display:none;margin-top:10px"><p class="small">Le modifiche valgono soltanto per questo atleta, questa settimana e questa giornata.</p><div id="editorRows"></div><button type="button" class="secondary" onclick="addExerciseRow()">+ Aggiungi esercizio</button> <button type="button" onclick="saveExerciseEdits()">Salva modifiche</button></div></div>
 <div class="card"><h3>Organizza la seduta</h3><label>Data prevista (facoltativa)</label><input id="scheduledDate" type="date"><div class="wraprow"><button class="secondary" onclick="markSkipped()">Segna saltata</button><button class="secondary" onclick="rescheduleWorkout()">Riprogramma alla data scelta</button><button class="ghost" onclick="clearSchedule()">Annulla stato</button></div><p class="small">Una seduta riprogrammata mantiene il proprio giorno nel piano, ma appare con la nuova data. Non duplicare due sessioni intense nello stesso giorno.</p></div>
 <div class="card"><h3>Consuntivo</h3>
 <label>Durata (min)</label><input id="dur" type="number">
@@ -187,7 +187,14 @@ function getDraft(w,d){return load(draftKey())[sessionKey(w,d)]||null}
 function clearDraft(w,d){const a=load(draftKey());delete a[sessionKey(w,d)];save(draftKey(),a)}
 function collectFields(){let data={};for(const id of ['dur','rpe','osg','prg','hang','pull','fatigue','pain','notes'])data[id]=$(id).value;return data}
 function saveDraft(){if(!document.getElementById('workout').classList.contains('active'))return;const a=load(draftKey());a[sessionKey(selectedWeek,selectedDay)]={exercises:[...$('exerciseList').querySelectorAll('input[type=checkbox]')].map(e=>e.checked),fields:collectFields(),updatedAt:new Date().toISOString()};save(draftKey(),a);updateWorkoutStatus()}
-function clearAllExerciseMarks(w,d){const s=load(KS),rec=s.filter(x=>+x.week===+w&&+x.day===+d).at(-1);if(rec){rec.exercises=exFor(d,w).map(name=>({name,done:false}));rec.completed=false;rec.updatedAt=new Date().toISOString();save(KS,s)}clearDraft(w,d)}
+// Cancella ESCLUSIVAMENTE il consuntivo relativo a profilo corrente, settimana e giorno selezionati.
+// Rimuove tutte le vecchie copie della medesima seduta, comprese eventuali duplicazioni legacy.
+function clearWorkoutRecord(w,d){
+  const s=load(KS);
+  const remaining=s.filter(x=>!(+x.week===+w&&+x.day===+d));
+  if(remaining.length!==s.length)save(KS,remaining);
+  clearDraft(w,d);
+}
 function localISO(date){return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-')}
 function dayFromISO(v){const d=new Date(v+'T12:00:00');return isNaN(d.valueOf())?null:(d.getDay()||7)}
 function workoutForDate(date){const day=dayFromISO(date);if(!day)return null;const cal=load(KC);for(const [key,e] of Object.entries(cal)){if(e.status==='moved'&&e.date===date){const [w,d]=key.split('-').map(Number);if(w===selectedWeek)return {week:w,day:d,moved:true}}}return {week:selectedWeek,day,moved:false}}
@@ -204,10 +211,16 @@ function openEditor(){const ed=$('exerciseEditor');ed.style.display=ed.style.dis
 function addExerciseRow(value=''){const el=document.createElement('div');el.className='editrow';const ta=document.createElement('textarea');ta.rows=2;ta.placeholder='Esercizio, serie, recupero, intensità';ta.value=value;el.append(ta);const b=document.createElement('button');b.type='button';b.className='ghost';b.textContent='Rimuovi';b.onclick=()=>el.remove();el.append(b);$('editorRows').append(el)}
 function saveExerciseEdits(){const arr=[...$('editorRows').querySelectorAll('textarea')].map(x=>x.value.trim()).filter(Boolean);if(!arr.length){toast('Inserisci almeno un esercizio');return}const a=load(KE);a[sessionKey(selectedWeek,selectedDay)]=arr;save(KE,a);$('exerciseEditor').style.display='none';loadWorkout();toast('Esercizi personalizzati salvati')}
 function resetExercises(){
-if(!confirm('Ripristinare il piano originale e AZZERARE tutte le spunte di questa seduta? Lo stato tornerà Parziale se erano presenti dati; gli altri valori resteranno salvati.'))return;
-const a=load(KE);delete a[sessionKey(selectedWeek,selectedDay)];save(KE,a);
-clearAllExerciseMarks(selectedWeek,selectedDay);
-$('exerciseEditor').style.display='none';loadWorkout();toast('Piano ripristinato, spunte azzerate');
+const w=selectedWeek,d=selectedDay;
+if(!confirm('Ripristinare completamente questa seduta? Verranno eliminati esercizi spuntati, consuntivo (durata, RPE, carichi, note) e TUTTE le registrazioni storiche relative SOLO a questo atleta, settimana '+w+', giorno '+T[d][0]+'. Le altre sedute e gli altri atleti non saranno modificati.'))return;
+const edits=load(KE);delete edits[sessionKey(w,d)];save(KE,edits);
+clearWorkoutRecord(w,d);
+updateCalendar(w,d,null);
+$('exerciseEditor').style.display='none';
+loadWorkout();
+// loadWorkout rilegge i valori dallo storage. Non esiste più alcun consuntivo per questa seduta.
+refresh();
+toast('Seduta ripristinata: dati, spunte e storico della sola seduta eliminati');
 }
 function markSkipped(){if(isCompleted(selectedWeek,selectedDay)){toast('Prima riapri la seduta completata');return;}updateCalendar(selectedWeek,selectedDay,{status:'skipped'});refresh();toast('Seduta segnata saltata')}
 function rescheduleWorkout(){const date=$('scheduledDate').value;if(!date){toast('Scegli prima una data');return}updateCalendar(selectedWeek,selectedDay,{status:'moved',date});refresh();toast('Seduta riprogrammata al '+date)}
