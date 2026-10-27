@@ -1,7 +1,3 @@
-CLIMB 7A PWA v0.5
-1. Estrai questo ZIP.
-2. Copia i sei file nella radice del repository GitHub Pages sostituendo i precedenti.
-3. Commit changes e riapri la PWA sul telefono.
-4. I dati v0.4/v0.4.1 migrano nel profilo principale al primo avvio sulla stessa origine/dispositivo; una copia rimane nelle vecchie chiavi locali.
-5. I profili sono locali al singolo browser/dispositivo; non è prevista sincronizzazione cloud.
-6. Verifica dati dopo aggiornamento e conserva una copia del vecchio archivio.
+Climb 7A PWA v0.6.1 — correzione stato completato e riapertura sedute.
+Sostituire i sei file nel repository GitHub Pages. I dati locali precedenti restano salvati.
+ATTENZIONE: le registrazioni vecchie prive del campo completed=true verranno visualizzate come PARZIALI (non piu completate automaticamente). Riaprire le sedute interessate e confermare il completamento.
