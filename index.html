@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111111"><link rel="manifest" href="./manifest.webmanifest">
-<title>Climb 7A — v0.6</title>
+<title>Climb 7A — v0.6.2</title>
 <style>
 :root{--bg:#f4f4f1;--card:#fff;--ink:#151515;--muted:#666;--line:#ddd;--ok:#1d6b3b;--warn:#9a6400}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
@@ -31,7 +31,7 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 </style>
 </head>
 <body><div class="app">
-<header><div class="brand">CLIMB 7A</div><div class="sub">v0.6 · calendario e allenatore digitale</div><div class="profilebar"><select id="profileSelect" aria-label="Seleziona atleta" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Profili</button></div></header>
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.6.2 · calendario e salvataggio bozze</div><div class="profilebar"><select id="profileSelect" aria-label="Seleziona atleta" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Profili</button></div></header>
 <main>
 
 <section id="home" class="screen active">
@@ -42,20 +42,21 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 <div class="card"><div id="hRpe" class="metric">—</div><div class="label">RPE medio</div></div>
 <div class="card"><div id="hOS" class="metric">6a+</div><div class="label">miglior OS</div></div>
 </div>
-<div class="card"><span class="tag dark" id="todayTag">Lunedì</span><h3 id="todayTitle">Forza dita + trazioni + core</h3><p class="small" id="todayDesc">Seduta prevista dal piano. Completa gli esercizi e registra il carico.</p><button onclick="loadWorkout()">Apri seduta</button></div>
+<div class="card"><span class="tag dark" id="todayTag">Lunedì</span><h3 id="todayTitle">Forza dita + trazioni + core</h3><p class="small" id="todayDesc">Seduta prevista dal piano. Completa gli esercizi e registra il carico.</p><button onclick="openToday()">Apri allenamento di oggi</button></div>
 <div class="card"><h3>Dati dell’atleta selezionato</h3><div id="profileSummary" class="small"></div></div><div class="card coach"><h3>Allenatore digitale</h3><p id="coachAdvice" class="small"></p><div id="coachDetails" class="coachbox small"></div><p class="small">Suggerimenti indicativi, non prescrizioni mediche o sostituti di un allenatore. Nessun carico aumenta automaticamente.</p></div><div class="card"><h3>Regola del ciclo</h3><p class="small">3 stimoli di arrampicata: boulder forza/potenza, lead indoor specifica e outdoor performance. Le sedute a casa completano forza e recupero.</p></div>
 </section>
 
 <section id="plan" class="screen">
 <h2>Programma 12 settimane</h2>
 <div class="card"><div class="week" id="weekBtns"></div></div>
-<div class="card"><h3>Calendario settimanale</h3><p class="small">Tocca un giorno per aprire la seduta. ✓ completata · ◐ parziale · – saltata · ↪ spostata.</p><div id="calendar" class="calendar"></div><p id="calendarSummary" class="small"></p></div>
+<div class="card"><label for="planDate">Vai a una data</label><input id="planDate" type="date" onchange="openWorkoutForDate(this.value)"><p class="small">Per le date senza riprogrammazioni viene proposta la seduta del giorno della settimana scelto (nella settimana del ciclo attualmente selezionata).</p></div><div class="card"><h3>Calendario settimanale</h3><p class="small">Tocca un giorno per aprire la seduta. ✓ completata · ◐ parziale · – saltata · ↪ spostata.</p><div id="calendar" class="calendar"></div><p id="calendarSummary" class="small"></p></div>
 <div class="card"><div id="weekStatus" class="small"></div><span class="tag dark" id="phase"></span><span class="tag" id="weekFocus"></span><h3 id="weekTitle"></h3><p class="small" id="weekNote"></p></div>
 <div class="notice">La sessione outdoor può essere spostata a domenica: in quel caso sabato è riposo. Se salti la lead, non aggiungere automaticamente una seconda seduta intensa.</div><div id="planDays"></div>
 </section>
 
 <section id="workout" class="screen">
 <h2>Allenamento del giorno</h2>
+<div class="card"><h3>Calendario e allenamento della data</h3><label for="workoutDate">Seleziona una data</label><input id="workoutDate" type="date" onchange="onWorkoutDateChanged(this.value)"><div class="small" id="dateInfo">Scegli una data per aprire l’allenamento previsto. Le sedute riprogrammate hanno priorità.</div><button type="button" class="secondary" onclick="openToday()">Vai a oggi</button></div>
 <div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div><div class="wraprow" style="margin-top:12px"><button type="button" class="secondary" onclick="openEditor()">✎ Modifica esercizi</button><button type="button" class="ghost" onclick="resetExercises()">Ripristina piano</button></div><div id="exerciseEditor" style="display:none;margin-top:10px"><p class="small">Le modifiche valgono soltanto per questo atleta, questa settimana e questa giornata.</p><div id="editorRows"></div><button type="button" class="secondary" onclick="addExerciseRow()">+ Aggiungi esercizio</button> <button type="button" onclick="saveExerciseEdits()">Salva modifiche</button></div></div>
 <div class="card"><h3>Organizza la seduta</h3><label>Data prevista (facoltativa)</label><input id="scheduledDate" type="date"><div class="wraprow"><button class="secondary" onclick="markSkipped()">Segna saltata</button><button class="secondary" onclick="rescheduleWorkout()">Riprogramma alla data scelta</button><button class="ghost" onclick="clearSchedule()">Annulla stato</button></div><p class="small">Una seduta riprogrammata mantiene il proprio giorno nel piano, ma appare con la nuova data. Non duplicare due sessioni intense nello stesso giorno.</p></div>
 <div class="card"><h3>Consuntivo</h3>
@@ -113,6 +114,7 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;p
 
 <script>
 const $=id=>document.getElementById(id);
+const DRAFT_SUFFIX='_drafts';
 const PROFILE_KEY='c7a5_profiles', ACTIVE_KEY='c7a5_active';
 const DEFAULT_PROFILE={id:'original',name:'Atleta principale',weight:89,pullups:10,grade:'6a+',goal:'7a a vista',week:1};
 let profiles=[],activeId='original',KS='',KR='',KT='',KE='',KC='';
@@ -120,7 +122,7 @@ function scopedKey(kind){return 'c7a5_'+activeId+'_'+kind}
 function scoped(){KS=scopedKey('sessions');KR=scopedKey('routes');KT=scopedKey('tests');KE=scopedKey('exercise_edits');KC=scopedKey('calendar')}
 function activeProfile(){return profiles.find(p=>p.id===activeId)||profiles[0]}
 
-const load=k=>{try{return JSON.parse(localStorage.getItem(k)||(k.endsWith('_calendar')||k.endsWith('_exercise_edits')?'{}':'[]'))}catch{return k.endsWith('_calendar')||k.endsWith('_exercise_edits')?{}:[]}}, save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const load=k=>{try{return JSON.parse(localStorage.getItem(k)||(k.endsWith('_calendar')||(k.endsWith('_exercise_edits')||k.endsWith('_drafts'))?'{}':'[]'))}catch{return k.endsWith('_calendar')||(k.endsWith('_exercise_edits')||k.endsWith('_drafts'))?{}:[]}}, save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const today=new Date(), iso=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
 let selectedWeek=1, selectedDay=today.getDay()||7;
@@ -180,6 +182,20 @@ if([4,8,12].includes(w)){a=a.map(x=>x.replace('4–6 blocchi','3–4 blocchi').r
 if(w===12&&[1,2,4,5].includes(day))a.push('SETTIMANA 12: intensità moderata, priorità al recupero prima dell’uscita');
 return a;}
 function sessionKey(w,d){return w+'-'+d}
+function draftKey(){return scopedKey('drafts')}
+function getDraft(w,d){return load(draftKey())[sessionKey(w,d)]||null}
+function clearDraft(w,d){const a=load(draftKey());delete a[sessionKey(w,d)];save(draftKey(),a)}
+function collectFields(){let data={};for(const id of ['dur','rpe','osg','prg','hang','pull','fatigue','pain','notes'])data[id]=$(id).value;return data}
+function saveDraft(){if(!document.getElementById('workout').classList.contains('active'))return;const a=load(draftKey());a[sessionKey(selectedWeek,selectedDay)]={exercises:[...$('exerciseList').querySelectorAll('input[type=checkbox]')].map(e=>e.checked),fields:collectFields(),updatedAt:new Date().toISOString()};save(draftKey(),a);updateWorkoutStatus()}
+function clearAllExerciseMarks(w,d){const s=load(KS),rec=s.filter(x=>+x.week===+w&&+x.day===+d).at(-1);if(rec){rec.exercises=exFor(d,w).map(name=>({name,done:false}));rec.completed=false;rec.updatedAt=new Date().toISOString();save(KS,s)}clearDraft(w,d)}
+function localISO(date){return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-')}
+function dayFromISO(v){const d=new Date(v+'T12:00:00');return isNaN(d.valueOf())?null:(d.getDay()||7)}
+function workoutForDate(date){const day=dayFromISO(date);if(!day)return null;const cal=load(KC);for(const [key,e] of Object.entries(cal)){if(e.status==='moved'&&e.date===date){const [w,d]=key.split('-').map(Number);if(w===selectedWeek)return {week:w,day:d,moved:true}}}return {week:selectedWeek,day,moved:false}}
+function openWorkoutForDate(date){const target=workoutForDate(date);if(!target){toast('Data non valida');return}selectedDay=target.day;loadWorkout();$('workoutDate').value=date;$('dateInfo').textContent=(target.moved?'Seduta riprogrammata per il ':'Seduta prevista per il ')+date+' · settimana '+selectedWeek;}
+function openToday(){openWorkoutForDate(localISO(new Date()))}
+function onWorkoutDateChanged(v){openWorkoutForDate(v)}
+function openCalendarDay(day){const base=new Date(($('planDate').value||localISO(new Date()))+'T12:00:00');const delta=day-(base.getDay()||7);base.setDate(base.getDate()+delta);selectedDay=day;loadWorkout();$('workoutDate').value=localISO(base);$('dateInfo').textContent='Seduta prevista per '+localISO(base)+' · settimana '+selectedWeek;}
+
 function customEx(w,d){const edits=load(KE);return edits[sessionKey(w,d)]}
 function exFor(d,w){const custom=customEx(w,d);return Array.isArray(custom)?[...custom]:baseExFor(d,w)}
 function calendarEntry(w,d){return load(KC)[sessionKey(w,d)]||{}}
@@ -187,36 +203,66 @@ function updateCalendar(w,d,entry){const all=load(KC);if(entry===null)delete all
 function openEditor(){const ed=$('exerciseEditor');ed.style.display=ed.style.display==='none'?'block':'none';if(ed.style.display==='block'){$('editorRows').innerHTML='';exFor(selectedDay,selectedWeek).forEach(x=>addExerciseRow(x));}}
 function addExerciseRow(value=''){const el=document.createElement('div');el.className='editrow';const ta=document.createElement('textarea');ta.rows=2;ta.placeholder='Esercizio, serie, recupero, intensità';ta.value=value;el.append(ta);const b=document.createElement('button');b.type='button';b.className='ghost';b.textContent='Rimuovi';b.onclick=()=>el.remove();el.append(b);$('editorRows').append(el)}
 function saveExerciseEdits(){const arr=[...$('editorRows').querySelectorAll('textarea')].map(x=>x.value.trim()).filter(Boolean);if(!arr.length){toast('Inserisci almeno un esercizio');return}const a=load(KE);a[sessionKey(selectedWeek,selectedDay)]=arr;save(KE,a);$('exerciseEditor').style.display='none';loadWorkout();toast('Esercizi personalizzati salvati')}
-function resetExercises(){if(!confirm('Ripristinare il programma originale per questa seduta?'))return;const a=load(KE);delete a[sessionKey(selectedWeek,selectedDay)];save(KE,a);$('exerciseEditor').style.display='none';loadWorkout()}
+function resetExercises(){
+if(!confirm('Ripristinare il piano originale e AZZERARE tutte le spunte di questa seduta? Lo stato tornerà Parziale se erano presenti dati; gli altri valori resteranno salvati.'))return;
+const a=load(KE);delete a[sessionKey(selectedWeek,selectedDay)];save(KE,a);
+clearAllExerciseMarks(selectedWeek,selectedDay);
+$('exerciseEditor').style.display='none';loadWorkout();toast('Piano ripristinato, spunte azzerate');
+}
 function markSkipped(){if(isCompleted(selectedWeek,selectedDay)){toast('Prima riapri la seduta completata');return;}updateCalendar(selectedWeek,selectedDay,{status:'skipped'});refresh();toast('Seduta segnata saltata')}
 function rescheduleWorkout(){const date=$('scheduledDate').value;if(!date){toast('Scegli prima una data');return}updateCalendar(selectedWeek,selectedDay,{status:'moved',date});refresh();toast('Seduta riprogrammata al '+date)}
 function clearSchedule(){updateCalendar(selectedWeek,selectedDay,null);$('scheduledDate').value='';refresh();toast('Stato calendario ripristinato')}
 function sessionLabel(w,d){if(isCompleted(w,d))return '✓';if(isPartial(w,d))return '◐';const e=calendarEntry(w,d);return e.status==='skipped'?'–':e.status==='moved'?'↪':'○'}
-function renderCalendar(){const labels=['L','M','M','G','V','S','D'];$('calendar').innerHTML=labels.map((day,i)=>{const d=i+1,e=calendarEntry(selectedWeek,d),state=isCompleted(selectedWeek,d)?'ok':isPartial(selectedWeek,d)?'partial':e.status==='skipped'?'skip':e.status==='moved'?'move':'';return `<button class="calday ${state} ${selectedDay===d?'selected':''}" onclick="selectedDay=${d};loadWorkout()"><span>${day}</span><b>${sessionLabel(selectedWeek,d)}</b><span>${esc(T[d][1])}</span>${e.date?`<span class="mini">${esc(e.date.slice(5))}</span>`:''}</button>`}).join('');let completed=0,partial=0,skipped=0,moved=0;for(let d=1;d<=7;d++){if(isCompleted(selectedWeek,d))completed++;else if(isPartial(selectedWeek,d))partial++;else if(calendarEntry(selectedWeek,d).status==='skipped')skipped++;else if(calendarEntry(selectedWeek,d).status==='moved')moved++}$('calendarSummary').textContent=`Settimana ${selectedWeek}: ${completed} completate · ${partial} parziali · ${skipped} saltate · ${moved} riprogrammate.`}
+function renderCalendar(){const labels=['L','M','M','G','V','S','D'];$('calendar').innerHTML=labels.map((day,i)=>{const d=i+1,e=calendarEntry(selectedWeek,d),state=isCompleted(selectedWeek,d)?'ok':isPartial(selectedWeek,d)?'partial':e.status==='skipped'?'skip':e.status==='moved'?'move':'';return `<button class="calday ${state} ${selectedDay===d?'selected':''}" onclick="openCalendarDay(${d})"><span>${day}</span><b>${sessionLabel(selectedWeek,d)}</b><span>${esc(T[d][1])}</span>${e.date?`<span class="mini">${esc(e.date.slice(5))}</span>`:''}</button>`}).join('');let completed=0,partial=0,skipped=0,moved=0;for(let d=1;d<=7;d++){if(isCompleted(selectedWeek,d))completed++;else if(isPartial(selectedWeek,d))partial++;else if(calendarEntry(selectedWeek,d).status==='skipped')skipped++;else if(calendarEntry(selectedWeek,d).status==='moved')moved++}$('calendarSummary').textContent=`Settimana ${selectedWeek}: ${completed} completate · ${partial} parziali · ${skipped} saltate · ${moved} riprogrammate.`}
 function coachDetails(s,r){const last=s.slice(-5),valid=last.filter(x=>x.rpe>0),mean=valid.length?(valid.reduce((a,x)=>a+x.rpe,0)/valid.length).toFixed(1):'—',fatigue=last.filter(x=>x.fatigue>0),fmean=fatigue.length?(fatigue.reduce((a,x)=>a+x.fatigue,0)/fatigue.length).toFixed(1):'—';const completion=Array.from({length:7},(_,i)=>isCompleted(selectedWeek,i+1)).filter(Boolean).length;let plan='Mantieni il programma e cerca precisione tecnica.';if(last.some(x=>x.pain==='yes'))plan='Evita gli esercizi dolorosi e cerca una valutazione qualificata se il dolore continua.';else if(last.some(x=>x.rpe>=9||x.fatigue>=8))plan='Per la prossima seduta valuta recupero o volume ridotto e nessun aumento di carico.';else if(valid.length>=3&&valid.slice(-3).every(x=>x.rpe<=7)&&fatigue.length>=3&&fatigue.slice(-3).every(x=>x.fatigue<=5))plan='Buona risposta registrata: valuta un piccolo aumento della qualità o del volume, non della zavorra automatica.';return `Ultime ${last.length} sedute: RPE medio ${mean}, fatica media ${fmean}. Settimana ${selectedWeek}: ${completion}/7 giornate completate. Indicazione: ${plan}`}
 function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));const m={home:'nh',plan:'np',workout:'nw',climb:'nc',progress:'npr',tests:'nt',profiles:'nprofiles'};if(m[id])$(m[id]).classList.add('active');refresh();}
-function renderPlan(){$('weekBtns').innerHTML=weeks.map((w,i)=>`<button class="${i+1===selectedWeek?'sel':''}" onclick="setProfileWeek(${i+1})">${i+1}</button>`).join('');const w=weeks[selectedWeek-1];$('phase').textContent=w[0];$('weekFocus').textContent=w[1];$('weekTitle').textContent='Settimana '+selectedWeek;$('weekNote').textContent=w[2];renderCalendar();$('planDays').innerHTML=Array.from({length:7},(_,i)=>{const d=i+1,t=T[d];return `<div class="card"><div class="status ${isCompleted(selectedWeek,d)?'ok':'partial'}">${isCompleted(selectedWeek,d)?'✓ Completato':isPartial(selectedWeek,d)?'◐ Parziale':calendarEntry(selectedWeek,d).status==='skipped'?'– Saltata':calendarEntry(selectedWeek,d).status==='moved'?'↪ Riprogrammata '+(calendarEntry(selectedWeek,d).date||''):'○ Da fare'}</div><br><span class="tag">${t[0]}</span><span class="tag">${t[1]}</span><h3>${t[2]}</h3><ul class="list">${exFor(d,selectedWeek).map(x=>`<li class="small">${esc(x)}</li>`).join('')}</ul><button class="secondary" onclick="selectedDay=${d};loadWorkout()">Apri seduta</button></div>`}).join('');}
+function renderPlan(){$('weekBtns').innerHTML=weeks.map((w,i)=>`<button class="${i+1===selectedWeek?'sel':''}" onclick="setProfileWeek(${i+1})">${i+1}</button>`).join('');const w=weeks[selectedWeek-1];$('phase').textContent=w[0];$('weekFocus').textContent=w[1];$('weekTitle').textContent='Settimana '+selectedWeek;$('weekNote').textContent=w[2];renderCalendar();$('planDays').innerHTML=Array.from({length:7},(_,i)=>{const d=i+1,t=T[d];return `<div class="card"><div class="status ${isCompleted(selectedWeek,d)?'ok':'partial'}">${isCompleted(selectedWeek,d)?'✓ Completato':isPartial(selectedWeek,d)?'◐ Parziale':calendarEntry(selectedWeek,d).status==='skipped'?'– Saltata':calendarEntry(selectedWeek,d).status==='moved'?'↪ Riprogrammata '+(calendarEntry(selectedWeek,d).date||''):'○ Da fare'}</div><br><span class="tag">${t[0]}</span><span class="tag">${t[1]}</span><h3>${t[2]}</h3><ul class="list">${exFor(d,selectedWeek).map(x=>`<li class="small">${esc(x)}</li>`).join('')}</ul><button class="secondary" onclick="openCalendarDay(${d})">Apri seduta</button></div>`}).join('');}
 function savedWorkout(w=selectedWeek,d=selectedDay){const a=load(KS).filter(x=>+x.week===+w&&+x.day===+d);return a.length?a[a.length-1]:null}
 function isCompleted(w,d){return savedWorkout(w,d)?.completed===true}
 function isPartial(w,d){const x=savedWorkout(w,d);return !!x&&x.completed!==true}
-function updateWorkoutStatus(){const done=isCompleted(selectedWeek,selectedDay),part=isPartial(selectedWeek,selectedDay);const st=$('workoutSavedStatus');st.textContent=done?'✓ Completato':part?'◐ Salvato parzialmente':'○ Da fare';st.className='status '+(done?'ok':'partial');$('reopenActions').style.display=done?'block':'none';}
-function loadWorkout(){const t=T[selectedDay],old=savedWorkout();$('wTag').textContent=`S${selectedWeek} · ${t[0]} · ${t[1]}`;$('wTitle').textContent=t[2];$('wObjective').textContent=weeks[selectedWeek-1][2];$('scheduledDate').value=calendarEntry(selectedWeek,selectedDay).date||old?.scheduledDate||'';$('exerciseEditor').style.display='none';const previous=old?.exercises||[];
-$('exerciseList').innerHTML=exFor(selectedDay,selectedWeek).map((x,i)=>{const match=previous.find(e=>e.name===x)||previous[i]?.name===x&&previous[i];return `<label class="check"><input type="checkbox" id="ex${i}" ${match?.done?'checked':''}><span>${esc(x)}</span></label>`}).join('');
+function updateWorkoutStatus(){
+const done=isCompleted(selectedWeek,selectedDay),part=isPartial(selectedWeek,selectedDay),draft=getDraft(selectedWeek,selectedDay);
+const st=$('workoutSavedStatus');st.textContent=done?'✓ Completato':part?'◐ Parziale (registrato)':draft?'◐ Bozza automatica, non completato':'○ Da fare';st.className='status '+(done?'ok':'partial');
+$('reopenActions').style.display=done?'block':'none';
+}
+function loadWorkout(){
+const t=T[selectedDay],old=savedWorkout(),draft=getDraft(selectedWeek,selectedDay);
+$('wTag').textContent=`S${selectedWeek} · ${t[0]} · ${t[1]}`;$('wTitle').textContent=t[2];$('wObjective').textContent=weeks[selectedWeek-1][2];
+$('scheduledDate').value=calendarEntry(selectedWeek,selectedDay).date||old?.scheduledDate||'';
+$('exerciseEditor').style.display='none';
+const previous=old?.exercises||[];
+$('exerciseList').innerHTML=exFor(selectedDay,selectedWeek).map((x,i)=>{
+const matched=previous.find(e=>e.name===x);
+const done=Array.isArray(draft?.exercises)?draft.exercises[i]===true:matched?.done===true;
+return `<label class="check"><input type="checkbox" id="ex${i}" ${old?.completed===true?'disabled title="Riapri la seduta per modificare"':''} ${done?'checked':''}><span>${esc(x)}</span></label>`}).join('');
 const fields={dur:'duration',rpe:'rpe',osg:'os',prg:'proj',hang:'hang',pull:'pull',fatigue:'fatigue',pain:'pain',notes:'note'};
-Object.entries(fields).forEach(([id,key])=>{$(id).value=old?.[key]??(id==='pain'?'no':'')});updateWorkoutStatus();show('workout');}
-function reopenWorkout(){const existing=savedWorkout();if(!existing||existing.completed!==true){toast('La seduta non risulta completata');return}if(!confirm('Riaprire la seduta? Tornerà Parziale, ma esercizi e dati resteranno salvati.'))return;const s=load(KS),idx=s.findIndex(x=>x===existing||(x.week===existing.week&&x.day===existing.day));if(idx<0)return;s[idx]={...s[idx],completed:false,reopenedAt:new Date().toISOString()};save(KS,s);loadWorkout();toast('Seduta riaperta: modifica e salva i dati');}
+Object.entries(fields).forEach(([id,key])=>{$(id).value=draft?.fields?.[id]??old?.[key]??(id==='pain'?'no':'')});
+// Do not lose the selected calendar date while opening the matching planned workout.
+const selectedDate=$('workoutDate').value||localISO(new Date());
+$('workoutDate').value=selectedDate;
+$('dateInfo').textContent='Settimana '+selectedWeek+' · '+t[0]+' · '+(calendarEntry(selectedWeek,selectedDay).status==='moved'?'riprogrammata':'prevista nel piano');
+updateWorkoutStatus();show('workout');
+}
+function reopenWorkout(){
+const existing=savedWorkout();if(!existing||existing.completed!==true){toast('La seduta non risulta completata');return}
+if(!confirm('Riaprire la seduta? Tornerà Parziale, mantenendo esercizi e dati salvati.'))return;
+const s=load(KS);
+// Fix duplicate historical records: update the latest AND any older completed records for the same week/day.
+for(const x of s)if(+x.week===+selectedWeek&&+x.day===+selectedDay){x.completed=false;x.reopenedAt=new Date().toISOString()}
+save(KS,s);loadWorkout();toast('Seduta riaperta e stato aggiornato');
+}
 function completeWorkout(completed){let rpe=+$('rpe').value,f=+$('fatigue').value;if(rpe&&(rpe<1||rpe>10)){toast('RPE deve essere tra 1 e 10');return}if(f&&(f<1||f>10)){toast('Fatica deve essere tra 1 e 10');return}
 if(completed&&!confirm('Confermi di avere terminato questa seduta e di volerla segnare come COMPLETATA?'))return;
 const checked=[...$('exerciseList').querySelectorAll('input')], ex=exFor(selectedDay,selectedWeek).map((name,i)=>({name,done:checked[i]?.checked||false}));const s=load(KS),old=savedWorkout();const obj={date:old?.date||iso,week:selectedWeek,day:selectedDay,title:T[selectedDay][2],scheduledDate:calendarEntry(selectedWeek,selectedDay).date||'',duration:+$('dur').value||0,rpe,os:$('osg').value,proj:$('prg').value,hang:+$('hang').value||0,pull:+$('pull').value||0,fatigue:f,pain:$('pain').value,exercises:ex,note:$('notes').value,completed:completed===true,updatedAt:new Date().toISOString()};
-const prior=s.findIndex(x=>x.week===selectedWeek&&x.day===selectedDay);if(prior>=0)s.splice(prior,1);s.push(obj);save(KS,s);if(completed)updateCalendar(selectedWeek,selectedDay,null);toast(completed?'✓ Allenamento completato':'Allenamento parziale salvato');refresh();}
+const prior=s.findIndex(x=>x.week===selectedWeek&&x.day===selectedDay);if(prior>=0)s.splice(prior,1);s.push(obj);save(KS,s);clearDraft(selectedWeek,selectedDay);if(completed)updateCalendar(selectedWeek,selectedDay,null);toast(completed?'✓ Allenamento completato':'Allenamento parziale salvato');refresh();}
 function saveRoute(){if(!$('grade').value.trim()){toast('Inserisci il grado della via');return}const r=load(KR);r.push({date:$('rd').value||iso,route:$('route').value,grade:$('grade').value.trim(),result:$('result').value,attempts:+$('attempts').value||1,style:$('style').value,diff:+$('diff').value||0,failure:$('failure').value,note:$('rnotes').value});save(KR,r);toast('Via salvata');refresh();}
 function saveTests(){const ts=load(KT);ts.push({date:$('td').value||iso,week:+$('testWeek').value,weight:+$('tw').value||0,pullups:+$('tpu').value||0,weighted:+$('twp').value||0,weightedRpe:+$('twr').value||0,hang:+$('thw').value||0,hangRpe:+$('thr').value||0,time:+$('tht').value||0,intermittent:$('tint').value,lead:$('tlo').value,outdoor:$('tfo').value,note:$('tn').value,unit:'additional_kg'});save(KT,ts);toast('Test salvato nello storico');refresh();}
 const grades=['4','4+','5a','5a+','5b','5b+','5c','5c+','6a','6a+','6b','6b+','6c','6c+','7a','7a+','7b','7b+','7c'];
 function bestOS(routes){let valid=routes.filter(x=>x.result==='OS'&&grades.includes(x.grade));return valid.length?valid.reduce((a,b)=>grades.indexOf(a.grade)>grades.indexOf(b.grade)?a:b).grade:'6a+';}
 function plot(id,values,label){const c=$(id),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#666';ctx.font='12px Arial';if(!values.length){ctx.fillText('Ancora nessuna serie di dati registrata',14,30);return}const max=Math.max(...values.map(v=>v.v),1),min=Math.min(0,...values.map(v=>v.v));ctx.strokeStyle='#ddd';ctx.beginPath();ctx.moveTo(35,15);ctx.lineTo(35,150);ctx.lineTo(w-10,150);ctx.stroke();ctx.fillText(label,40,15);ctx.fillText(String(max),4,24);ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.beginPath();values.forEach((p,i)=>{const x=45+i*(w-65)/Math.max(1,values.length-1),y=145-(p.v-min)/(max-min||1)*110;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();values.forEach((p,i)=>{let x=45+i*(w-65)/Math.max(1,values.length-1),y=145-(p.v-min)/(max-min||1)*110;ctx.beginPath();ctx.arc(x,y,4,0,7);ctx.fillStyle='#111';ctx.fill();ctx.fillStyle='#777';ctx.fillText(String(p.label).slice(0,5),Math.max(0,x-13),168)});}
-function refresh(){renderPlan();const s=load(KS),r=load(KR),t=load(KT);$('hWeek').textContent=selectedWeek+'/12';$('hSessions').textContent=s.filter(x=>x.completed===true).length;const rr=s.filter(x=>x.rpe);$('hRpe').textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):'—';$('hOS').textContent=r.some(x=>x.result==='OS')?bestOS(r):(activeProfile().grade||'—');$('ph').textContent=(s.filter(x=>x.hang!==undefined).at(-1)?.hang??'—')+' kg +';$('pp').textContent=(s.filter(x=>x.pull!==undefined).at(-1)?.pull??'—')+' kg +';$('pm').textContent=s.reduce((a,b)=>a+(b.duration||0),0);$('pr').textContent=r.length;$('profileSummary').textContent=`${activeProfile().name} · ${activeProfile().weight||'—'} kg · ${activeProfile().pullups??'—'} trazioni · OS ${activeProfile().grade||'—'} · obiettivo ${activeProfile().goal||'—'}`;$('coachAdvice').textContent=coachText(s,r);$('coachDetails').textContent=coachDetails(s,r);$('weekStatus').textContent=`${Array.from({length:7},(_,i)=>isCompleted(selectedWeek,i+1)).filter(Boolean).length} / 7 giorni segnati completati nella settimana ${selectedWeek}`;
+function refresh(){renderPlan();const s=load(KS),r=load(KR),t=load(KT);$('hWeek').textContent=selectedWeek+'/12';$('hSessions').textContent=s.filter(x=>x.completed===true).length;const rr=s.filter(x=>x.rpe);$('hRpe').textContent=rr.length?(rr.reduce((a,b)=>a+b.rpe,0)/rr.length).toFixed(1):'—';$('hOS').textContent=r.some(x=>x.result==='OS')?bestOS(r):(activeProfile().grade||'—');$('ph').textContent=(s.filter(x=>x.hang!==undefined).at(-1)?.hang??'—')+' kg +';$('pp').textContent=(s.filter(x=>x.pull!==undefined).at(-1)?.pull??'—')+' kg +';$('pm').textContent=s.reduce((a,b)=>a+(b.duration||0),0);$('pr').textContent=r.length;$('profileSummary').textContent=`${activeProfile().name} · ${activeProfile().weight||'—'} kg · ${activeProfile().pullups??'—'} trazioni · OS ${activeProfile().grade||'—'} · obiettivo ${activeProfile().goal||'—'}`;const nowDay=(new Date().getDay()||7),todayPlan=workoutForDate(localISO(new Date()));$('todayTag').textContent='Oggi · '+T[todayPlan?.day||nowDay][0];$('todayTitle').textContent=T[todayPlan?.day||nowDay][2];$('todayDesc').textContent='Seduta proposta per oggi nella settimana '+selectedWeek+' del ciclo '+(todayPlan?.moved?'(riprogrammata)':'')+'.';$('coachAdvice').textContent=coachText(s,r);$('coachDetails').textContent=coachDetails(s,r);$('weekStatus').textContent=`${Array.from({length:7},(_,i)=>isCompleted(selectedWeek,i+1)).filter(Boolean).length} / 7 giorni segnati completati nella settimana ${selectedWeek}`;
 $('routes').innerHTML=r.slice(-15).reverse().map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.route||'-')}</td><td>${esc(x.grade||'-')}</td><td>${esc(x.result)}</td></tr>`).join('');const attempted=r.filter(x=>x.result==='OS'||x.result==='Flash'||x.result==='RP'||x.result==='Caduta'||x.result==='Non completata');$('osStats').textContent=r.length?`${r.length} vie registrate · ${r.filter(x=>x.result==='OS').length} OS · migliore OS ${bestOS(r)}. Percentuale OS sulle vie registrate: ${attempted.length?Math.round(100*r.filter(x=>x.result==='OS').length/attempted.length):0}% (non è la percentuale dei soli tentativi a vista se registri anche i progetti).`:'Nessun dato.';$('sessionTable').innerHTML=s.slice(-8).reverse().map(x=>`${esc(x.date)} · S${esc(x.week)} · ${esc(x.title)} · ${x.completed===true?'✓ Completato':'◐ Parziale'} · RPE ${esc(x.rpe||'—')} · ${x.exercises?x.exercises.filter(e=>e.done).length+'/'+x.exercises.length+' esercizi':''}<br>`).join('');$('testHistory').innerHTML=t.length?t.slice().reverse().map(x=>`${esc(x.date)} · ${x.week?'S'+esc(x.week):'Base'} · ${x.weight} kg corporei · ${x.pullups} trazioni · trazione +${x.weighted} kg · trave +${x.hang} kg${x.time?' / '+x.time+' s':''}<br>`).join(''):'Nessun retest salvato. I valori iniziali confermati sono mostrati sopra.';
-const st=$('workoutSavedStatus');if(st){st.textContent=isCompleted(selectedWeek,selectedDay)?'✓ Completato':isPartial(selectedWeek,selectedDay)?'◐ Salvato parzialmente':'○ Da fare';st.className='status '+(isCompleted(selectedWeek,selectedDay)?'ok':'partial');$('reopenActions').style.display=isCompleted(selectedWeek,selectedDay)?'block':'none'}plot('rpeChart',rr.slice(-10).map(x=>({label:x.date.slice(5),v:x.rpe})),'RPE (1–10)');plot('pullChart',t.filter(x=>x.weighted!==undefined).slice(-8).map(x=>({label:x.week?'S'+x.week:'Base',v:x.unit==='additional_kg'?x.weighted:Math.max(0,x.weighted-(x.weight||89))})),'Zavorra aggiunta (kg)');}
+updateWorkoutStatus();plot('rpeChart',rr.slice(-10).map(x=>({label:x.date.slice(5),v:x.rpe})),'RPE (1–10)');plot('pullChart',t.filter(x=>x.weighted!==undefined).slice(-8).map(x=>({label:x.week?'S'+x.week:'Base',v:x.unit==='additional_kg'?x.weighted:Math.max(0,x.weighted-(x.weight||89))})),'Zavorra aggiunta (kg)');}
 function toast(msg){let el=$('toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2100)}
 function initProfiles(){
 try{profiles=JSON.parse(localStorage.getItem(PROFILE_KEY)||'[]')}catch{profiles=[]}
@@ -249,6 +295,9 @@ const fails=r.slice(-8).filter(x=>x.failure);const counts={};fails.forEach(x=>co
 if(common)return `Nel diario vie ricorre: ${common}. Nella prossima seduta tecnica dedica 15–20 minuti a questo aspetto, su vie gestibili. Mantieni i carichi finché il recupero non è buono.`;
 if(last.length>=3&&last.every(x=>(+x.rpe||0)>0&&x.rpe<=7&&(x.fatigue||0)<=5))return 'Ultime tre sedute con RPE contenuto e fatica bassa: puoi valutare un piccolo progresso tecnico o di volume, mantenendo margine. Nessun incremento automatico delle zavorre.';
 return 'Prosegui con il programma attuale e registra RPE, fatica e vie. Le indicazioni si aggiorneranno in base ai dati di questo atleta.';}
-$('rd').value=iso;$('td').value=iso;initProfiles();refresh();loadWorkout();
+$('rd').value=iso;$('td').value=iso;$('planDate').value=iso;$('workoutDate').value=iso;
+$('exerciseList').addEventListener('change',saveDraft);
+for(const id of ['dur','rpe','osg','prg','hang','pull','fatigue','pain','notes'])$(id).addEventListener('input',saveDraft);
+initProfiles();refresh();openToday();
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"))}</script></body></html>
