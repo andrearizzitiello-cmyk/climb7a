@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#111111" name="theme-color"/><link href="./manifest.webmanifest" rel="manifest"/>
-<title>Climb 7A — v0.10</title>
+<title>Climb 7A — v0.15</title>
 <style>
 :root{--bg:#f4f4f1;--card:#fff;--ink:#151515;--muted:#666;--line:#ddd;--ok:#1d6b3b;--warn:#9a6400}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
@@ -58,10 +58,63 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 .ad-decision-short{font-size:13px;font-weight:700;margin:8px 0}
 
 .exercise-entry{border-bottom:1px solid #e8eaed;padding:4px 0 8px}.exercise-entry .check{margin-bottom:0}.exercise-help{margin:1px 0 4px 30px}.exercise-help>summary{font-size:12px;color:#285d7c;font-weight:700;padding:8px 2px;cursor:pointer;list-style:none}.exercise-help>summary::-webkit-details-marker{display:none}.exercise-help-body{font-size:13px;line-height:1.5;padding:9px 12px;border-radius:10px;background:#f4f7fa}.exercise-help-body p{margin:7px 0}.exercise-pain{padding:9px;border-left:3px solid #ad6a28;background:#fff2e2;border-radius:5px}.library-item{border-bottom:1px solid #e4e8ec;padding:6px 0}.library-item>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 4px;cursor:pointer;font-size:14px}.library-category{font-size:10px;color:#556e7a;background:#e9f0f5;padding:4px 7px;border-radius:8px;white-space:nowrap}
+
+/* v0.15 — calendario Allenati davvero compatto e resistente agli schermi stretti */
+html,body,.app,main,.screen{max-width:100%;min-width:0}
+#workout,#workoutLongMount,#workoutLegacyBody,#longOpsCard,.compact-days{min-width:0;max-width:100%}
+#workout .card{padding:12px;margin-bottom:9px;border-radius:14px}
+#workout h2{font-size:19px;margin:10px 2px}
+#workoutModeBar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#workoutModeBar p{margin:0;flex:1;min-width:125px;overflow-wrap:anywhere}
+#workoutModeBar button{font-size:11px;padding:7px 9px;min-height:34px}
+#longOpsCard>h3{font-size:16px;margin:0 0 3px}
+#longOpsCard>p.small{font-size:11px;line-height:1.35;margin:2px 0 9px}
+.compact-weekbar{display:grid;grid-template-columns:40px minmax(0,1fr) 40px;gap:8px;align-items:end;max-width:100%;min-width:0}
+.compact-weekpick{min-width:0}
+.compact-weekpick label{display:block;font-size:11px;margin:0 0 3px;font-weight:700}
+.compact-weekpick select{display:block;width:100%;max-width:100%;min-width:0;height:40px;padding:7px 28px 7px 10px;margin:0;font-size:13px}
+.compact-arrow{height:40px;min-width:0;width:40px;padding:0!important;border-radius:11px;font-size:27px;line-height:1}
+.compact-date-panel{margin:8px 0 0;border:1px solid #e4e4e4;border-radius:10px;padding:0 10px}
+.compact-date-panel>summary{font-size:12px;font-weight:700;cursor:pointer;list-style:none;min-height:36px;display:flex;align-items:center;justify-content:space-between}
+.compact-date-panel>summary::after{content:'⌄';font-size:16px;color:#777}
+.compact-date-panel[open]>summary::after{content:'⌃'}
+.compact-date-panel input,.compact-legacy-date input{width:100%;max-width:100%;min-width:0;display:block;font-size:14px}
+.compact-date-panel label{font-size:11px}
+.compact-hint{margin:7px 0 4px;font-size:10px;line-height:1.3}
+.compact-ops-summary{background:#f2f6f3;border-radius:10px;padding:8px 10px;font-size:11px;line-height:1.35;margin:7px 0 8px;overflow-wrap:anywhere}
+.compact-days details,.compact-days summary{max-width:100%;min-width:0;overflow-wrap:anywhere}
+.compact-days .row{min-width:0;flex-wrap:wrap}
+.compact-days .row>div{min-width:0;flex:1 1 115px}
+.compact-days input,.compact-days select{min-width:0;max-width:100%}
+.compact-legacy-date summary{padding:11px!important;min-height:42px!important;font-size:13px!important}
+.compact-date-content{padding:0 11px 11px}
+@media(max-width:380px){main{padding-left:10px;padding-right:10px}#workoutModeBar{padding:9px!important}.compact-weekbar{grid-template-columns:36px minmax(0,1fr) 36px;gap:5px}.compact-arrow{width:36px;height:40px}.compact-weekpick select{font-size:12px}}
+
+/* v0.15: compact, independent quantitative fields on long-plan exercises */
+.dose-editor{margin:3px 0 5px 28px;border:1px solid #e4eaf0;border-radius:9px;padding:3px 8px;max-width:100%;min-width:0}
+.dose-editor>summary{font-size:12px;padding:7px 0;cursor:pointer;color:#24516b}
+.dose-summary{font-weight:700;display:block;color:#405965;margin-top:2px}
+.dose-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:6px 0}
+.dose-grid label{font-size:11px;min-width:0;overflow-wrap:anywhere}
+.dose-grid input{width:100%;min-width:0;box-sizing:border-box;margin:3px 0 0;padding:7px 4px;font-size:15px}
+.ad-session-mini{border:1px solid #dce7ed;border-radius:10px;margin:8px 0;padding:6px 10px;background:#f4f8fa}
+.ad-session-mini>summary{font-weight:700;font-size:13px;padding:6px 0;cursor:pointer}
+@media(max-width:350px){.dose-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v0.15: informative safety and structured instructions */
+.v15-safety{background:#fff6e3;border:1px solid #e5c48c;border-radius:10px;padding:10px;margin:9px 0;font-size:12px;line-height:1.5}
+.v15-safety details{margin-top:7px}.v15-safety summary{font-weight:700;cursor:pointer}
+.v15-archive{background:#f2f5f8;border:1px solid #cbd7e0;border-radius:10px;padding:10px;font-size:12px}
+.v15-checkin{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#eff4f7;border-radius:10px;padding:8px 10px;margin:7px 0;font-size:12px} .v15-checkin label{margin:0;flex:1;font-weight:700}.v15-checkin input{max-width:70px;width:70px;margin:0;padding:6px;font-size:14px}
+.v15-expl{margin:4px 0 6px 27px;line-height:1.5;overflow-wrap:anywhere}
+.compact-days .exercise-entry{padding:6px 0;border-bottom:1px solid #eaeaea}
+.compact-days .exercise-entry .check{font-size:13px}
+.compact-days .library-item{max-width:100%}
+button:disabled{opacity:.4;cursor:not-allowed}
 </style>
 </head>
 <body><div class="app">
-<header><div class="brand">CLIMB 7A</div><div class="sub">v0.13 · Pianificazione</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.15 · Esercizi e AD</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
 <main>
 <section class="screen active" id="home">
 <div class="hero"><div class="small">OBIETTIVO DEL CICLO</div><div class="big">7a ONSIGHT</div><div class="progress"><div id="goalbar"></div></div><div class="small" id="goalText">Base: 6a+ OS · 6c lavorato</div></div>
@@ -75,15 +128,19 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <div class="card coach"><h3>AD · Riepilogo</h3><p class="small" id="coachAdvice"></p><div class="wraprow"><button class="secondary" onclick="show('paintracker')">Salute e recupero</button><button class="secondary" onclick="show('adpage')">Analisi AD completa</button></div></div><details class="card collapsible"><summary>Regola del ciclo</summary><p class="small">3 stimoli di arrampicata: boulder forza/potenza, lead indoor specifica e outdoor performance. Le sedute a casa completano forza e recupero.</p></details>
 </section>
 <section class="screen" id="plan">
-<h2>Programma 12 settimane</h2>
+<h2 id="programHeading">Il mio programma</h2>
+<div id="longPlanWeekPanel" class="card" style="display:none"><p id="longPlanWeekLabel" class="small"></p><div class="week" id="longWeekBtns"></div><button class="secondary" type="button" onclick="show('workout')">Apri Allenati</button></div>
+<div id="legacyPlanBody">
 <div class="card"><div class="week" id="weekBtns"></div></div>
 <div class="card"><label for="planDate">Vai a una data</label><input id="planDate" onchange="openWorkoutForDate(this.value)" type="date"/><p class="small">Per le date senza riprogrammazioni viene proposta la seduta del giorno della settimana scelto (nella settimana del ciclo attualmente selezionata).</p></div><details class="card collapsible" open=""><summary>Calendario settimanale</summary><p class="small">Tocca un giorno per aprire la seduta. ✓ completata · ◐ parziale · – saltata · ↪ spostata.</p><div class="calendar" id="calendar"></div><p class="small" id="calendarSummary"></p></details>
 <div class="card"><div class="small" id="weekStatus"></div><span class="tag dark" id="phase"></span><span class="tag" id="weekFocus"></span><h3 id="weekTitle"></h3><p class="small" id="weekNote"></p></div>
-<div class="notice">La sessione outdoor può essere spostata a domenica: in quel caso sabato è riposo. Se salti la lead, non aggiungere automaticamente una seconda seduta intensa.</div><div id="planDays"></div>
+<div class="notice">La sessione outdoor può essere spostata a domenica: in quel caso sabato è riposo. Se salti la lead, non aggiungere automaticamente una seconda seduta intensa.</div><div id="planDays"></div></div>
 </section>
 <section class="screen" id="workout">
 <h2>Allenamento del giorno</h2>
-<details class="card collapsible"><summary>Calendario e allenamento della data</summary><label for="workoutDate">Seleziona una data</label><input id="workoutDate" onchange="onWorkoutDateChanged(this.value)" type="date"/><div class="small" id="dateInfo">Scegli una data per aprire l’allenamento previsto. Le sedute riprogrammate hanno priorità.</div><button class="secondary" onclick="openToday()" type="button">Vai a oggi</button></details>
+<div class="card" id="workoutModeBar"><p class="small" id="activePlanLabel"></p><button type="button" class="secondary" onclick="show('longplan')">⚙ Impostazioni piano in Altro</button></div>
+<div id="workoutLongMount"></div><div id="workoutLegacyBody">
+<details class="card collapsible compact-legacy-date"><summary>▦ Scegli la data</summary><div class="compact-date-content"><label for="workoutDate">Data dell’allenamento</label><input id="workoutDate" onchange="onWorkoutDateChanged(this.value)" type="date"/><div class="small" id="dateInfo">Scegli una data per aprire la seduta prevista.</div><button class="secondary" onclick="openToday()" type="button">Oggi</button></div></details>
 <div class="card"><span class="tag dark" id="wTag"></span><h3 id="wTitle"></h3><p class="small" id="wObjective"></p><div id="exerciseList"></div><div class="wraprow" style="margin-top:12px"><button class="secondary" onclick="openEditor()" type="button">✎ Modifica ripetizioni / tempi</button><button class="ghost" onclick="resetExercises()" type="button">Ripristina seduta e consuntivo</button></div><div id="exerciseEditor" style="display:none;margin-top:10px"><p class="small">Modifica soltanto quantità (ripetizioni o tempo) per ciascun esercizio. Il tipo di esercizio è fisso e non può essere sostituito.</p><div id="editorRows"></div><button onclick="saveExerciseEdits()" type="button">Salva modifiche</button></div></div>
 <details class="card collapsible"><summary>Organizza la seduta</summary><label>Data prevista (facoltativa)</label><input id="scheduledDate" type="date"/><div class="wraprow"><button class="secondary" onclick="markSkipped()">Segna saltata</button><button class="secondary" onclick="rescheduleWorkout()">Riprogramma alla data scelta</button><button class="ghost" onclick="clearSchedule()">Annulla stato</button></div><p class="small">Una seduta riprogrammata mantiene il proprio giorno nel piano, ma appare con la nuova data. Non duplicare due sessioni intense nello stesso giorno.</p></details>
 <details class="card collapsible" open=""><summary>Consuntivo</summary>
@@ -95,7 +152,7 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <label>Zavorra trazioni aggiunta (kg; 0 = corpo libero)</label><input id="pull" type="number"/>
 <label>Fatica iniziale (1–10)</label><input id="fatigue" max="10" min="1" placeholder="es. 4" type="number"/><label>Fatica finale (1–10)</label><input id="fatigueEnd" max="10" min="1" placeholder="es. 6" type="number"/><div class="notice">Il dolore si registra in <button class="secondary" onclick="show('paintracker')" type="button">Salute e recupero</button>. AD tiene conto di questo monitoraggio.</div><label>Note</label><textarea id="notes" rows="3"></textarea><div class="small">Se compare dolore alle dita o ai gomiti, interrompi l’esercizio provocante. Non progredire il carico in presenza di dolore.</div>
 <div class="notice"><b>AD · Sintesi</b><p class="small" id="adWorkoutAdvice">Registra RPE e fatica.</p><button class="secondary" onclick="show('adpage')" type="button">Apri analisi completa</button></div><div class="status partial" id="workoutSavedStatus">Non ancora completato</div><div id="reopenActions" style="display:none;margin:8px 0"><button class="secondary" onclick="reopenWorkout()" type="button">↶ Riapri seduta completata</button><p class="small">Riaprendo, lo stato torna Parziale; gli esercizi e i dati registrati restano modificabili.</p></div><p class="small">Con “Termina e segna completato” la seduta risulterà completata anche se alcuni esercizi sono stati saltati; il dettaglio rimane nello storico.</p><div class="row"><button onclick="completeWorkout(true)">✓ Termina e segna completato</button><button class="secondary" onclick="completeWorkout(false)">Salva parziale</button></div>
-</details></section>
+</details></div></section>
 <section class="screen" id="climb">
 <h2>Diario vie</h2><div class="card">
 <label>Data</label><input id="rd" type="date"/><label>Via</label><input id="route" placeholder="Nome via"/>
@@ -150,10 +207,11 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <div class="card"><h3>Modifica atleta selezionato</h3><label>Nome</label><input id="editName" maxlength="55"/><label>Peso (kg)</label><input id="editWeight" max="300" min="20" step="0.1" type="number"/><label>Trazioni massime</label><input id="editPullups" max="100" min="0" type="number"/><label>Grado a vista attuale</label><input id="editGrade"/><label>Obiettivo</label><input id="editGoal"/><button onclick="updateProfile()">Salva profilo</button></div>
 <div class="card"><h3>Settimana attiva</h3><label>Settimana di allenamento del profilo</label><select id="profileWeek" onchange="setProfileWeek(this.value)"></select><p class="small">La settimana è indipendente per ciascun atleta. Le sedute completate restano associate alla settimana in cui sono state registrate.</p></div>
 </section>
-<section class="screen" id="library"><h2>Libreria esercizi</h2><p class="small">Schede brevi su obiettivi, esecuzione ed errori da evitare. Non cambiano il programma di allenamento.</p><div class="card"><label for="librarySearch">Cerca un esercizio</label><input id="librarySearch" type="search" placeholder="Es. trave, core, boulder" oninput="renderExerciseLibrary()"/><label for="libraryCategory">Categoria</label><select id="libraryCategory" onchange="renderExerciseLibrary()"><option>Tutte</option><option>Core</option><option>Dita</option><option>Forza</option><option>Lead</option><option>Lettura</option><option>Organizzazione</option><option>Outdoor</option><option>Potenza</option><option>Preparazione</option><option>Programmazione</option><option>Recupero</option><option>Tecnica</option></select><p class="small" id="libraryCount"></p><div id="libraryResults"></div></div></section>
+<section class="screen" id="library"><h2>Libreria esercizi</h2><p class="small">Solo esercizi specifici, con spiegazioni di esecuzione. Le indicazioni su riscaldamento, recupero e organizzazione sono in una sezione distinta.</p><div class="card"><label for="librarySearch">Cerca un esercizio</label><input id="librarySearch" type="search" placeholder="Es. trave, squat, piedi" oninput="renderExerciseLibrary()"/><label for="libraryCategory">Categoria</label><select id="libraryCategory" onchange="renderExerciseLibrary()"><option>Tutte</option><option>Core</option><option>Dita</option><option>Forza</option><option>Lettura</option><option>Recupero</option><option>Tecnica</option></select><p class="small" id="libraryCount"></p><div id="libraryResults"></div></div><button class="secondary" onclick="show('guidance')">📖 Apri le indicazioni di allenamento</button></section>
+<section class="screen" id="guidance"><h2>Indicazioni di allenamento</h2><p class="small">Suggerimenti e protocolli generali: non sono esercizi singoli e non vengono conteggiati come tali.</p><div class="card"><label for="guidanceSearch">Cerca un'indicazione</label><input id="guidanceSearch" type="search" placeholder="Es. riscaldamento, recupero" oninput="renderGuidance()"/><p class="small" id="guidanceCount"></p><div id="guidanceResults"></div></div></section>
 
 <section class="screen" id="longplan"><h2>Il mio piano a lungo termine</h2>
-<p class="small">Piano individuale per 3, 6 o 12 mesi. Questo strumento pianifica i blocchi e i controlli: il programma settimanale esistente resta invariato finché non scegli di usarne le indicazioni.</p>
+<p class="small">Qui scegli e attivi un solo piano per atleta. La schermata Allenati mostrerà esclusivamente il piano salvato.</p>
 <div class="card"><h3>1 · Obiettivo e situazione iniziale</h3>
 <div class="row"><div><label for="lpDuration">Durata</label><select id="lpDuration" onchange="previewLongPlan()"><option value="13">3 mesi · 13 settimane</option><option value="26">6 mesi · 26 settimane</option><option value="52">12 mesi · 52 settimane</option></select></div><div><label for="lpStart">Data inizio</label><input type="date" id="lpStart" onchange="previewLongPlan()"></div></div>
 <label for="lpGoal">Obiettivo</label><input id="lpGoal" placeholder="Es. 7a a vista" oninput="previewLongPlan()" maxlength="90">
@@ -164,17 +222,17 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <p class="small">L'eventuale dolore presente viene letto dal modulo Salute e recupero: non è necessario inserirlo una seconda volta.</p>
 </div>
 <div class="card"><h3>2 · Proposta di periodizzazione</h3><div id="lpSummary" class="notice"></div><div id="lpBlockList"></div><details class="collapsible"><summary>Mostra le settimane una per una</summary><div id="lpWeekList"></div></details></div>
-<div class="card"><h3>4 · Calendario operativo del piano</h3><p class="small">Sedute del piano lungo con date reali, indipendenti dal vecchio ciclo di 12 settimane. Scegli una settimana, poi registra le sedute. Il piano salvato resta separato per atleta.</p>
-<div class="row"><div><label for="lpActiveWeek">Settimana del piano</label><select id="lpActiveWeek" onchange="renderLongOperations()"></select></div><div><label for="lpJumpDate">Vai a una data</label><input type="date" id="lpJumpDate" onchange="jumpLongDate()"></div></div>
-<div id="lpOpsSummary" class="notice"></div><div id="lpOpsDays"></div>
+<div id="longPlanOpsMount"><div class="card" id="longOpsCard"><h3>Sedute del piano attivo</h3><p class="small">Scegli la settimana. Apri una seduta per vedere esercizi, spiegazioni, spunte e consuntivo. Le registrazioni rimangono separate per atleta.</p>
+<div class="compact-weekbar" aria-label="Navigazione delle settimane"><button class="secondary compact-arrow" type="button" aria-label="Settimana precedente" onclick="moveLongWeek(-1)">‹</button><div class="compact-weekpick"><label for="lpActiveWeek">Settimana</label><select id="lpActiveWeek" onchange="renderLongOperations()"></select></div><button class="secondary compact-arrow" type="button" aria-label="Settimana successiva" onclick="moveLongWeek(1)">›</button></div>
+<details class="compact-date-panel"><summary>▦ Cerca per data</summary><label for="lpJumpDate">Data dell’allenamento</label><input type="date" id="lpJumpDate" onchange="jumpLongDate()"></details><p id="lpDurationHint" class="small compact-hint"></p><div id="lpOpsSummary" class="compact-ops-summary"></div><div id="lpOpsDays" class="compact-days"></div>
 <details class="collapsible"><summary>Andamento e indicazioni AD per il piano lungo</summary><div id="lpOpsAD" class="small"></div></details>
-<p class="small">Le modifiche al piano lungo non riscrivono né cancellano le sedute del programma a 12 settimane. In caso di dolore attivo evita gli esercizi dolorosi e non aumentare i carichi senza valutazione professionale.</p></div>
-<div class="card"><h3>3 · Salvataggio e revisione</h3><p class="small">Il piano viene salvato per l'atleta selezionato, separatamente dalle sedute già completate. Puoi rigenerarlo in qualsiasi momento; un salvataggio sostituisce soltanto il piano di lungo periodo di quell'atleta.</p><div class="wraprow"><button type="button" onclick="saveLongPlan()">Salva piano per questo atleta</button><button type="button" class="secondary" onclick="restoreLongPlan()">Carica piano salvato</button></div><p id="lpSaveStatus" class="small"></p></div>
+<p class="small">Le vecchie sedute vengono conservate in archivio, senza comparire come piano attivo. In presenza di dolore evita gli esercizi che lo provocano.</p></div>
+</div><details class="card collapsible"><summary>Metodo e fonti della programmazione</summary><p class="small">Il piano usa periodizzazione e variazione tecnica come criteri di progettazione, non come garanzia di efficacia o prevenzione infortuni. Le dosi sono esempi prudenziali: verifica con un allenatore qualificato, specialmente con dolore attivo, storia di lesioni o carichi intensi.</p><ul class="small"><li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10756908/" target="_blank" rel="noopener">Quarmby et al., 2023 — revisione degli infortuni da sovraccarico</a></li><li><a href="https://link.springer.com/article/10.1186/s40798-024-00677-w" target="_blank" rel="noopener">Revisione 2024 — forza, arrampicata e gestione del carico</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/37800745/" target="_blank" rel="noopener">Ehiogu et al., 2023 — riabilitazione lesioni delle pulegge</a></li></ul></details><div class="card"><h3>3 · Salvataggio e revisione</h3><p class="small">Il piano viene salvato per l'atleta selezionato, separatamente dalle sedute già completate. Puoi rigenerarlo in qualsiasi momento; un salvataggio sostituisce soltanto il piano di lungo periodo di quell'atleta.</p><div class="wraprow"><button type="button" onclick="saveLongPlan()">Attiva questo piano per l’atleta</button><button type="button" class="secondary" onclick="restoreLongPlan()">Carica piano salvato</button></div><p id="lpSaveStatus" class="small"></p></div>
 </section>
 <section class="screen" id="more"><h2>Altro</h2>
-<div class="card"><h3>Profilo e programma</h3><div class="menu-stack"><button onclick="show('profiles')">👥 Profili atleti</button><button onclick="show('tests')">📋 Test e retest</button><button onclick="show('climb')">🧗 Diario vie</button><button onclick="show('library')">📚 Libreria esercizi</button><button onclick="show('longplan')">🗓 Pianificatore 3 / 6 / 12 mesi</button></div></div>
+<div class="card"><h3>Profilo e programma</h3><div class="menu-stack"><button onclick="show('profiles')">👥 Profili atleti</button><button onclick="show('tests')">📋 Test e retest</button><button onclick="show('climb')">🧗 Diario vie</button><button onclick="show('library')">📚 Libreria esercizi</button><button onclick="show('guidance')">📖 Indicazioni di allenamento</button><button onclick="show('longplan')">🗓 Pianificatore 3 / 6 / 12 mesi</button></div></div>
 <div class="card"><h3>AD e benessere</h3><div class="menu-stack"><button onclick="show('adpage')">◉ Analisi AD completa</button><button onclick="show('paintracker')">♡ Salute e recupero</button></div></div>
-<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.13. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
+<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.15. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
 <nav><button aria-current="page" aria-label="Home" class="active" id="nh" onclick="show('home')" type="button"><span aria-hidden="true" class="nav-icon">⌂</span><span class="nav-label">Home</span></button><button aria-label="Calendario" id="np" onclick="show('plan')" type="button"><span aria-hidden="true" class="nav-icon">▦</span><span class="nav-label">Calendario</span></button><button aria-label="Allenati" id="nw" onclick="loadWorkout()" type="button"><span aria-hidden="true" class="nav-icon">◉</span><span class="nav-label">Allenati</span></button><button aria-label="Progressi" id="npr" onclick="show('progress')" type="button"><span aria-hidden="true" class="nav-icon">▥</span><span class="nav-label">Progressi</span></button><button aria-label="Altro" id="nm" onclick="show('more')" type="button"><span aria-hidden="true" class="nav-icon">☰</span><span class="nav-label">Altro</span></button></nav><div class="toast" id="toast"></div>
 </div>
 <script>
@@ -283,21 +341,32 @@ function exFor(d,w){const base=baseExFor(d,w),dose=customDose(w,d);return base.m
 
 // Libreria statica educativa: non modifica gli ID, il piano né lo storico.
 const EXERCISE_LIBRARY = [{"name": "Riscaldamento mani e spalle", "category": "Preparazione", "goal": "Aumentare progressivamente temperatura e mobilità.", "how": "Cammina o muoviti 3–5 minuti; mobilizza spalle, polsi e dita senza forzare; inizia con prese molto comode.", "mistake": "Passare subito alla tacca piccola o a trazioni pesanti.", "safety": "Se un gesto provoca dolore, interrompilo."}, {"name": "Trave: sospensioni intermittenti", "category": "Dita", "goal": "Allenare la capacità di mantenere presa con intervalli controllati.", "how": "Usa una presa confortevole a due mani, spalle attive; segui intervalli ON/OFF e recuperi previsti, senza cedimento.", "mistake": "Strappare in ingresso, perdere controllo delle spalle, aumentare la zavorra senza test.", "safety": "Con dolore alle dita presente, evita la trave dolorosa e i carichi elevati; valuta supporto clinico."}, {"name": "Trazioni controllate", "category": "Forza", "goal": "Sviluppare forza di tirata senza inseguire il cedimento.", "how": "Parti da posizione controllata, scapole attive, sali senza oscillare e scendi in modo regolare.", "mistake": "Slanci, mento proteso, ripetizioni forzate a fine serie.", "safety": "Sospendi o modifica se compare dolore a dita, gomiti o spalle."}, {"name": "Plank e dead bug", "category": "Core", "goal": "Migliorare stabilità del tronco e controllo degli arti.", "how": "Plank: mantieni allineati bacino e torace respirando. Dead bug: alterna braccio e gamba opposti senza inarcare la schiena.", "mistake": "Trattenere il respiro e compensare con la zona lombare.", "safety": "Riduci durata o ampiezza se perdi il controllo."}, {"name": "Defaticamento e mobilità", "category": "Recupero", "goal": "Terminare la seduta e recuperare mobilità senza forzature.", "how": "Riduci gradualmente il ritmo, esegui movimenti dolci di spalle e anche e respira normalmente.", "mistake": "Stretching intenso sulle dita affaticate.", "safety": "Non forzare articolazioni dolorose."}, {"name": "Boulder di riscaldamento", "category": "Tecnica", "goal": "Preparare il movimento con difficoltà crescente.", "how": "Esegui blocchi facili prima di avvicinarti al grado obiettivo, aumentando progressivamente richiesta e inclinazione.", "mistake": "Iniziare con lanci o passaggi massimali.", "safety": "Evita prese dolorose."}, {"name": "Piedi silenziosi e rotazioni", "category": "Tecnica", "goal": "Migliorare precisione dei piedi e scarico del peso.", "how": "Scegli blocchi facili; posa ogni piede senza rumore, ruota il bacino e prova a mantenere le braccia distese dove possibile.", "mistake": "Guardare solo le mani, riposizionare i piedi molte volte.", "safety": "La precisione conta più della difficoltà."}, {"name": "Boulder limite", "category": "Potenza", "goal": "Allenare tentativi di qualità su movimenti impegnativi.", "how": "Scegli pochi blocchi difficili; tenta con recuperi completi e interrompi quando la tecnica si deteriora.", "mistake": "Accumulo di tentativi stanchi o movimenti incontrollati.", "safety": "Non svolgere boulder limite con dolore alle dita attivo."}, {"name": "System wall", "category": "Tecnica", "goal": "Ripetere sequenze controllate e misurabili.", "how": "Imposta 3–4 sequenze accessibili; cura ritmo, piedi e riposo tra prove.", "mistake": "Aumentare presa e intensità insieme.", "safety": "Non usare prese dolorose."}, {"name": "Defaticamento boulder", "category": "Recupero", "goal": "Ridurre lo sforzo dopo il boulder.", "how": "Passa a movimenti facili o camminata, poi mobilità leggera per spalle e anche.", "mistake": "Altri tentativi intensi quando la qualità è finita.", "safety": "Nessuno stretching aggressivo delle dita."}, {"name": "Recupero attivo", "category": "Recupero", "goal": "Favorire movimento leggero in un giorno poco intenso.", "how": "Cammina a ritmo confortevole e svolgi mobilità libera da dolore.", "mistake": "Trasformarlo in un allenamento pesante.", "safety": "Se aumenta il dolore, riduci l’attività."}, {"name": "Mobilità ed estensori dita", "category": "Recupero", "goal": "Curare mobilità e gesti antagonisti a bassa intensità.", "how": "Apri e chiudi delicatamente le mani e muovi spalle e polsi in ampiezza confortevole.", "mistake": "Forzare estensione delle dita dolorose.", "safety": "Interrompi se i sintomi aumentano."}, {"name": "Giornata senza dita intense", "category": "Recupero", "goal": "Consentire recupero dallo stress di presa.", "how": "Evita trave massimale, blocchi esplosivi e trazioni pesanti; scegli attività alternative leggere.", "mistake": "Aggiungere lavoro intenso per compensare sedute saltate.", "safety": "In presenza di dolore persistente richiedi valutazione."}, {"name": "Riscaldamento su vie facili", "category": "Lead", "goal": "Entrare nella seduta con progressione tecnica e fisiologica.", "how": "Sali vie significativamente più facili del tuo limite, con recupero adeguato.", "mistake": "Affrontare subito la via obiettivo.", "safety": "Evita movimenti dolorosi."}, {"name": "Lettura della via dal basso", "category": "Lettura", "goal": "Riconoscere mani, piedi, crux e riposi prima di partire.", "how": "Osserva ogni sezione, immagina le sequenze e identifica punti dove respirare e rilassare gli avambracci.", "mistake": "Memorizzare solo le prese delle mani.", "safety": "Verifica sempre condizioni e sicurezza con il compagno."}, {"name": "Vie a vista progressive", "category": "Lead", "goal": "Allenare la lettura durante il primo tentativo.", "how": "Parti da vie sotto il limite, scala con ritmo e prova a decidere i movimenti senza lunghe soste inutili.", "mistake": "Partire troppo forte o ignorare i riposi.", "safety": "Interrompi se le prese scelte provocano dolore."}, {"name": "Tentativi su via impegnativa", "category": "Lead", "goal": "Trasferire tecnica e gestione della fatica a difficoltà più alta.", "how": "Concentrati su pochi tentativi di qualità e recupera completamente.", "mistake": "Riprovare senza recupero o peggiorare la tecnica.", "safety": "Evita prove massimali con dolore alle dita."}, {"name": "Diario tecnico della via", "category": "Lettura", "goal": "Individuare perché una sequenza non è riuscita.", "how": "Dopo la via, annota posizione piedi, ritmo, respirazione, riposi e motivo della caduta.", "mistake": "Scrivere solo il grado senza dettagli utili.", "safety": "Registra anche le vie riuscite e ciò che ha funzionato."}, {"name": "Mobilità spalle e anche", "category": "Recupero", "goal": "Preparare il lavoro complementare con movimenti semplici.", "how": "Esegui circonduzioni e mobilità controllata di spalle e anche per circa 10 minuti.", "mistake": "Movimenti bruschi o forzature.", "safety": "Lavora in ampiezza non dolorosa."}, {"name": "Squat o stacco rumeno leggero", "category": "Forza", "goal": "Allenare catena inferiore e controllo del bacino.", "how": "Squat: scendi in controllo mantenendo i piedi stabili. Stacco rumeno: fletti le anche mantenendo il bilanciere vicino al corpo.", "mistake": "Schiena che perde controllo, carico eccessivo.", "safety": "Inizia leggero; se non conosci la tecnica chiedi supervisione."}, {"name": "Stabilità scapolare", "category": "Forza", "goal": "Migliorare controllo della scapola e del tronco.", "how": "Scegli movimenti controllati a carico moderato, concentrandoti sulla posizione scapolare e respirazione.", "mistake": "Compensare con slanci o perdere controllo.", "safety": "Evita gesti che sollecitano dolorosamente gomiti o dita."}, {"name": "Mobilità pre-falesia", "category": "Recupero", "goal": "Arrivare freschi all’uscita successiva.", "how": "Esegui mobilità generale dolce, senza stancare gli avambracci.", "mistake": "Aggiungere lavoro alla trave dopo una seduta complementare.", "safety": "Riduci volume in caso di fatica alta."}, {"name": "Riscaldamento falesia", "category": "Outdoor", "goal": "Prepararsi gradualmente alle condizioni della roccia.", "how": "Inizia su vie molto sotto il limite e aumenta solo se senti buona coordinazione e recupero.", "mistake": "Entrare direttamente nella via obiettivo.", "safety": "Controlla sicurezza, condizioni e comunicazione con il compagno."}, {"name": "Tentativi onsight outdoor", "category": "Outdoor", "goal": "Allenare lettura e decisione al primo tentativo.", "how": "Scegli vie nuove gestibili, osserva la linea e pianifica i riposi; annota le scelte dopo.", "mistake": "Affrontare troppi tentativi in stato di fatica.", "safety": "Non forzare prese che provocano dolore."}, {"name": "Via sfidante", "category": "Outdoor", "goal": "Sperimentare un livello superiore quando ben recuperato.", "how": "Scegli una via adatta alle condizioni della giornata e affrontala con recupero completo.", "mistake": "Scambiare la stanchezza per mancata forza e continuare comunque.", "safety": "Evita prove difficili se il dolore è attivo."}, {"name": "Analisi outdoor", "category": "Lettura", "goal": "Tradurre l’esperienza in azioni per la seduta successiva.", "how": "Segna grado, stile, tentativi, posizioni di riposo e motivo di eventuale caduta.", "mistake": "Registrare solo successo o fallimento.", "safety": "Le note sono un supporto, non una diagnosi."}, {"name": "Riposo dopo falesia", "category": "Recupero", "goal": "Ridurre accumulo di fatica dopo l’uscita.", "how": "Programma riposo o attività dolce; controlla come ti senti il giorno successivo.", "mistake": "Recuperare una seduta intensa persa.", "safety": "Se compare dolore persistente valuta un professionista."}, {"name": "Spostamento uscita outdoor", "category": "Organizzazione", "goal": "Alternare sabato e domenica mantenendo recupero.", "how": "Se esci domenica, dedica sabato al riposo invece che ad altra intensità.", "mistake": "Raddoppiare il lavoro outdoor nel weekend.", "safety": "Adatta ai sintomi e alle condizioni ambientali."}, {"name": "Mobilità opzionale", "category": "Recupero", "goal": "Muoversi senza aumentare lo stress di allenamento.", "how": "Esegui pochi minuti di mobilità generale confortevole.", "mistake": "Trasformare un giorno libero in lavoro intenso.", "safety": "La mobilità non deve provocare dolore."}, {"name": "Settimana di scarico", "category": "Programmazione", "goal": "Ridurre il volume lasciando spazio al recupero.", "how": "Mantieni tecnica e gesti facili, abbassa numero di tentativi o serie secondo programma.", "mistake": "Compensare con massimali fuori programma.", "safety": "Con dolore in corso privilegia valutazione e carichi tollerati."}, {"name": "Settimana 12: recupero", "category": "Programmazione", "goal": "Arrivare freschi al tentativo obiettivo.", "how": "Riduci il volume e mantieni solo movimenti controllati, senza nuovi massimali.", "mistake": "Aggiungere allenamenti impegnativi all’ultimo momento.", "safety": "Non forzare un tentativo obiettivo con dolore attivo."}];
+
+EXERCISE_LIBRARY.push(...[{"name": "Squat controllato", "category": "Forza", "goal": "Rinforzare gambe e controllo del bacino.", "how": "Piedi stabili, scendi lentamente mantenendo tronco e ginocchia controllati; risali senza slanci.", "mistake": "Aumentare il peso prima di controllare l'escursione.", "safety": "Carico leggero e movimento non doloroso."}, {"name": "Plank", "category": "Core", "goal": "Stabilità del tronco in isometria.", "how": "Avambracci a terra, bacino in linea e respiro regolare; mantieni i secondi previsti.", "mistake": "Inarcare la schiena o bloccare il respiro.", "safety": "Riduci la durata se perdi allineamento."}, {"name": "Dead bug", "category": "Core", "goal": "Controllo del tronco durante il movimento degli arti.", "how": "Supino, alterna braccio e gamba opposti, mantieni la schiena neutra e muoviti lentamente.", "mistake": "Sollevare la zona lombare o accelerare.", "safety": "Riduci l'ampiezza se perdi controllo."}, {"name": "Stacco rumeno leggero", "category": "Forza", "goal": "Rinforzare catena posteriore e controllo delle anche.", "how": "Con un bilanciere leggero porta il bacino indietro, ginocchia leggermente flesse e schiena stabile.", "mistake": "Curvare la schiena o allontanare il bilanciere.", "safety": "Non usare carichi impegnativi senza apprendere la tecnica."}] );
+const TRUE_EXERCISES = new Set(["Lettura della via dal basso", "Mobilità ed estensori dita", "Mobilità spalle e anche", "Piedi silenziosi e rotazioni", "Plank e dead bug", "Squat o stacco rumeno leggero", "Stabilità scapolare", "Trave: sospensioni intermittenti", "Trazioni controllate", "Squat controllato", "Plank", "Dead bug", "Stacco rumeno leggero"]);
+function isExercise(e){return TRUE_EXERCISES.has(e.name)}
 const EXERCISE_INDEX = {"1": [0, 1, 2, 3, 4], "2": [5, 6, 7, 8, 9], "3": [10, 11, 12], "4": [13, 14, 15, 16, 17], "5": [18, 19, 20, 21], "6": [22, 23, 24, 25], "7": [26, 27, 28]};
 function exerciseRecord(day,index,label=''){
  const ids=EXERCISE_INDEX[day]||[];const id=ids[index]??(label.startsWith('SETTIMANA DI SCARICO')?29:label.startsWith('SETTIMANA 12')?30:null);
  return id==null?null:{...EXERCISE_LIBRARY[id],id};
 }
-function exerciseHelp(day,index,label){
- const e=exerciseRecord(day,index,label);if(!e)return '';
- const painWarning=(activePain()&&['Dita','Potenza','Outdoor','Lead'].includes(e.category))?'<p class="exercise-pain">Dolore segnalato: non eseguire movimenti dolorosi o aumentare carichi. Consulta il modulo Salute e recupero.</p>':'';
- return `<details class="exercise-help"><summary aria-label="Spiegazione di ${esc(e.name)}">ⓘ Come si esegue?</summary><div class="exercise-help-body"><strong>${esc(e.name)}</strong><p><b>Obiettivo:</b> ${esc(e.goal)}</p><p><b>Esecuzione:</b> ${esc(e.how)}</p><p><b>Da evitare:</b> ${esc(e.mistake)}</p><p><b>Attenzione:</b> ${esc(e.safety)}</p>${painWarning}</div></details>`;
+function guidanceOrExerciseHelp(e){
+ const real=isExercise(e);
+ const painWarning=(activePain()&&['Dita','Potenza','Outdoor','Lead'].includes(e.category))?'<p class="exercise-pain">Dolore segnalato: evita gesti dolorosi e aumenti di carico; consulta Salute e recupero.</p>':'';
+ return `<details class="exercise-help"><summary>${real?'ⓘ Come si esegue?':'ⓘ Indicazioni'}</summary><div class="exercise-help-body"><strong>${esc(e.name)}</strong><p><b>Obiettivo:</b> ${esc(e.goal)}</p><p><b>${real?'Esecuzione':'Indicazione'}:</b> ${esc(e.how)}</p><p><b>Da evitare:</b> ${esc(e.mistake)}</p><p><b>Attenzione:</b> ${esc(e.safety)}</p>${painWarning}</div></details>`;
 }
+function exerciseHelp(day,index,label){const e=exerciseRecord(day,index,label);return e?guidanceOrExerciseHelp(e):''}
 function renderExerciseLibrary(){
  const category=$('libraryCategory')?.value||'Tutte',q=($('librarySearch')?.value||'').toLocaleLowerCase('it').trim();
- const filtered=EXERCISE_LIBRARY.map((e,i)=>({...e,id:i})).filter(e=>(category==='Tutte'||e.category===category)&&(!q||[e.name,e.goal,e.category].join(' ').toLocaleLowerCase('it').includes(q)));
+ const filtered=EXERCISE_LIBRARY.filter(isExercise).filter(e=>(category==='Tutte'||e.category===category)&&(!q||[e.name,e.goal,e.category].join(' ').toLocaleLowerCase('it').includes(q)));
  $('libraryCount').textContent=filtered.length+' esercizi';
- $('libraryResults').innerHTML=filtered.map(e=>`<details class="library-item"><summary><b>${esc(e.name)}</b><span class="library-category">${esc(e.category)}</span></summary><div class="exercise-help-body"><p><b>Obiettivo:</b> ${esc(e.goal)}</p><p><b>Come fare:</b> ${esc(e.how)}</p><p><b>Errori comuni:</b> ${esc(e.mistake)}</p><p><b>Precauzioni:</b> ${esc(e.safety)}</p></div></details>`).join('')||'<p class="small">Nessun esercizio corrispondente.</p>';
+ $('libraryResults').innerHTML=filtered.map(e=>`<details class="library-item"><summary><b>${esc(e.name)}</b><span class="library-category">${esc(e.category)}</span></summary><div class="exercise-help-body"><p><b>Obiettivo:</b> ${esc(e.goal)}</p><p><b>Come si esegue:</b> ${esc(e.how)}</p><p><b>Errori comuni:</b> ${esc(e.mistake)}</p><p><b>Precauzioni:</b> ${esc(e.safety)}</p></div></details>`).join('')||'<p class="small">Nessun esercizio corrispondente.</p>';
+}
+function renderGuidance(){
+ const q=($('guidanceSearch')?.value||'').toLocaleLowerCase('it').trim();
+ const filtered=EXERCISE_LIBRARY.filter(e=>!isExercise(e)).filter(e=>!q||[e.name,e.goal,e.category].join(' ').toLocaleLowerCase('it').includes(q));
+ $('guidanceCount').textContent=filtered.length+' indicazioni';
+ $('guidanceResults').innerHTML=filtered.map(e=>`<details class="library-item"><summary><b>${esc(e.name)}</b><span class="library-category">${esc(e.category)}</span></summary><div class="exercise-help-body"><p><b>Obiettivo:</b> ${esc(e.goal)}</p><p><b>Indicazione:</b> ${esc(e.how)}</p><p><b>Da evitare:</b> ${esc(e.mistake)}</p><p><b>Attenzione:</b> ${esc(e.safety)}</p></div></details>`).join('')||'<p class="small">Nessuna indicazione corrispondente.</p>';
 }
 
 function calendarEntry(w,d){return load(KC)[sessionKey(w,d)]||{}}
@@ -373,12 +442,30 @@ function adAssess(sessions, profile, day){
  return {kind:'mantieni',heading:'Mantieni il carico',message:'La risposta è gestibile, ma non c’è ancora un margine ripetuto sufficiente per aumentare. Mantieni quantità e qualità, e rivaluta dopo la prossima seduta.',basis:`ultima seduta: RPE ${r}, fatica ${fi}→${ff}`};
 }
 function coachDetails(s,r){const a=adAssess(s,activeProfile(),selectedDay),done=s.filter(x=>x.completed===true).slice(-4),mean=done.filter(x=>+x.rpe>0).map(x=>+x.rpe),average=mean.length?(mean.reduce((p,c)=>p+c,0)/mean.length).toFixed(1):'—';return `${done.length} sedute completate esaminate · RPE medio ${average}. Motivo: ${a.basis}.`}
+// v0.13.3: un solo piano attivo per atleta; la scelta della durata è soltanto in Altro.
+function currentWorkoutMode(){return longData()?'long':'none'}
+function openLongWeek(w){const v=longData();if(!v)return;show('workout');$('lpActiveWeek').value=String(Math.min(v.duration,Math.max(1,+w||1)));renderLongOperations();syncWorkoutMode()}
+function syncWorkoutMode(){
+ const v=longData(),isLong=!!v,box=$('longOpsCard');if(!box)return;
+ const destination=isLong?$('workoutLongMount'):$('longPlanOpsMount');
+ if(box.parentNode!==destination)destination.appendChild(box);
+ $('workoutLegacyBody').style.display='none';
+ $('workoutLongMount').style.display=isLong?'':'none';
+ $('activePlanLabel').textContent=v?`Piano attivo: ${v.duration===13?'trimestrale':v.duration===26?'semestrale':'annuale'} · ${v.duration} settimane. Tutte le sedute e gli esercizi sono qui sotto.`:'Nessun piano attivo. Vai in Altro → Pianificatore e salva la durata desiderata.';
+ $('longPlanWeekPanel').style.display=isLong?'':'none';
+ $('legacyPlanBody').style.display='none';
+ $('programHeading').textContent=isLong?`Piano attivo · ${v.duration} settimane`:'Nessun piano attivo';
+ if(v){$('longPlanWeekLabel').textContent=`${v.duration===13?'Trimestrale':v.duration===26?'Semestrale':'Annuale'} · scegli una settimana per aprire le sedute.`;
+ $('longWeekBtns').innerHTML=Array.from({length:v.duration},(_,i)=>`<button type="button" class="${Number($('lpActiveWeek').value)===i+1?'sel':''}" onclick="openLongWeek(${i+1})">${i+1}</button>`).join('');}
+ else $('longWeekBtns').innerHTML='';
+ if(isLong)renderLongOperations();
+}
 function show(id){
  document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===id));
  document.querySelectorAll('nav button').forEach(x=>{x.classList.remove('active');x.removeAttribute('aria-current')});
  const m={home:'nh',plan:'np',workout:'nw',progress:'npr',climb:'npr',tests:'nm',profiles:'nm',paintracker:'nm',adpage:'nm',more:'nm',library:'nm',longplan:'nm'};
  if(m[id]){$(m[id]).classList.add('active');$(m[id]).setAttribute('aria-current','page')}
- refresh();if(id==='library')renderExerciseLibrary();if(id==='longplan'){initializeLongPlan(false);renderLongOperations();}window.scrollTo(0,0);
+ refresh();if(id==='library')renderExerciseLibrary();if(id==='guidance')renderGuidance();if(id==='longplan'){initializeLongPlan(false);renderLongOperations();}syncWorkoutMode();window.scrollTo(0,0);
 }
 function renderPlan(){$('weekBtns').innerHTML=weeks.map((w,i)=>`<button class="${i+1===selectedWeek?'sel':''}" onclick="setProfileWeek(${i+1})">${i+1}</button>`).join('');const w=weeks[selectedWeek-1];$('phase').textContent=w[0];$('weekFocus').textContent=w[1];$('weekTitle').textContent='Settimana '+selectedWeek;$('weekNote').textContent=w[2];renderCalendar();$('planDays').innerHTML=Array.from({length:7},(_,i)=>{const d=i+1,t=T[d];return `<div class="card"><div class="status ${isCompleted(selectedWeek,d)?'ok':'partial'}">${isCompleted(selectedWeek,d)?'✓ Completato':isPartial(selectedWeek,d)?'◐ Parziale':calendarEntry(selectedWeek,d).status==='skipped'?'– Saltata':calendarEntry(selectedWeek,d).status==='moved'?'↪ Riprogrammata '+(calendarEntry(selectedWeek,d).date||''):'○ Da fare'}</div><br><span class="tag">${t[0]}</span><span class="tag">${t[1]}</span><h3>${t[2]}</h3><ul class="list">${exFor(d,selectedWeek).map(x=>`<li class="small">${esc(x)}</li>`).join('')}</ul><button class="secondary" onclick="openCalendarDay(${d})">Apri seduta</button></div>`}).join('');}
 function compactPlanDays(){
@@ -572,7 +659,7 @@ function showADWorkout(){const s=load(KS);const a=adAssess(s,activeProfile(),sel
 $('painDate').value=iso;$('painArea').value='dita';$('painIntensity').value='';$('painCurrent').value='present';$('rd').value=iso;$('td').value=iso;$('planDate').value=iso;$('workoutDate').value=iso;
 $('exerciseList').addEventListener('change',saveDraft);
 for(const id of ['dur','rpe','osg','prg','hang','pull','fatigue','fatigueEnd','notes'])$(id).addEventListener('input',saveDraft);
-initProfiles();refresh();openToday();
+/* init deferred to after v15 catalogue */
 
 // Long-range periodization. Independent from the existing 12-week workouts and test records.
 function longPlanKey(){return scopedKey('longplan_v1')}
@@ -584,33 +671,192 @@ function longPlanWeeks(v){const phases=longPlanPhases(v),out=[];for(let i=1;i<=v
 function previewLongPlan(){if(!$('lpDuration'))return;const v=longPlanValues(),blocks=longPlanPhases(v),entries=longPlanWeeks(v),pain=activePain(),weakness={lettura:'lettura delle vie',piedi:'tecnica piedi e bacino',resistenza:'continuità e recuperi',forza:'forza specifica',generale:'base generale'}[v.weakness];const caution=pain?'Dolore attivo registrato: evita progressioni sulle strutture dolorose e privilegia attività tollerate. Richiedi una valutazione professionale se persiste.':'La progressione dipende da tecnica, recupero e test; non sono previsti aumenti automatici.';$('lpSummary').innerHTML=`<b>${v.duration} settimane · ${esc(v.goal)}</b><p class="small">Partenza: ${esc(v.start)} · livello a vista: ${esc(v.grade)} · ${v.pullups} trazioni · ${v.days} sedute/settimana.</p><p class="small">Focus: ${esc(weakness)}. ${esc(longPlanSessions(v))}.</p><p class="small">${esc(caution)}</p>`;$('lpBlockList').innerHTML=blocks.map(b=>`<details class="library-item"><summary><b>Sett. ${b.start}–${b.end}: ${esc(b.name)}</b> <span>⌄</span></summary><p class="small">${esc(b.focus)}</p></details>`).join('');$('lpWeekList').innerHTML=entries.map(x=>`<div class="library-item"><b>Sett. ${x.week}</b> · ${x.date} · ${esc(x.phase)} ${x.deload?'· Scarico':''} ${x.review?'· Verifica':''}<p class="small">${esc(x.note)}</p></div>`).join('')}
 function initializeLongPlan(force){if(!$('lpDuration'))return;const saved=load(longPlanKey());if(!force&&saved&&saved.duration){applyLongPlan(saved);return}const p=activeProfile();$('lpDuration').value='13';$('lpStart').value=iso;$('lpGoal').value=p.goal||'7a a vista';$('lpGrade').value=p.grade||'';$('lpPullups').value=p.pullups??'';$('lpExperience').value='advanced';$('lpDays').value='3';$('lpWeakness').value='lettura';$('lpEquipment').value='mixed';$('lpSaveStatus').textContent='Nessun piano a lungo termine salvato per questo atleta.';previewLongPlan()}
 function applyLongPlan(v){for(const [id,key] of [['lpDuration','duration'],['lpStart','start'],['lpGoal','goal'],['lpGrade','grade'],['lpPullups','pullups'],['lpExperience','experience'],['lpDays','days'],['lpWeakness','weakness'],['lpEquipment','equipment']])$(id).value=v[key]??'';previewLongPlan();$('lpSaveStatus').textContent=v.savedAt?'Piano salvato il '+new Date(v.savedAt).toLocaleString('it-IT')+'.':'Piano caricato.'}
-function restoreLongPlan(){const v=load(longPlanKey());if(v&&v.duration){applyLongPlan(v);toast('Piano caricato')}else{initializeLongPlan(true);toast('Non esiste ancora un piano salvato')}}
-function saveLongPlan(){const v=longPlanValues();v.savedAt=new Date().toISOString();save(longPlanKey(),v);$('lpSaveStatus').textContent='Piano salvato per '+activeProfile().name+' · '+new Date(v.savedAt).toLocaleString('it-IT');toast('Piano trimestrale / semestrale / annuale salvato')};renderLongOperations()
+function restoreLongPlan(){const v=load(longPlanKey());if(v&&v.duration){applyLongPlan(v);renderLongOperations();toast('Piano caricato')}else{initializeLongPlan(true);renderLongOperations();toast('Non esiste ancora un piano salvato')}}
+function saveLongPlan(){const v=longPlanValues();v.savedAt=new Date().toISOString();save(longPlanKey(),v);$('lpSaveStatus').textContent='Piano salvato per '+activeProfile().name+' · '+new Date(v.savedAt).toLocaleString('it-IT');renderLongOperations();syncWorkoutMode();toast('Piano salvato: '+v.duration+' settimane')}
 
 // v0.13: Long plan uses an independent week/day namespace (1..52), preserving legacy 12-week history.
 function longSessionKey(){return scopedKey('long_sessions_v1')}
 function longRecords(){const x=load(longSessionKey());return Array.isArray(x)?x:[]}
 function longData(){return load(longPlanKey())?.duration ? load(longPlanKey()):null}
 function longActiveWeek(){return Math.max(1,Math.min(longData()?.duration||13,Number($('lpActiveWeek').value)||1))}
+function moveLongWeek(delta){const sel=$('lpActiveWeek'),v=longData();if(!v){toast('Salva prima un piano');return}sel.value=Math.min(v.duration,Math.max(1,(Number(sel.value)||1)+delta));renderLongOperations()}
 function longDayISO(v,week,day){const d=new Date(v.start+'T12:00:00');d.setDate(d.getDate()+(week-1)*7 + (day-1));return localISO(d)}
-function longDayTemplates(v,week){const phase=longPlanPhases(v).find(p=>week>=p.start&&week<=p.end);const low=v.days===2,phaseName=phase?.name||'Preparazione';const deload=week%4===0||week===v.duration;const arr=[];
- const add=(d,kind,title,dose)=>arr.push({day:d,kind,title,dose,date:longDayISO(v,week,d)});
- add(1,'Tecnica','Tecnica: piedi, bacino e lettura',deload?'25–35 min controllati':'35–50 min, progressione facile');
- add(2,'Boulder','Boulder: qualità del movimento',deload?'3–4 blocchi facili':'4–6 blocchi controllati, recupero completo');
- if(v.days>=4)add(3,'Complementare','Core, mobilità e forza generale',deload?'20 min leggeri':'25–40 min, senza cedimento');
- if(v.days>=3)add(4,'Lead','Lead: vie a vista e gestione dei riposi',deload?'2–3 vie facili':'3–5 vie progressive, qualità prima del volume');
- if(v.days>=5)add(5,'Complementare','Resistenza tecnica facile',deload?'20 min facili':'20–35 min senza affaticamento elevato');
- if(low)add(6,'Recupero','Recupero e mobilità','20–30 min facoltativi');else add(6,'Outdoor','Falesia o montagna: tecnica e lettura',deload?'Uscita facile o recupero':'Vie progressive, attenzione al recupero');
- return {phaseName,deload,arr};
+function longTrainingStage(v,week){
+ const blocks=longPlanPhases(v),block=blocks.find(p=>week>=p.start&&week<=p.end)||blocks[0];
+ const idx=blocks.indexOf(block),progress=(week-block.start)/Math.max(1,block.end-block.start);
+ const stages=v.duration===13?['base','strength','performance','taper']:v.duration===26?['base','strength','endurance','performance','taper']:['base','technique','strength','endurance','performance','taper'];
+ const stage=stages[idx]||'base',deload=week%4===0||week===v.duration;
+ const review=week===1||week%13===0||week===v.duration;
+ const level=v.experience==='beginner'?'beginner':v.experience==='advanced'?'advanced':'intermediate';
+ return {stage,deload,review,progress,level,phaseName:block.name,week};
+}
+function longDayTemplates(v,week){
+ const p=longTrainingStage(v,week),arr=[],num=v.days;
+ const titles={base:['Tecnica · fondamentali','Boulder · controllo','Preparazione generale','Lead · lettura e ritmo','Tecnica · continuità facile','Falesia · volume facile'],technique:['Tecnica · precisione e bacino','Boulder · coordinazione','Forza complementare','Lead · lettura onsight','Tecnica · riposi e posizioni','Falesia · lettura'],strength:['Tecnica · economie di movimento','Boulder · forza specifica','Forza generale controllata','Lead · singoli passaggi','Tecnica · scarico attivo','Falesia · singoli passaggi'],endurance:['Tecnica · fluidità','Boulder · circuiti','Core e mobilità','Lead · continuità','Tecnica · recuperi attivi','Falesia · resistenza'],performance:['Tecnica · simulazione a vista','Boulder · qualità mirata','Mobilità e core leggero','Lead · simulazione onsight','Lettura e recupero','Falesia · tentativi a vista'],taper:['Tecnica · mantenimento','Boulder · facile','Mobilità e recupero','Lead · verifica controllata','Recupero attivo','Falesia · prova obiettivo']};
+ const names=titles[p.stage],add=(d,kind,title,dose)=>arr.push({day:d,kind,title,dose,date:longDayISO(v,week,d),stage:p.stage,deload:p.deload});
+ const dose=p.deload?'Volume ridotto del 35–50%, intensità controllata':p.stage==='strength'?'Qualità e recuperi lunghi':p.stage==='endurance'?'Continuità con pause misurate':p.stage==='performance'?'Pochi tentativi di qualità':'Priorità alla tecnica';
+ add(1,'Tecnica',names[0],dose);add(2,'Boulder',names[1],dose);
+ if(num>=4)add(3,'Complementare',names[2],dose);
+ if(num>=3)add(4,'Lead',names[3],dose);
+ if(num>=5)add(5,'Tecnica',names[4],dose);
+ if(num===2)add(6,'Recupero','Recupero · mobilità','Facoltativo, senza dolore');
+ else add(6,'Outdoor',names[5],dose);
+ if(p.review)arr.forEach(e=>{e.title+=' · verifica tecnica';});
+ return {phaseName:p.phaseName,deload:p.deload,arr};
 }
 function longRecord(w,d){return longRecords().find(x=>+x.week===+w&&+x.day===+d)||null}
-function longCompletion(w,d,status){const v=longData();if(!v)return;const a=longRecords().filter(x=>!(+x.week===w&&+x.day===d));const entry=longDayTemplates(v,w).arr.find(x=>x.day===d);if(!entry)return;
- const rpe=Number($('lsRpe'+d)?.value||0),fi=Number($('lsFi'+d)?.value||0),ff=Number($('lsFf'+d)?.value||0);
- if([rpe,fi,ff].some(n=>n<0||n>10)){toast('Usa valori tra 0 e 10');return}
- if(status==='completed'&&(!rpe||!fi||!ff)){toast('Per completare registra RPE e fatica iniziale/finale');return}
- const x={week:w,day:d,date:entry.date,kind:entry.kind,title:entry.title,status,rpe,fi,ff,notes:($('lsNote'+d)?.value||'').trim(),updatedAt:new Date().toISOString()};a.push(x);save(longSessionKey(),a);renderLongOperations();toast(status==='completed'?'Seduta del piano lungo completata':'Seduta del piano lungo salvata');
+function longDraftKey(){return scopedKey('long_drafts_v1')}
+function longDrafts(){const data=load(longDraftKey());return data&&typeof data==='object'&&!Array.isArray(data)?data:{}}
+function longDraft(w,d){return longDrafts()[w+'_'+d]||{}}
+function longExercises(e,w,v){
+ const p=longTrainingStage(v,w),stage=p.stage,deload=p.deload;
+ const hard=p.level==='beginner'?0:p.level==='advanced'?2:1;
+ const n=(lo,hi)=>Math.min(hi,lo+hard),sets=(a,b,unit='')=>`${a} × ${b}${unit}`;
+ const catalog={
+ base:{
+  Tecnica:[['Mobilità spalle e anche','8 min'],['Piedi silenziosi e rotazioni',sets(3,n(5,7),' min')],['Lettura della via dal basso','3 sequenze'],['Stabilità scapolare',sets(2,10)]],
+  Boulder:[['Boulder di riscaldamento','12 min'],['Piedi silenziosi e rotazioni',sets(3,5,' min')],['Boulder limite',`${n(3,5)} blocchi facili/medi, 3 min recupero`],['Defaticamento boulder','8 min']],
+  Lead:[['Riscaldamento su vie facili','2 vie'],['Lettura della via dal basso','4 min'],['Vie a vista progressive',`${n(2,4)} vie facili/medie`],['Diario tecnico della via','5 min']],
+  Outdoor:[['Riscaldamento falesia','2 vie facili'],['Tentativi onsight outdoor',`${n(1,3)} vie sotto il limite`],['Analisi outdoor','10 min']],
+  Complementare:[['Squat controllato',sets(3,8)],['Plank',sets(3,30,' s')],['Dead bug',sets(3,8,' per lato')]],
+  Recupero:[['Recupero attivo','20 min'],['Mobilità spalle e anche','10 min']]},
+ technique:{
+  Tecnica:[['Piedi silenziosi e rotazioni',sets(4,6,' min')],['Lettura della via dal basso','5 sequenze'],['Stabilità scapolare',sets(3,10)]],
+  Boulder:[['Boulder di riscaldamento','15 min'],['Piedi silenziosi e rotazioni',sets(3,7,' min')],['Boulder limite',`${n(3,5)} blocchi tecnici, 3 min recupero`]],
+  Lead:[['Lettura della via dal basso','5–8 min'],['Vie a vista progressive',`${n(3,5)} vie, concentrarsi sui riposi`],['Diario tecnico della via','8 min']],
+  Outdoor:[['Riscaldamento falesia','2 vie'],['Tentativi onsight outdoor',`${n(2,4)} tentativi sulla lettura`],['Analisi outdoor','12 min']],
+  Complementare:[['Dead bug',sets(3,10,' per lato')],['Plank',sets(3,40,' s')]],
+  Recupero:[['Recupero attivo','20 min']]},
+ strength:{
+  Tecnica:[['Mobilità spalle e anche','10 min'],['Piedi silenziosi e rotazioni',sets(2,6,' min')],['Lettura della via dal basso','3 sequenze']],
+  Boulder:[['Boulder di riscaldamento','20 min'],['Boulder limite',`${n(4,6)} blocchi duri, 4–5 min recupero`],['Stabilità scapolare',sets(2,10)]],
+  Lead:[['Riscaldamento su vie facili','2 vie'],['Vie a vista progressive',`${n(2,3)} vie di qualità, riposo 8–10 min`],['Diario tecnico della via','8 min']],
+  Outdoor:[['Riscaldamento falesia','2 vie'],['Tentativi onsight outdoor',`${n(1,2)} vie di qualità, recuperi completi`],['Analisi outdoor','10 min']],
+  Complementare:[['Squat controllato',sets(4,6)],['Stabilità scapolare',sets(3,8)],['Plank',sets(3,35,' s')]],
+  Recupero:[['Mobilità spalle e anche','20 min']]},
+ endurance:{
+  Tecnica:[['Piedi silenziosi e rotazioni',sets(3,8,' min')],['Lettura della via dal basso','4 sequenze'],['Mobilità spalle e anche','8 min']],
+  Boulder:[['Boulder di riscaldamento','15 min'],['Boulder limite',`${n(3,5)} circuiti medi da 3–4 movimenti, 2 min recupero`],['Defaticamento boulder','10 min']],
+  Lead:[['Riscaldamento su vie facili','2 vie'],['Vie a vista progressive',`${n(4,6)} vie facili/medie, recuperi 5 min`],['Diario tecnico della via','6 min']],
+  Outdoor:[['Riscaldamento falesia','2 vie'],['Tentativi onsight outdoor',`${n(3,5)} vie sostenibili, ritmo continuo`],['Analisi outdoor','10 min']],
+  Complementare:[['Dead bug',sets(3,12,' per lato')],['Plank',sets(3,45,' s')],['Mobilità spalle e anche','10 min']],
+  Recupero:[['Recupero attivo','25 min']]},
+ performance:{
+  Tecnica:[['Lettura della via dal basso','6 sequenze'],['Piedi silenziosi e rotazioni',sets(2,6,' min')]],
+  Boulder:[['Boulder di riscaldamento','15 min'],['Boulder limite',`${n(2,4)} problemi mirati, recuperi completi`],['Defaticamento boulder','8 min']],
+  Lead:[['Riscaldamento su vie facili','2 vie'],['Lettura della via dal basso','8 min'],['Vie a vista progressive',`${n(2,3)} vie a vista obiettivo, riposo 10 min`],['Diario tecnico della via','10 min']],
+  Outdoor:[['Riscaldamento falesia','2 vie'],['Tentativi onsight outdoor',`${n(1,2)} tentativi obiettivo, recupero pieno`],['Analisi outdoor','15 min']],
+  Complementare:[['Plank',sets(2,30,' s')],['Mobilità spalle e anche','15 min']],
+  Recupero:[['Recupero attivo','20 min']]},
+ taper:{
+  Tecnica:[['Piedi silenziosi e rotazioni',sets(2,5,' min')],['Lettura della via dal basso','3 sequenze']],
+  Boulder:[['Boulder di riscaldamento','15 min'],['Defaticamento boulder','10 min']],
+  Lead:[['Riscaldamento su vie facili','2 vie'],['Vie a vista progressive','1–2 vie facili, senza cedimento'],['Diario tecnico della via','8 min']],
+  Outdoor:[['Riscaldamento falesia','2 vie'],['Tentativi onsight outdoor','1 tentativo solo se recuperato'],['Analisi outdoor','10 min']],
+  Complementare:[['Mobilità spalle e anche','15 min'],['Dead bug',sets(2,8,' per lato')]],
+  Recupero:[['Recupero attivo','20 min']]}
+ };
+ let list=(catalog[stage][e.kind]||catalog[stage].Tecnica).map(([name,dose])=>({name,dose}));
+ // Technical priority changes a concrete exercise dose rather than merely changing the phase label.
+ if(v.weakness==='piedi'&&e.kind==='Tecnica')list=list.map(x=>x.name==='Piedi silenziosi e rotazioni'?{...x,dose:'4 × 8 min (priorità tecnica)'}:x);
+ if(v.weakness==='lettura'&&e.kind==='Lead')list=list.map(x=>x.name==='Lettura della via dal basso'?{...x,dose:'8 min (priorità lettura)'}:x);
+ if(v.weakness==='resistenza'&&stage==='endurance'&&e.kind==='Lead')list=list.map(x=>x.name==='Vie a vista progressive'?{...x,dose:`${n(4,6)} vie, recuperi 4–5 min`}:x);
+ if(v.equipment==='boulder'&&e.kind==='Lead')list=[{name:'Boulder di riscaldamento',dose:'15 min'},{name:'Piedi silenziosi e rotazioni',dose:'3 × 6 min'},{name:'Defaticamento boulder',dose:'10 min'}];
+ if(v.equipment==='home'&&e.kind==='Boulder')list=[{name:'Mobilità spalle e anche',dose:'10 min'},{name:'Squat controllato',dose:'3 × 8'},{name:'Dead bug',dose:'3 × 10 per lato'}];
+ if(deload)list=list.filter(x=>x.name!=='Boulder limite').map(x=>({...x,dose: x.dose.replace(/^([3-9]) ×/, '2 ×').replace(/([3-9]) vie/g,'2 vie').replace(/([3-9]) blocchi/g,'2 blocchi')+' · scarico'}));
+ // Weekly progression inside each phase, not just a different phase title.
+ // Weeks 1–3 of a four-week wave alternate controlled loading and technical emphasis;
+ // week 4 is a deload. Never increase intensity automatically in presence of active pain.
+ const wave=(w-1)%4, phaseWeek=Math.max(1,w-(longPlanPhases(v).find(b=>w>=b.start&&w<=b.end)?.start||1)+1);
+ const painNow=!!activePain();
+ const baseScale=wave===0?1:wave===1?1.08:1.16;
+ const scale=deload?0.65:painNow?1:baseScale+0.04*Math.floor((phaseWeek-1)/4);
+ list=list.map((x,i)=>{
+   const original=String(x.dose), match=original.match(/^(\d+)\s*[×x]\s*(\d+)/);
+   let dose=original;
+   if(match){
+      const series=Number(match[1]),qty=Number(match[2]);
+      const nextSeries=deload?Math.max(1,Math.ceil(series*0.65)):series;
+      const nextQty=Math.max(1,Math.round(qty*scale));
+      dose=original.replace(match[0],`${nextSeries} × ${nextQty}`);
+   } else {
+      // Progress the count of boulders / routes only when an explicit count is given.
+      dose=original.replace(/^(\d+)(\s+(?:blocchi|vie|circuiti|tentativi|problemi))/i,(_,num,unit)=>`${Math.max(1,deload?Math.ceil(Number(num)*.65):Number(num)+(painNow?0:(wave===2?1:0)+Math.floor((phaseWeek-1)/4)))}${unit}`);
+   }
+   // The week number and loading emphasis remain visible, so the scheduled dose
+   // can be audited against other weeks even if the underlying exercise is unchanged.
+   const emphasis=deload?'scarico':wave===0?'consolidamento':wave===1?'progressione controllata':wave===2?'settimana di carico':'recupero';
+   return {...x,dose,emphasis};
+ });
+ // A live pain report requires conservative recommendations; no high-intensity gripping automatically prescribed.
+ if(activePain())list=list.filter(x=>x.name!=='Boulder limite'&&x.name!=='Tentativi onsight outdoor').map(x=>({...x,dose:x.dose+' · evitare se doloroso'}));
+ return list;
 }
-function longReset(w,d){if(!confirm('Azzerare solo questa seduta del piano lungo? I dati delle altre sedute e del ciclo da 12 settimane non saranno modificati.'))return;save(longSessionKey(),longRecords().filter(x=>!(+x.week===w&&+x.day===d)));renderLongOperations();toast('Seduta azzerata')}
+// v0.15: doses are local to the selected athlete, week and day; historic workouts remain independent.
+function longDoseKey(){return scopedKey('long_exercise_doses_v14')}
+function longDoseAll(){const data=load(longDoseKey());return data&&typeof data==='object'&&!Array.isArray(data)?data:{}}
+function longDoseId(w,d){return String(w)+'_'+String(d)}
+function doseDefaults(ex){
+ const dose=String(ex.dose||''),range=dose.match(/(\d+)\s*[×x]\s*(\d+)(?:\s*[–-]\s*\d+)?/),minutes=dose.match(/(\d+)\s*(?:min|minute)/i),seconds=dose.match(/(\d+)\s*s(?:ec)?\b/i);
+ const isGuidance=!EXERCISE_LIBRARY.some(e=>e.name===ex.name&&isExercise(e));
+ if(isGuidance)return {kind:'indicazione',sets:0,amount:0,unit:'',rest:0};
+ return {kind:'esercizio',sets:range?Number(range[1]):1,amount:range?Number(range[2]):seconds?Number(seconds[1]):minutes?Number(minutes[1]):1,unit:seconds?'secondi':minutes?'minuti':'ripetizioni',rest:range?120:60};
+}
+function longDosesFor(w,d,choices){const store=longDoseAll()[longDoseId(w,d)]||{};return choices.map((ex,i)=>({name:ex.name,...doseDefaults(ex),...(store[i]||{})}));}
+function longSetDose(w,d,i,key,val){
+ const v=longData(),e=v&&longDayTemplates(v,w).arr.find(x=>x.day===d);if(!e)return;
+ const choices=longExercises(e,w,v);if(!choices[i])return;
+ const defaults=doseDefaults(choices[i]);if(defaults.kind!=='esercizio')return;
+ const n=Number(val);if(!Number.isFinite(n)||n<0||n>600){toast('Valore non valido');return}
+ const store=longDoseAll(),id=longDoseId(w,d),list=store[id]||{};
+ const current=list[i]||{};list[i]={...current,[key]:key==='rest'?Math.round(n):Math.round(n)};store[id]=list;save(longDoseKey(),store);
+ longDraftUpdate(w,d); // Keep unsaved checkmarks and notes when a dose is edited.
+}
+function longDoseEditor(w,d,choices,i){const ex=choices[i],base=doseDefaults(ex),dose=longDosesFor(w,d,choices)[i];
+ if(base.kind!=='esercizio')return '<small class="small">Indicazione della seduta · non modificabile come esercizio</small>';
+ return `<details class="dose-editor"><summary>Serie · quantità · recupero <span class="dose-summary">${dose.sets} × ${dose.amount} ${esc(dose.unit)} · pausa ${dose.rest}s</span></summary><div class="dose-grid"><label>Serie<input aria-label="Serie ${esc(ex.name)}" type="number" min="1" max="30" value="${dose.sets}" onchange="longSetDose(${w},${d},${i},'sets',this.value)"></label><label>${esc(dose.unit)}<input aria-label="Quantità ${esc(ex.name)}" type="number" min="1" max="600" value="${dose.amount}" onchange="longSetDose(${w},${d},${i},'amount',this.value)"></label><label>Recupero (s)<input aria-label="Recupero ${esc(ex.name)}" type="number" min="0" max="600" value="${dose.rest}" onchange="longSetDose(${w},${d},${i},'rest',this.value)"></label></div></details>`;
+}
+// Compare only sessions of the same kind, not unrelated weekly RPE values.
+function longADDecision(kind,w){
+ if(activePain())return {action:'hold',factor:1,reason:'Dolore attivo: non aumentare esercizi che provocano sintomi. Controlla Salute e recupero.'};
+ const comparable=longRecords().filter(x=>x.status==='completed'&&x.kind===kind&&+x.week<w).sort((a,b)=>a.date.localeCompare(b.date)).slice(-3);
+ if(!comparable.length)return {action:'hold',factor:1,reason:'Nessuna seduta precedente comparabile: mantieni le quantità e registra RPE e fatica.'};
+ const risk=comparable.some(x=>+x.rpe>=8||+x.fi>=7||+x.ff>=8);
+ if(risk)return {action:'reduce',factor:.8,reason:'RPE o fatica elevati in una seduta comparabile: proposta di riduzione del volume del 20%.'};
+ if(comparable.length>=3&&comparable.every(x=>+x.rpe<=6&&+x.fi<=4&&+x.ff<=5))return {action:'increase',factor:1.05,reason:'Tre sedute comparabili ben tollerate: piccolo incremento della quantità, solo dopo tua conferma.'};
+ return {action:'hold',factor:1,reason:`${comparable.length} seduta/e comparabile/i: mantieni le quantità finché non emerge un andamento stabile.`};
+}
+function longApplyAD(w,d){
+ const v=longData(),e=v&&longDayTemplates(v,w).arr.find(x=>x.day===d);if(!e)return;
+ const decision=longADDecision(e.kind,w);if(decision.action==='hold'){toast('AD: mantenimento, nessuna modifica applicata');return;}
+ if(decision.action==='increase'&&activePain()){toast('Aumento bloccato: dolore presente');return;}
+ const choices=longExercises(e,w,v),existing=longDosesFor(w,d,choices);
+ if(!confirm(decision.reason+' Applicare la variazione alle quantità degli esercizi di questa seduta?'))return;
+ const all=longDoseAll(),id=longDoseId(w,d),values=all[id]||{};
+ existing.forEach((dose,i)=>{if(dose.kind!=='esercizio')return;values[i]={...(values[i]||{}),amount:Math.max(1,Math.round(dose.amount*decision.factor))};});
+ all[id]=values;save(longDoseKey(),all);renderLongOperations();toast('Proposta AD applicata alla seduta selezionata');
+}
+function longRestoreDose(w,d){if(!confirm('Ripristinare solo serie, quantità e recuperi di questa seduta?'))return;const all=longDoseAll();delete all[longDoseId(w,d)];save(longDoseKey(),all);renderLongOperations()}
+
+function longExerciseHelp(name){const e=EXERCISE_LIBRARY.find(x=>x.name===name);return e?guidanceOrExerciseHelp(e):'';}
+
+function longDraftUpdate(w,d){const key=w+'_'+d,data=longDrafts(),dayEl=$('longForm'+d);if(!dayEl)return;
+ data[key]={checks:Array.from(dayEl.querySelectorAll('input[data-long-check]')).map(el=>el.checked),duration:dayEl.querySelector('[data-long-field="duration"]').value,rpe:dayEl.querySelector('[data-long-field="rpe"]').value,fi:dayEl.querySelector('[data-long-field="fi"]').value,ff:dayEl.querySelector('[data-long-field="ff"]').value,hang:dayEl.querySelector('[data-long-field="hang"]').value,pull:dayEl.querySelector('[data-long-field="pull"]').value,notes:dayEl.querySelector('[data-long-field="notes"]').value};
+ save(longDraftKey(),data);
+}
+function longCompletion(w,d,status){const v=longData();if(!v)return;
+ longDraftUpdate(w,d);const form=longDraft(w,d),a=longRecords().filter(x=>!(+x.week===w&&+x.day===d));const entry=longDayTemplates(v,w).arr.find(x=>x.day===d);if(!entry)return;
+ const rpe=Number(form.rpe||0),fi=Number(form.fi||0),ff=Number(form.ff||0),duration=Number(form.duration||0);
+ if([rpe,fi,ff].some(n=>n<0||n>10)||duration<0){toast('RPE e fatica devono essere tra 0 e 10');return}
+ if(status==='completed'&&(!rpe||!fi||!ff)){toast('Per completare registra RPE e fatica iniziale/finale');return}
+ const x={week:w,day:d,date:entry.date,kind:entry.kind,title:entry.title,status,rpe,fi,ff,duration,hang:form.hang===''?null:Number(form.hang),pull:form.pull===''?null:Number(form.pull),checks:form.checks||[],exerciseDoses:longDosesFor(w,d,longExercises(entry,w,v)),notes:form.notes||'',updatedAt:new Date().toISOString()};
+ a.push(x);save(longSessionKey(),a);const drafts=longDrafts();delete drafts[w+'_'+d];save(longDraftKey(),drafts);renderLongOperations();toast(status==='completed'?'Seduta completata':'Seduta salvata');
+}
+function longReopen(w,d){const rows=longRecords(),x=rows.find(r=>+r.week===w&&+r.day===d);if(!x||x.status!=='completed')return;if(!confirm('Riaprire questa seduta? Tornerà parziale mantenendo consuntivo e spunte.'))return;x.status='partial';save(longSessionKey(),rows);renderLongOperations();toast('Seduta riaperta')}
+function longReset(w,d){if(!confirm('Azzerare questa seduta, incluse spunte, consuntivo e storico? Gli altri allenamenti rimangono invariati.'))return;
+ save(longSessionKey(),longRecords().filter(x=>!(+x.week===w&&+x.day===d)));
+ const doses=longDoseAll();delete doses[longDoseId(w,d)];save(longDoseKey(),doses);
+ const drafts=longDrafts();delete drafts[w+'_'+d];save(longDraftKey(),drafts);renderLongOperations();toast('Seduta ripristinata')}
 function longAD(w){const v=longData();if(!v)return 'Salva un piano per attivare il monitoraggio.';const rows=longRecords().filter(x=>+x.week<=w&&x.status==='completed').sort((a,b)=>a.date.localeCompare(b.date));const recent=rows.slice(-4);
  if(activePain())return 'Dolore attivo: nessun aumento proposto. Evita attività dolorose e chiedi una valutazione professionale se persiste.';
  if(!recent.length)return 'Nessuna seduta completata: registra RPE e fatica iniziale/finale per ricevere una valutazione.';
@@ -621,14 +867,170 @@ function longAD(w){const v=longData();if(!v)return 'Salva un piano per attivare 
  if(last.every(x=>x.rpe<=6&&x.fi<=4&&x.ff<=5))return `Buona tolleranza generale (RPE medio ${avg('rpe')}). Valuta un piccolo incremento solo dopo confronto fra sedute dello stesso tipo e senza dolore; nessuna modifica automatica.`;
  return `RPE medio ${avg('rpe')}, fatica finale ${avg('ff')} (ultime 3 sedute). Mantieni il carico e prosegui con i controlli del piano.`;
 }
-function renderLongOperations(){if(!$('lpActiveWeek'))return;const v=longData();if(!v){$('lpOpsSummary').textContent='Salva prima il piano da 3, 6 o 12 mesi.';$('lpOpsDays').innerHTML='';$('lpOpsAD').textContent='Nessun piano salvato.';return}
+function renderLongOperations(){if(!$('lpActiveWeek'))return;const v=longData();if(!v){$('lpDurationHint').textContent='Nessun piano attivo. Salvalo in Altro → Pianificatore.';$('lpOpsSummary').textContent='Seleziona la durata del piano e salvala.';$('lpOpsDays').innerHTML='';$('lpOpsAD').textContent='Nessun piano salvato.';return}
  const sel=$('lpActiveWeek'),w=Math.min(v.duration,Math.max(1,+sel.value||1));if(sel.options.length!==v.duration){sel.innerHTML=Array.from({length:v.duration},(_,i)=>`<option value="${i+1}">Settimana ${i+1}</option>`).join('')}sel.value=w;
+ const selectedDuration=Number($('lpDuration').value)||13;$('lpDurationHint').textContent=`Piano attivo: ${v.duration} settimane`+(selectedDuration!==v.duration?' · Per cambiare durata salva il nuovo piano in Altro.':'');
  const t=longDayTemplates(v,w),completed=t.arr.filter(e=>longRecord(w,e.day)?.status==='completed').length;
- $('lpOpsSummary').textContent=`Settimana ${w}/${v.duration} · ${t.phaseName}${t.deload?' · Scarico':''} · ${completed}/${t.arr.length} sedute completate`;
- $('lpOpsDays').innerHTML=t.arr.map(e=>{const x=longRecord(w,e.day),status=x?.status||'pending';return `<details class="library-item"><summary><b>${esc(e.date)} · ${esc(e.title)}</b> <span>${status==='completed'?'✓ Completata':status==='skipped'?'– Saltata':status==='partial'?'◐ Parziale':'○ Da fare'} ▾</span></summary><p class="small">${esc(e.dose)} · ${esc(t.phaseName)}</p><div class="row"><div><label>RPE (1–10)</label><input id="lsRpe${e.day}" type="number" min="1" max="10" value="${x?.rpe||''}"></div><div><label>Fatica iniziale</label><input id="lsFi${e.day}" type="number" min="1" max="10" value="${x?.fi||''}"></div><div><label>Fatica finale</label><input id="lsFf${e.day}" type="number" min="1" max="10" value="${x?.ff||''}"></div></div><label>Note</label><textarea id="lsNote${e.day}" rows="2">${esc(x?.notes||'')}</textarea><div class="wraprow"><button onclick="longCompletion(${w},${e.day},'completed')">Completa</button><button class="secondary" onclick="longCompletion(${w},${e.day},'partial')">Salva parziale</button><button class="secondary" onclick="longCompletion(${w},${e.day},'skipped')">Salta</button><button class="ghost" onclick="longReset(${w},${e.day})">Ripristina</button></div></details>`}).join('');
+ $('lpOpsSummary').textContent=`Settimana ${w}/${v.duration} · ${t.phaseName} · ${t.deload?'SCARICO':(['Consolidamento','Progressione','Carico','Recupero'][((w-1)%4)])} · ${completed}/${t.arr.length} sedute completate`;
+ $('lpOpsDays').innerHTML=t.arr.map(e=>{const x=longRecord(w,e.day),draft=longDraft(w,e.day),status=x?.status||'pending',choices=longExercises(e,w,v),checks=draft.checks||x?.checks||[],field=(k)=>(draft[k]!==undefined?draft[k]:x?.[k]??'');
+ const exercises=choices.map((ex,i)=>`<div class="exercise-entry"><label class="check"><input type="checkbox" data-long-check="1" ${checks[i]?'checked':''} ${status==='completed'?'disabled':''} onchange="longDraftUpdate(${w},${e.day})"><span><b>${esc(ex.name)}</b><br><small>Settimana ${w}: ${esc(ex.dose)}</small></span></label>${longDoseEditor(w,e.day,choices,i)}${longExerciseHelp(ex.name)}</div>`).join('');
+ return `<details class="library-item" id="longForm${e.day}"><summary><b>${esc(e.date)} · ${esc(e.title)}</b> <span>${status==='completed'?'✓ Completata':status==='skipped'?'– Saltata':status==='partial'?'◐ Parziale':'○ Da fare'} ▾</span></summary><p class="small">${esc(e.dose)} · ${esc(t.phaseName)}</p><h4>Esercizi della seduta</h4><details class="ad-session-mini"><summary>AD · suggerimento per questa seduta</summary><p class="small">${esc(longADDecision(e.kind,w).reason)}</p><div class="wraprow"><button type="button" class="secondary" onclick="longApplyAD(${w},${e.day})">Applica proposta</button><button type="button" class="ghost" onclick="longRestoreDose(${w},${e.day})">Ripristina quantità</button></div></details>${exercises}<details class="card collapsible"><summary>Consuntivo e carichi</summary><label>Durata (min)</label><input data-long-field="duration" type="number" min="0" value="${esc(String(field('duration')))}" onchange="longDraftUpdate(${w},${e.day})"><div class="row"><div><label>RPE</label><input data-long-field="rpe" type="number" min="1" max="10" value="${esc(String(field('rpe')||''))}" onchange="longDraftUpdate(${w},${e.day})"></div><div><label>Fatica iniziale</label><input data-long-field="fi" type="number" min="1" max="10" value="${esc(String(field('fi')||''))}" onchange="longDraftUpdate(${w},${e.day})"></div><div><label>Fatica finale</label><input data-long-field="ff" type="number" min="1" max="10" value="${esc(String(field('ff')||''))}" onchange="longDraftUpdate(${w},${e.day})"></div></div><div class="row"><div><label>Zavorra trave (+kg)</label><input data-long-field="hang" type="number" step="0.5" value="${esc(String(field('hang')??''))}" onchange="longDraftUpdate(${w},${e.day})"></div><div><label>Zavorra trazioni (+kg)</label><input data-long-field="pull" type="number" step="0.5" value="${esc(String(field('pull')??''))}" onchange="longDraftUpdate(${w},${e.day})"></div></div><label>Note</label><textarea data-long-field="notes" rows="2" oninput="longDraftUpdate(${w},${e.day})">${esc(String(field('notes')||''))}</textarea></details><div class="wraprow"><button onclick="longCompletion(${w},${e.day},'completed')">✓ Segna completata</button><button class="secondary" onclick="longCompletion(${w},${e.day},'partial')">Salva parziale</button><button class="secondary" onclick="longCompletion(${w},${e.day},'skipped')">Salta</button>${status==='completed'?`<button class="secondary" onclick="longReopen(${w},${e.day})">Riapri</button>`:''}<button class="ghost" onclick="longReset(${w},${e.day})">Ripristina</button></div></details>`}).join('');
  $('lpOpsAD').textContent=longAD(w);
 }
 function jumpLongDate(){const v=longData(),date=$('lpJumpDate').value;if(!v||!date)return;const start=new Date(v.start+'T12:00:00'),target=new Date(date+'T12:00:00');const diff=Math.floor((target-start)/86400000);if(diff<0||diff>=v.duration*7){toast('La data è fuori dal piano salvato');return}const w=Math.floor(diff/7)+1;$('lpActiveWeek').value=w;renderLongOperations();toast('Settimana '+w+' del piano')}
+
+
+// v0.15 — evidence-informed planning, not an injury predictor or medical tool.
+const V15_EXERCISES=[{"id":"silent","name":"Piedi silenziosi","category":"Tecnica","how":"Posa i piedi senza rumore su prese grandi e accessibili; fermati se perdi precisione.","dose":"3 × 5 min","focus":"feet","requires":"climb","intensity":"easy","goal":"Precisione piedi","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"flag","name":"Bandierina controllata","category":"Tecnica","how":"Su passaggi facili, prova bandierine e controlla le rotazioni del bacino.","dose":"3 × 4 min","focus":"body","requires":"climb","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"hip","name":"Rotazioni del bacino","category":"Tecnica","how":"Su parete molto facile, ruota l’anca verso la parete e confronta due posizioni.","dose":"3 × 5 min","focus":"feet","requires":"climb","intensity":"easy","goal":"Precisione piedi","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"pause","name":"Scala e fermati","category":"Tecnica","how":"Su un boulder facile, mantieni posizioni stabili per 2–3 secondi senza tirare più del necessario.","dose":"3 × 4 min","focus":"body","requires":"climb","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"no_repos","name":"Piedi al primo tentativo","category":"Tecnica","how":"Durante un passaggio facile, posa ogni piede una volta sola; conta le correzioni.","dose":"3 × 4 min","focus":"feet","requires":"climb","intensity":"easy","goal":"Precisione piedi","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"quiet_game","name":"Sfida piedi silenziosi","category":"Tecnica","how":"In una breve sequenza facile conta gli appoggi silenziosi; supera il tuo punteggio con controllo.","dose":"4 × 3 min","focus":"feet","requires":"climb","intensity":"easy","goal":"Precisione piedi","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"hip_precision","name":"Micro-trasferimenti di peso","category":"Tecnica","how":"Su appoggi grandi e facili sposta il bacino lentamente senza forzare la presa.","dose":"3 × 4 min","focus":"body","requires":"climb","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"route_scan","name":"Lettura delle sequenze","category":"Lettura","how":"Prima di salire individua piedi, direzione del bacino, crux e riposi su una via facile.","dose":"3 × 3 min","focus":"reading","requires":"none","intensity":"easy","goal":"Lettura e decisione","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"memory_beta","name":"Memoria della sequenza","category":"Lettura","how":"Osserva per 2 minuti, descrivi 5 movimenti e poi confronta con la sequenza reale.","dose":"3 × 4 min","focus":"reading","requires":"none","intensity":"easy","goal":"Lettura e decisione","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"rest_spot","name":"Ricerca delle posizioni di riposo","category":"Lead","how":"Su vie molto sotto il limite individua due riposi e rilassa un braccio alla volta.","dose":"2 × 1 via","focus":"reading","requires":"lead","intensity":"moderate","goal":"Lettura e decisione","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"pace","name":"Ritmo e respirazione","category":"Lead","how":"Su una via accessibile prova un ritmo costante e un’espirazione regolare nei movimenti.","dose":"2 × 1 via","focus":"flow","requires":"lead","intensity":"moderate","goal":"Fluidità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"onsight","name":"Primo tentativo controllato","category":"Lead","how":"Scegli una via sotto il limite e salila a vista con lettura preventiva e recupero completo.","dose":"2 × 1 via","focus":"onsight","requires":"lead","intensity":"moderate","goal":"Vista e lettura","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"lead_link","name":"Sequenze collegate su via","category":"Lead","how":"Su una via gestibile unisci due sezioni con pausa programmata; evita il cedimento.","dose":"2 × 1 via","focus":"endurance","requires":"lead","intensity":"moderate","goal":"Continuità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"lead_interval","name":"Vie facili intervallate","category":"Lead","how":"Esegui vie ben sotto il limite con recuperi adeguati; interrompi se perdi tecnica.","dose":"3 × 1 via","focus":"endurance","requires":"lead","intensity":"moderate","goal":"Continuità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"lead_project","name":"Simulazione lettura a vista","category":"Lead","how":"Studia dal basso una via nuova accessibile; esegui un solo primo tentativo di qualità.","dose":"1 × 1 via","focus":"onsight","requires":"lead","intensity":"moderate","goal":"Vista e lettura","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"boulder_foot","name":"Blocchi facili a vincolo piedi","category":"Boulder","how":"Scegli un blocco facile; ripetilo usando solo appoggi piedi marcati.","dose":"3 × 3 blocchi","focus":"feet","requires":"boulder","intensity":"easy","goal":"Precisione piedi","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"boulder_flow","name":"Boulder fluido","category":"Boulder","how":"Esegui blocchi facili senza fermate prolungate, con focus sul rilassamento.","dose":"3 × 3 blocchi","focus":"flow","requires":"boulder","intensity":"easy","goal":"Fluidità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"boulder_static","name":"Movimenti statici controllati","category":"Boulder","how":"Lavora su blocchi moderati con movimenti lenti, senza lanci o prese piccole.","dose":"3 × 2 blocchi","focus":"body","requires":"boulder","intensity":"moderate","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"boulder_tension","name":"Tensione del corpo su blocchi moderati","category":"Boulder","how":"Su strapiombo moderato e prese grandi allena controllo del corpo, senza tentativi massimali.","dose":"3 × 2 blocchi","focus":"strength","requires":"boulder","intensity":"moderate","goal":"Forza specifica controllata","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"boulder_limit","name":"Boulder duro di qualità","category":"Boulder","how":"Pochi blocchi impegnativi con recupero ampio; interrompi al deteriorarsi della tecnica.","dose":"3 × 2 blocchi","focus":"strength","requires":"boulder","intensity":"high","goal":"Forza specifica controllata","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"boulder_circuit","name":"Circuiti di boulder moderato","category":"Boulder","how":"Ripeti sequenze accessibili; tecnica stabile, recupero sufficiente e niente cedimento.","dose":"3 × 1 circuito","focus":"endurance","requires":"boulder","intensity":"moderate","goal":"Continuità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"boulder_4x","name":"Boulder collegati","category":"Boulder","how":"Collega due blocchi facili, poi recupera completamente; mantieni tecnica e ritmo.","dose":"3 × 2 blocchi","focus":"endurance","requires":"boulder","intensity":"moderate","goal":"Continuità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"boulder_game","name":"Boulder: tre soluzioni","category":"Tecnica","how":"Su un blocco facile prova tre sequenze piedi diverse, sempre su prese confortevoli.","dose":"3 × 1 blocco","focus":"fun","requires":"boulder","intensity":"easy","goal":"Coinvolgimento e controllo","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"outdoor_onsight","name":"Falesia: via nuova sotto il limite","category":"Outdoor","how":"Prepara la lettura; sali a vista su difficoltà conservativa con partner competente e controlli di sicurezza.","dose":"2 × 1 via","focus":"onsight","requires":"outdoor","intensity":"moderate","goal":"Vista e lettura","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"outdoor_read","name":"Falesia: lettura a terra","category":"Lettura","how":"Da terra individua le sequenze e tre opzioni per i piedi; confronta poi con la salita.","dose":"3 × 4 min","focus":"reading","requires":"none","intensity":"easy","goal":"Lettura e decisione","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"outdoor_rest","name":"Falesia: riposi e ritmo","category":"Outdoor","how":"Su vie facili allena lo scarico di un braccio e le posizioni di riposo senza forzare.","dose":"2 × 1 via","focus":"flow","requires":"outdoor","intensity":"moderate","goal":"Fluidità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"outdoor_var","name":"Falesia: variazione di lettura","category":"Outdoor","how":"Scegli due vie nuove accessibili e confronta decisioni, piedi e tempo di osservazione.","dose":"2 × 1 via","focus":"fun","requires":"outdoor","intensity":"moderate","goal":"Coinvolgimento e controllo","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività su parete: usare la sicurezza abituale della disciplina, su terreno adeguato; evitare movimenti dolorosi."},{"id":"squat","name":"Squat a corpo libero","category":"Forza","how":"Scendi entro ampiezza controllata mantenendo piedi stabili; evita carichi se tecnica incerta.","dose":"3 × 8 rip","focus":"legs","requires":"home","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"split_squat","name":"Affondi statici","category":"Forza","how":"In posizione divaricata piega entrambe le ginocchia mantenendo equilibrio e allineamento.","dose":"2 × 8 rip","focus":"legs","requires":"home","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"hinge","name":"Hip hinge senza carico","category":"Forza","how":"Porta il bacino indietro mantenendo la colonna neutra, senza pesi.","dose":"3 × 8 rip","focus":"legs","requires":"home","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"bridge","name":"Ponte glutei","category":"Core","how":"Supino con piedi a terra solleva il bacino senza inarcare la schiena.","dose":"3 × 10 rip","focus":"legs","requires":"home","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"deadbug","name":"Dead bug","category":"Core","how":"Da supino estendi lentamente braccio e gamba opposti senza inarcare la schiena.","dose":"3 × 8 rip","focus":"core","requires":"home","intensity":"easy","goal":"Stabilità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"plank","name":"Plank su avambracci","category":"Core","how":"Mantieni tronco stabile sugli avambracci con respirazione regolare; interrompi prima del cedimento.","dose":"3 × 25 s","focus":"core","requires":"home","intensity":"easy","goal":"Stabilità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"sideplank","name":"Plank laterale su avambraccio","category":"Core","how":"Mantieni allineati spalle, bacino e piedi senza sforzo sulle dita.","dose":"2 × 20 s","focus":"core","requires":"home","intensity":"easy","goal":"Stabilità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"bird_dog","name":"Bird dog su pugni o avambracci","category":"Core","how":"Alterna estensione opposta di gamba e braccio evitando pressione sulle dita; usa appoggio tollerato.","dose":"2 × 8 rip","focus":"core","requires":"home","intensity":"easy","goal":"Stabilità","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"ankle","name":"Equilibrio monopodalico","category":"Coordinazione","how":"In piedi su una gamba mantieni 20 secondi con sostegno vicino se necessario.","dose":"3 × 20 s","focus":"balance","requires":"home","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"hip_mob","name":"Mobilità anche controllata","category":"Mobilità","how":"Esegui movimenti di anche in ampiezza comoda, senza forzare.","dose":"2 × 5 min","focus":"mobility","requires":"home","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"shoulder_mob","name":"Mobilità spalle senza carico","category":"Mobilità","how":"Circonduzioni lente delle spalle senza sollecitare le dita o provocare sintomi.","dose":"2 × 4 min","focus":"mobility","requires":"home","intensity":"easy","goal":"Controllo tecnico","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"walk","name":"Camminata a ritmo facile","category":"Recupero","how":"Cammina a ritmo conversazionale; regola la durata secondo come ti senti.","dose":"1 × 20 min","focus":"recovery","requires":"home","intensity":"easy","goal":"Recupero","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"breath","name":"Respirazione diaframmatica","category":"Recupero","how":"Respira lentamente senza trattenere il fiato e senza cercare sensazioni forzate.","dose":"1 × 5 min","focus":"recovery","requires":"home","intensity":"easy","goal":"Recupero","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."},{"id":"balance_game","name":"Sfida equilibrio su pavimento","category":"Coordinazione","how":"Su pavimento stabile prova 3 posizioni di equilibrio diverse per 20 secondi; sostegno vicino.","dose":"3 × 20 s","focus":"fun","requires":"home","intensity":"easy","goal":"Coinvolgimento e controllo","mistake":"Non forzare se compare dolore o la qualità del gesto peggiora.","safety":"Attività a bassa intensità; interrompere se provoca dolore."}];
+const V15_MAP=Object.fromEntries(V15_EXERCISES.map(e=>[e.id,e]));
+for(const e of V15_EXERCISES){if(!EXERCISE_LIBRARY.some(old=>old.name===e.name))EXERCISE_LIBRARY.push({...e,mistake:e.mistake,safety:e.safety});TRUE_EXERCISES.add(e.name)}
+function v15Level(v){return v.experience==='beginner'?'beginner':v.experience==='advanced'?'advanced':'intermediate'}
+function v15RecentRisk(w,d){
+ const sessions=longRecords().filter(x=>x.status==='completed'&&+x.week<=w).sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(-2);
+ const recentHigh=sessions.some(x=>Number(x.fi)>=7||Number(x.ff)>=8||Number(x.rpe)>=9);
+ const currentHigh=d?Number(longDraft(w,d).fi||0)>=7:false;
+ return {pain:!!activePain(),highFatigue:recentHigh||currentHigh,reason:activePain()?'Dolore attivo registrato: le attività di presa sono sostituite. Non usare questa proposta come riabilitazione.':currentHigh?'Fatica iniziale elevata oggi: sostituisci la seduta intensa con attività leggere, senza forzare.':recentHigh?'Fatica/RPE elevati nelle ultime sedute: evita intensità alte e privilegia recupero e tecnica facile.':''};
+}
+const V15_RECOVERY={Tecnica:['hip_mob','deadbug','balance_game'],Boulder:['walk','bridge','breath'],Lead:['hip_mob','sideplank','breath'],Outdoor:['walk','ankle','breath'],Complementare:['squat','deadbug','hip_mob'],Recupero:['walk','breath','hip_mob']};
+const V15_FUN=['quiet_game','memory_beta','boulder_game','balance_game'];
+function v15Schedule(e,w,v){
+ const stage=longTrainingStage(v,w).stage,weekStage=longTrainingStage(v,w),k=e.kind;
+ let x=[];
+ if(k==='Tecnica'){
+    const theme=v.weakness==='lettura'?'route_scan':v.weakness==='piedi'?'silent':v.weakness==='resistenza'?'pause':'hip';
+    const extra=stage==='strength'?['flag','hip_precision','pause']:stage==='endurance'?['pause','flag','quiet_game']:stage==='performance'?['route_scan','memory_beta','no_repos']:['flag','hip_precision','no_repos','quiet_game'];
+    x=[theme,extra[w%extra.length],w%2===0?'memory_beta':'breath'];
+ } else if(k==='Boulder'){
+    const options={base:[['boulder_foot','silent','boulder_game'],['boulder_flow','flag','quiet_game'],['boulder_foot','pause','hip']],technique:[['boulder_game','flag','no_repos'],['boulder_flow','hip','quiet_game'],['boulder_foot','pause','hip_precision']],strength:[['boulder_static','boulder_tension','deadbug'],['boulder_tension','boulder_static','flag'],['boulder_limit','hip_precision','breath']],endurance:[['boulder_circuit','boulder_flow','breath'],['boulder_4x','pause','hip_mob'],['boulder_circuit','boulder_game','walk']],performance:[['boulder_static','boulder_game','breath'],['boulder_foot','quiet_game','hip_mob'],['boulder_flow','flag','breath']],taper:[['boulder_foot','hip_mob','breath'],['boulder_flow','flag','walk']]};
+    x=(options[stage]||options.base)[(w-1)%((options[stage]||options.base).length)];
+ } else if(k==='Lead'){
+    const options={base:[['route_scan','pace','rest_spot'],['memory_beta','onsight','route_scan'],['route_scan','rest_spot','pace']],technique:[['memory_beta','pace','onsight'],['route_scan','rest_spot','onsight'],['route_scan','pace','lead_link']],strength:[['route_scan','lead_project','rest_spot'],['pace','onsight','memory_beta'],['route_scan','lead_link','rest_spot']],endurance:[['route_scan','lead_interval','pace'],['rest_spot','lead_link','memory_beta'],['lead_interval','pace','route_scan']],performance:[['route_scan','lead_project','rest_spot'],['memory_beta','onsight','pace']],taper:[['route_scan','pace','breath'],['memory_beta','rest_spot','hip_mob']]};
+    x=(options[stage]||options.base)[(w-1)%((options[stage]||options.base).length)];
+ } else if(k==='Outdoor'){
+    const options={base:[['outdoor_read','outdoor_onsight','rest_spot'],['outdoor_read','outdoor_var','pace']],technique:[['outdoor_read','outdoor_var','rest_spot'],['outdoor_read','outdoor_onsight','pace']],strength:[['outdoor_read','outdoor_onsight','rest_spot'],['outdoor_read','outdoor_rest','breath']],endurance:[['outdoor_read','outdoor_rest','lead_link'],['outdoor_read','outdoor_var','pace']],performance:[['outdoor_read','outdoor_onsight','pace'],['outdoor_read','outdoor_var','rest_spot']],taper:[['outdoor_read','outdoor_rest','breath']]};
+    x=(options[stage]||options.base)[(w-1)%((options[stage]||options.base).length)];
+ } else if(k==='Complementare'){
+    const options={base:[['squat','deadbug','hip_mob'],['bridge','plank','ankle']],technique:[['split_squat','deadbug','balance_game'],['hinge','sideplank','hip_mob']],strength:[['squat','sideplank','bridge'],['split_squat','deadbug','hinge'],['hinge','plank','squat']],endurance:[['bridge','deadbug','hip_mob'],['squat','sideplank','ankle']],performance:[['deadbug','bridge','breath'],['plank','hip_mob','balance_game']],taper:[['hip_mob','deadbug','breath']]};
+    x=(options[stage]||options.base)[(w-1)%((options[stage]||options.base).length)];
+ } else x=w%2===0?['walk','hip_mob','breath']:['breath','balance_game','walk'];
+ // Equipment defines what can be used, not merely the label of the session.
+ if(v.equipment==='home' && ['Boulder','Lead','Outdoor','Tecnica'].includes(k))x=w%2===0?['squat','deadbug','balance_game']:['bridge','hip_mob','walk'];
+ if(v.equipment==='boulder' && ['Lead','Outdoor'].includes(k))x=['boulder_foot','route_scan','boulder_game'];
+ if(v.equipment==='lead' && k==='Boulder')x=['route_scan','pace','rest_spot'];
+ if(weekStage.level==='beginner')x=x.map(id=>id==='boulder_limit'?'boulder_foot':id==='lead_project'?'onsight':id);
+ if(weekStage.deload)x=x.map(id=>({boulder_limit:'boulder_foot',boulder_tension:'boulder_flow',boulder_circuit:'boulder_foot',boulder_4x:'boulder_flow',lead_interval:'pace',lead_link:'rest_spot',lead_project:'route_scan'}[id]||id));
+ return [...new Set(x)].filter(id=>V15_MAP[id]);
+}
+function v15FormatDose(ex,week,v){
+ const raw=String(ex.dose),stage=longTrainingStage(v,week),match=raw.match(/^(\d+)\s*×\s*(\d+)\s*(rip|min|s|via|blocchi?|circuito)/i);
+ if(!match)return {dose:raw,sets:1,amount:1,unit:'ripetizioni',rest:60};
+ let sets=Number(match[1]),amount=Number(match[2]),unit=match[3];
+ // No automatic increase in external load and no universal week-to-week progression.
+ if(stage.deload)sets=Math.max(1,Math.round(sets*0.6));
+ if(stage.level==='beginner')sets=Math.max(1,sets-1);
+ const longRest=['strength','performance'].includes(stage.stage);
+ const rest=ex.requires==='home'?60:ex.focus==='strength'?240:longRest?180:120;
+ const unitMap={rip:'ripetizioni',min:'minuti',s:'secondi',via:'vie',blocco:'blocchi',blocchi:'blocchi',circuito:'circuiti'};
+ return {dose:`${sets} × ${amount} ${unit}${stage.deload?' · scarico':''}`,sets,amount,unit:unitMap[unit]||unit,rest};
+}
+function v15Entries(e,w,v,ids){return ids.map(id=>{
+ const source=V15_MAP[id],data=v15FormatDose(source,w,v);
+ return {...source,...data,why:longTrainingStage(v,w).phaseName,sourceId:id};
+ })}
+// Same session anchor can remain; rotating the second drill creates genuine movement variety.
+function longExercises(e,w,v){
+ const risk=v15RecentRisk(w,e.day),prescribed=v15Schedule(e,w,v);
+ let ids=prescribed;
+ if(risk.pain){const low=V15_RECOVERY[e.kind]||V15_RECOVERY.Recupero;ids=[low[(w-1)%low.length],low[w%low.length],(w%2===0?'breath':'balance_game')];}
+ else if(risk.highFatigue)ids=['hip_mob','deadbug','breath'];
+ ids=[...new Set(ids)];if(ids.length<3)ids.push(...['hip_mob','walk','balance_game'].filter(id=>!ids.includes(id)).slice(0,3-ids.length));
+ return v15Entries(e,w,v,ids).map((x,i)=>({...x,riskNote:risk.reason,plannedIds:risk.reason?prescribed:[],engineVersion:15}));
+}
+function doseDefaults(ex){
+ if(ex.engineVersion===15)return {kind:'esercizio',sets:ex.sets,amount:ex.amount,unit:ex.unit,rest:ex.rest};
+ const dose=String(ex.dose||''),range=dose.match(/(\d+)\s*[×x]\s*(\d+)(?:\s*[–-]\s*\d+)?/),minutes=dose.match(/(\d+)\s*(?:min|minute)/i),seconds=dose.match(/(\d+)\s*s(?:ec)?\b/i);
+ const isGuidance=!EXERCISE_LIBRARY.some(e=>e.name===ex.name&&isExercise(e));
+ return isGuidance?{kind:'indicazione',sets:0,amount:0,unit:'',rest:0}:{kind:'esercizio',sets:range?Number(range[1]):1,amount:range?Number(range[2]):seconds?Number(seconds[1]):minutes?Number(minutes[1]):1,unit:seconds?'secondi':minutes?'minuti':'ripetizioni',rest:range?120:60};
+}
+// v15 uses stable exercise identifiers. v14 overrides remain archived rather than applied to the wrong exercise.
+function longDoseKey(){return scopedKey('long_exercise_doses_v15')}
+function longDosesFor(w,d,choices){const store=longDoseAll()[longDoseId(w,d)]||{};return choices.map((ex,i)=>({name:ex.name,id:ex.id,...doseDefaults(ex),...(store[ex.id]||{})}));}
+function longSetDose(w,d,i,key,val){
+ const v=longData(),e=v&&longDayTemplates(v,w).arr.find(x=>x.day===d);if(!e)return;
+ const choices=longExercises(e,w,v),ex=choices[i];if(!ex)return;
+ const n=Number(val);if(!Number.isFinite(n)||n<(key==='rest'?0:1)||n>(key==='sets'?12:key==='rest'?600:180)){toast('Valore fuori intervallo: controlla quantità e recupero');return;}
+ const all=longDoseAll(),id=longDoseId(w,d),list=all[id]||{};
+ list[ex.id]={...(list[ex.id]||{}),[key]:Math.round(n)};all[id]=list;save(longDoseKey(),all);longDraftUpdate(w,d);
+}
+function longApplyAD(w,d){
+ const v=longData(),e=v&&longDayTemplates(v,w).arr.find(x=>x.day===d);if(!e)return;
+ const decision=longADDecision(e.kind,w),risk=v15RecentRisk(w,d);
+ if(risk.pain||risk.highFatigue){toast('Progressione bloccata: controlla Salute e recupero e i livelli di fatica.');return;}
+ if(decision.action==='hold'){toast('AD: mantenimento, nessuna modifica applicata');return;}
+ const choices=longExercises(e,w,v),existing=longDosesFor(w,d,choices);
+ if(!confirm(decision.reason+' Applicare la modifica alle quantità degli esercizi selezionati?'))return;
+ const all=longDoseAll(),id=longDoseId(w,d),values=all[id]||{};
+ existing.forEach((dose,i)=>{if(dose.kind!=='esercizio')return;const ex=choices[i];if(ex.intensity==='high')return;
+ const next=Math.max(1,Math.round(dose.amount*decision.factor));
+ values[ex.id]={...(values[ex.id]||{}),amount:next};});
+ all[id]=values;save(longDoseKey(),all);renderLongOperations();toast('Variazione applicata agli esercizi a basso/moderato carico');
+}
+function longReset(w,d){
+ if(!confirm('Eliminare spunte, consuntivo e storico SOLTANTO di questa seduta?'))return;
+ save(longSessionKey(),longRecords().filter(x=>!(+x.week===w&&+x.day===d)));
+ for(const key of [longDoseKey(),scopedKey('long_exercise_doses_v14')]){const doses=load(key)||{};delete doses[longDoseId(w,d)];save(key,doses)}
+ const drafts=longDrafts();delete drafts[w+'_'+d];save(longDraftKey(),drafts);renderLongOperations();toast('Seduta ripristinata');
+}
+function longExerciseHelp(name){const e=V15_EXERCISES.find(x=>x.name===name)||EXERCISE_LIBRARY.find(x=>x.name===name);return e?guidanceOrExerciseHelp(e):''}
+function v15Explanation(ex){return `<p class="small v15-expl"><b>Obiettivo:</b> ${esc(ex.goal)} · <b>Perché ora:</b> ${esc(ex.why)} <span>· Intensità ${esc(ex.intensity)}</span></p>`;}
+function v15SafetyBanner(w,kind,v){
+ const e=longDayTemplates(v,w).arr.find(a=>a.kind===kind),risk=v15RecentRisk(w,e?.day);
+ if(!risk.reason)return `<p class="small">Alternanza guidata dalla fase, priorità tecnica e disponibilità. Dosi orientative, non prescrizioni mediche; interrompi se compare dolore.</p>`;
+ const scheduled=e?v15Schedule(e,w,v).map(id=>V15_MAP[id].name).join(' · '):'';
+ return `<div class="v15-safety">${esc(risk.reason)}<details><summary>Vedi la seduta originariamente prevista (non eseguire ora)</summary><p>${esc(scheduled)}</p></details></div>`;
+}
+function renderLongOperations(){
+ if(!$('lpActiveWeek'))return;const v=longData();if(!v){$('lpDurationHint').textContent='Nessun piano attivo. Salvalo in Altro → Pianificatore.';$('lpOpsSummary').textContent='Seleziona la durata del piano e salvala.';$('lpOpsDays').innerHTML='';$('lpOpsAD').textContent='Nessun piano salvato.';return;}
+ const sel=$('lpActiveWeek'),w=Math.min(v.duration,Math.max(1,+sel.value||1));if(sel.options.length!==v.duration){sel.innerHTML=Array.from({length:v.duration},(_,i)=>`<option value="${i+1}">Settimana ${i+1}</option>`).join('')}sel.value=w;
+ $('lpDurationHint').textContent=`Piano attivo: ${v.duration} settimane`;
+ const t=longDayTemplates(v,w),completed=t.arr.filter(e=>longRecord(w,e.day)?.status==='completed').length;
+ $('lpOpsSummary').textContent=`Settimana ${w}/${v.duration} · ${t.phaseName} · ${t.deload?'SCARICO':'Settimana di lavoro'} · ${completed}/${t.arr.length} sedute completate`;
+ $('lpOpsDays').innerHTML=t.arr.map(e=>{
+   const x=longRecord(w,e.day),draft=longDraft(w,e.day),status=x?.status||'pending',archive=!!x&&!x.engineVersion;
+   const choices=longExercises(e,w,v),checks=(draft.schema===15?draft.checks:archive?[]:x?.engineVersion===15?x.checks:[])||[],checkById=draft.checkById||x?.checkById||{};
+   const field=k=>(draft[k]!==undefined?draft[k]:x?.[k]??'');
+   let list='';
+   if(archive){list=`<div class="v15-archive"><b>Seduta registrata con il vecchio generatore.</b><p class="small">Resta archiviata con i suoi esercizi originali; non viene riscritta.</p><ul>${(x.exerciseDoses||[]).map(d=>`<li>${esc(d.name)} · ${esc(d.sets)} × ${esc(d.amount)} ${esc(d.unit)}</li>`).join('')}</ul></div>`;}
+   else list=choices.map((ex,i)=>`<div class="exercise-entry"><label class="check"><input type="checkbox" data-long-check="1" ${(draft.schema===15||x?.engineVersion===15)?(checkById[ex.id]?'checked':''):(checks[i]?'checked':'')} ${status==='completed'?'disabled':''} onchange="longDraftUpdate(${w},${e.day})"><span><b>${esc(ex.name)}</b><br><small>${esc(ex.dose)}</small></span></label>${v15Explanation(ex)}${longDoseEditor(w,e.day,choices,i)}${longExerciseHelp(ex.name)}</div>`).join('');
+   return `<details class="library-item" id="longForm${e.day}"><summary><b>${esc(e.date)} · ${esc(e.title)}</b> <span>${status==='completed'?'✓ Completata':status==='skipped'?'– Saltata':status==='partial'?'◐ Parziale':'○ Da fare'} ▾</span></summary>${archive?'':`<div class="v15-checkin"><label for="v15fi${e.day}">Fatica iniziale oggi (1–10)</label><input type="number" id="v15fi${e.day}" min="1" max="10" placeholder="—" value="${esc(String(field('fi')||''))}" onchange="v15Checkin(${w},${e.day},this.value)"></div>`}${v15SafetyBanner(w,e.kind,v)}<h4>${archive?'Storico originale':'Esercizi per questa seduta'}</h4>${list}<details class="ad-session-mini"><summary>AD · suggerimento</summary><p class="small">${esc(longADDecision(e.kind,w).reason)}</p><button type="button" class="secondary" onclick="longApplyAD(${w},${e.day})">Valuta e applica</button></details><details class="card collapsible"><summary>Consuntivo e carichi</summary><label>Durata (min)</label><input data-long-field="duration" type="number" min="0" value="${esc(String(field('duration')))}" onchange="longDraftUpdate(${w},${e.day})"><div class="row"><div><label>RPE</label><input data-long-field="rpe" type="number" min="1" max="10" value="${esc(String(field('rpe')||''))}" onchange="longDraftUpdate(${w},${e.day})"></div><div><label>Fatica iniziale</label><input data-long-field="fi" type="number" min="1" max="10" value="${esc(String(field('fi')||''))}" onchange="longDraftUpdate(${w},${e.day})"></div><div><label>Fatica finale</label><input data-long-field="ff" type="number" min="1" max="10" value="${esc(String(field('ff')||''))}" onchange="longDraftUpdate(${w},${e.day})"></div></div><div class="row"><div><label>Zavorra trave (+kg)</label><input data-long-field="hang" type="number" step="0.5" value="${esc(String(field('hang')??''))}" onchange="longDraftUpdate(${w},${e.day})"></div><div class="row"><div><label>Zavorra trazioni (+kg)</label><input data-long-field="pull" type="number" step="0.5" value="${esc(String(field('pull')??''))}" onchange="longDraftUpdate(${w},${e.day})"></div></div><label>Note</label><textarea data-long-field="notes" rows="2" oninput="longDraftUpdate(${w},${e.day})">${esc(String(field('notes')||''))}</textarea></details><div class="wraprow"><button onclick="longCompletion(${w},${e.day},'completed')" ${archive?'disabled':''}>✓ Completata</button><button class="secondary" onclick="longCompletion(${w},${e.day},'partial')" ${archive?'disabled':''}>Salva parziale</button><button class="secondary" onclick="longCompletion(${w},${e.day},'skipped')" ${archive?'disabled':''}>Salta</button>${status==='completed'&&!archive?`<button class="secondary" onclick="longReopen(${w},${e.day})">Riapri</button>`:''}<button class="ghost" onclick="longReset(${w},${e.day})">Ripristina</button></div></details>`;
+ }).join('');
+ $('lpOpsAD').textContent=longAD(w);
+}
+function v15Checkin(w,d,value){
+ const n=value===''?0:Number(value);if(!Number.isFinite(n)||n<0||n>10){toast('Inserisci un valore 1–10');return;}
+ const form=$('longForm'+d);if(!form)return;const fi=form.querySelector('[data-long-field="fi"]');if(fi)fi.value=value;longDraftUpdate(w,d);renderLongOperations();const reopened=$('longForm'+d);if(reopened)reopened.open=true;
+}
+function longDraftUpdate(w,d){
+ const key=w+'_'+d,data=longDrafts(),dayEl=$('longForm'+d);if(!dayEl)return;
+ const entry=longDayTemplates(longData(),w).arr.find(x=>x.day===d),exercises=longExercises(entry,w,longData()); const checkStates=Array.from(dayEl.querySelectorAll('input[data-long-check]')).map(el=>el.checked);const checkById=Object.fromEntries(exercises.map((ex,i)=>[ex.id,checkStates[i]]));
+ data[key]={schema:15,checkById,checks:checkStates,duration:dayEl.querySelector('[data-long-field="duration"]').value,rpe:dayEl.querySelector('[data-long-field="rpe"]').value,fi:dayEl.querySelector('[data-long-field="fi"]').value,ff:dayEl.querySelector('[data-long-field="ff"]').value,hang:dayEl.querySelector('[data-long-field="hang"]').value,pull:dayEl.querySelector('[data-long-field="pull"]').value,notes:dayEl.querySelector('[data-long-field="notes"]').value};save(longDraftKey(),data);
+}
+function longCompletion(w,d,status){
+ const v=longData();if(!v)return;const prior=longRecord(w,d);if(prior&&!prior.engineVersion){toast('Storico precedente: prima ripristina la seduta se vuoi iniziarne una nuova.');return;}
+ longDraftUpdate(w,d);const form=longDraft(w,d),rows=longRecords().filter(x=>!(+x.week===w&&+x.day===d)),entry=longDayTemplates(v,w).arr.find(x=>x.day===d);if(!entry)return;
+ const rpe=Number(form.rpe||0),fi=Number(form.fi||0),ff=Number(form.ff||0),duration=Number(form.duration||0);
+ if([rpe,fi,ff].some(n=>n<0||n>10)||duration<0){toast('RPE e fatica devono essere tra 0 e 10');return;}
+ if(status==='completed'&&(!rpe||!fi||!ff)){toast('Per completare inserisci RPE e fatica iniziale/finale');return;}
+ const exercises=longExercises(entry,w,v),doses=longDosesFor(w,d,exercises);
+ rows.push({week:w,day:d,date:entry.date,kind:entry.kind,title:entry.title,status,engineVersion:15,rpe,fi,ff,duration,hang:form.hang===''?null:Number(form.hang),pull:form.pull===''?null:Number(form.pull),checks:form.checks||[],checkById:form.checkById||{},exerciseDoses:doses,notes:form.notes||'',updatedAt:new Date().toISOString()});save(longSessionKey(),rows);
+ const drafts=longDrafts();delete drafts[w+'_'+d];save(longDraftKey(),drafts);renderLongOperations();toast(status==='completed'?'Seduta completata':'Seduta salvata');
+}
+
+function longReopen(w,d){const rows=longRecords(),x=rows.find(r=>+r.week===w&&+r.day===d);if(!x||x.status!=='completed')return;
+ if(!x.engineVersion){toast('Seduta storica: consulta il consuntivo o ripristina se vuoi ricominciare.');return;}
+ if(!confirm('Riaprire questa seduta? Diventerà parziale.'))return;x.status='partial';save(longSessionKey(),rows);renderLongOperations();toast('Seduta riaperta');}
+
+initProfiles();refresh();openToday();
 
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"))}</script></body></html>
