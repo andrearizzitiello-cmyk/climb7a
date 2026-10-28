@@ -1,1 +1,1 @@
-Climb 7A v0.9.3 - Correzione caricamento dashboard/AD/Progressi. Sostituire tutti i file su GitHub Pages. Non cancellare i dati del browser.
+Climb 7A v0.10 — carica i 6 file nella radice del repository GitHub Pages, sostituendo quelli precedenti. Mantieni lo stesso URL e non cancellare i dati del sito. Conserva una copia della versione precedente.
