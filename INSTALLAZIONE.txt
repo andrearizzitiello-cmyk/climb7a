@@ -1,1 +1,14 @@
-Climb 7A v0.15 — sostituisci i file di GitHub Pages. Non cancellare i dati del sito. Il motore ha modificato la libreria: le vecchie personalizzazioni v14 rimangono archiviate, ma non vengono applicate automaticamente a esercizi diversi. In caso di dolore attivo, la scheda originaria rimane visibile solo come riferimento e vengono proposte attività alternative non di presa da interrompere se dolorose. Non sostituisce una valutazione sanitaria.
+Climb 7A v0.23 — Programmazione adattiva e microcicli.
+
+Per aggiornare GitHub Pages, sostituisci i cinque file dell’app nella stessa cartella:
+  index.html
+  sw.js
+  manifest.webmanifest
+  icon-192.png
+  icon-512.png
+
+INSTALLAZIONE.txt contiene soltanto queste istruzioni.
+Non cancellare i dati del sito: profili, valutazioni e storico sono salvati nel localStorage dell’indirizzo esistente.
+La nuova versione compare come v0.23 nell’intestazione. Se vedi la precedente, ricarica l’app dopo l’aggiornamento della cache.
+La PWA funziona offline con una libreria interna e NON consulta automaticamente PubMed o le librerie online.
+Le dosi sono proposte prudenziali da individualizzare, non prescrizioni mediche o programmi clinicamente validati.
