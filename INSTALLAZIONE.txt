@@ -1,1 +1,4 @@
-Climb 7A v0.10 — carica i 6 file nella radice del repository GitHub Pages, sostituendo quelli precedenti. Mantieni lo stesso URL e non cancellare i dati del sito. Conserva una copia della versione precedente.
+Climb 7A v0.12 — Pianificatore 3/6/12 mesi.
+Sostituisci i sei file su GitHub Pages; mantieni lo stesso URL.
+I piani di lungo periodo sono separati per atleta e non sovrascrivono storico o programma 12 settimane.
+Conserva una copia dei dati prima di aggiornare.
