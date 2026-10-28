@@ -61,7 +61,7 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 </style>
 </head>
 <body><div class="app">
-<header><div class="brand">CLIMB 7A</div><div class="sub">v0.12 · Pianificazione</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
+<header><div class="brand">CLIMB 7A</div><div class="sub">v0.13 · Pianificazione</div><div class="profilebar"><select aria-label="Seleziona atleta" id="profileSelect" onchange="switchProfile(this.value)"></select><button class="secondary" onclick="show('profiles')">Cambia / gestisci</button></div></header>
 <main>
 <section class="screen active" id="home">
 <div class="hero"><div class="small">OBIETTIVO DEL CICLO</div><div class="big">7a ONSIGHT</div><div class="progress"><div id="goalbar"></div></div><div class="small" id="goalText">Base: 6a+ OS · 6c lavorato</div></div>
@@ -164,12 +164,17 @@ nav #nw .nav-icon{width:36px;height:32px;background:#222;color:white;border-radi
 <p class="small">L'eventuale dolore presente viene letto dal modulo Salute e recupero: non è necessario inserirlo una seconda volta.</p>
 </div>
 <div class="card"><h3>2 · Proposta di periodizzazione</h3><div id="lpSummary" class="notice"></div><div id="lpBlockList"></div><details class="collapsible"><summary>Mostra le settimane una per una</summary><div id="lpWeekList"></div></details></div>
+<div class="card"><h3>4 · Calendario operativo del piano</h3><p class="small">Sedute del piano lungo con date reali, indipendenti dal vecchio ciclo di 12 settimane. Scegli una settimana, poi registra le sedute. Il piano salvato resta separato per atleta.</p>
+<div class="row"><div><label for="lpActiveWeek">Settimana del piano</label><select id="lpActiveWeek" onchange="renderLongOperations()"></select></div><div><label for="lpJumpDate">Vai a una data</label><input type="date" id="lpJumpDate" onchange="jumpLongDate()"></div></div>
+<div id="lpOpsSummary" class="notice"></div><div id="lpOpsDays"></div>
+<details class="collapsible"><summary>Andamento e indicazioni AD per il piano lungo</summary><div id="lpOpsAD" class="small"></div></details>
+<p class="small">Le modifiche al piano lungo non riscrivono né cancellano le sedute del programma a 12 settimane. In caso di dolore attivo evita gli esercizi dolorosi e non aumentare i carichi senza valutazione professionale.</p></div>
 <div class="card"><h3>3 · Salvataggio e revisione</h3><p class="small">Il piano viene salvato per l'atleta selezionato, separatamente dalle sedute già completate. Puoi rigenerarlo in qualsiasi momento; un salvataggio sostituisce soltanto il piano di lungo periodo di quell'atleta.</p><div class="wraprow"><button type="button" onclick="saveLongPlan()">Salva piano per questo atleta</button><button type="button" class="secondary" onclick="restoreLongPlan()">Carica piano salvato</button></div><p id="lpSaveStatus" class="small"></p></div>
 </section>
 <section class="screen" id="more"><h2>Altro</h2>
 <div class="card"><h3>Profilo e programma</h3><div class="menu-stack"><button onclick="show('profiles')">👥 Profili atleti</button><button onclick="show('tests')">📋 Test e retest</button><button onclick="show('climb')">🧗 Diario vie</button><button onclick="show('library')">📚 Libreria esercizi</button><button onclick="show('longplan')">🗓 Pianificatore 3 / 6 / 12 mesi</button></div></div>
 <div class="card"><h3>AD e benessere</h3><div class="menu-stack"><button onclick="show('adpage')">◉ Analisi AD completa</button><button onclick="show('paintracker')">♡ Salute e recupero</button></div></div>
-<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.12. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
+<div class="card"><h3>Informazioni</h3><p class="small">Climb 7A v0.13. I dati rimangono memorizzati sul dispositivo e separati per atleta. Nessuna sincronizzazione online.</p></div></section></main>
 <nav><button aria-current="page" aria-label="Home" class="active" id="nh" onclick="show('home')" type="button"><span aria-hidden="true" class="nav-icon">⌂</span><span class="nav-label">Home</span></button><button aria-label="Calendario" id="np" onclick="show('plan')" type="button"><span aria-hidden="true" class="nav-icon">▦</span><span class="nav-label">Calendario</span></button><button aria-label="Allenati" id="nw" onclick="loadWorkout()" type="button"><span aria-hidden="true" class="nav-icon">◉</span><span class="nav-label">Allenati</span></button><button aria-label="Progressi" id="npr" onclick="show('progress')" type="button"><span aria-hidden="true" class="nav-icon">▥</span><span class="nav-label">Progressi</span></button><button aria-label="Altro" id="nm" onclick="show('more')" type="button"><span aria-hidden="true" class="nav-icon">☰</span><span class="nav-label">Altro</span></button></nav><div class="toast" id="toast"></div>
 </div>
 <script>
@@ -373,7 +378,7 @@ function show(id){
  document.querySelectorAll('nav button').forEach(x=>{x.classList.remove('active');x.removeAttribute('aria-current')});
  const m={home:'nh',plan:'np',workout:'nw',progress:'npr',climb:'npr',tests:'nm',profiles:'nm',paintracker:'nm',adpage:'nm',more:'nm',library:'nm',longplan:'nm'};
  if(m[id]){$(m[id]).classList.add('active');$(m[id]).setAttribute('aria-current','page')}
- refresh();if(id==='library')renderExerciseLibrary();if(id==='longplan')initializeLongPlan(false);window.scrollTo(0,0);
+ refresh();if(id==='library')renderExerciseLibrary();if(id==='longplan'){initializeLongPlan(false);renderLongOperations();}window.scrollTo(0,0);
 }
 function renderPlan(){$('weekBtns').innerHTML=weeks.map((w,i)=>`<button class="${i+1===selectedWeek?'sel':''}" onclick="setProfileWeek(${i+1})">${i+1}</button>`).join('');const w=weeks[selectedWeek-1];$('phase').textContent=w[0];$('weekFocus').textContent=w[1];$('weekTitle').textContent='Settimana '+selectedWeek;$('weekNote').textContent=w[2];renderCalendar();$('planDays').innerHTML=Array.from({length:7},(_,i)=>{const d=i+1,t=T[d];return `<div class="card"><div class="status ${isCompleted(selectedWeek,d)?'ok':'partial'}">${isCompleted(selectedWeek,d)?'✓ Completato':isPartial(selectedWeek,d)?'◐ Parziale':calendarEntry(selectedWeek,d).status==='skipped'?'– Saltata':calendarEntry(selectedWeek,d).status==='moved'?'↪ Riprogrammata '+(calendarEntry(selectedWeek,d).date||''):'○ Da fare'}</div><br><span class="tag">${t[0]}</span><span class="tag">${t[1]}</span><h3>${t[2]}</h3><ul class="list">${exFor(d,selectedWeek).map(x=>`<li class="small">${esc(x)}</li>`).join('')}</ul><button class="secondary" onclick="openCalendarDay(${d})">Apri seduta</button></div>`}).join('');}
 function compactPlanDays(){
@@ -580,6 +585,50 @@ function previewLongPlan(){if(!$('lpDuration'))return;const v=longPlanValues(),b
 function initializeLongPlan(force){if(!$('lpDuration'))return;const saved=load(longPlanKey());if(!force&&saved&&saved.duration){applyLongPlan(saved);return}const p=activeProfile();$('lpDuration').value='13';$('lpStart').value=iso;$('lpGoal').value=p.goal||'7a a vista';$('lpGrade').value=p.grade||'';$('lpPullups').value=p.pullups??'';$('lpExperience').value='advanced';$('lpDays').value='3';$('lpWeakness').value='lettura';$('lpEquipment').value='mixed';$('lpSaveStatus').textContent='Nessun piano a lungo termine salvato per questo atleta.';previewLongPlan()}
 function applyLongPlan(v){for(const [id,key] of [['lpDuration','duration'],['lpStart','start'],['lpGoal','goal'],['lpGrade','grade'],['lpPullups','pullups'],['lpExperience','experience'],['lpDays','days'],['lpWeakness','weakness'],['lpEquipment','equipment']])$(id).value=v[key]??'';previewLongPlan();$('lpSaveStatus').textContent=v.savedAt?'Piano salvato il '+new Date(v.savedAt).toLocaleString('it-IT')+'.':'Piano caricato.'}
 function restoreLongPlan(){const v=load(longPlanKey());if(v&&v.duration){applyLongPlan(v);toast('Piano caricato')}else{initializeLongPlan(true);toast('Non esiste ancora un piano salvato')}}
-function saveLongPlan(){const v=longPlanValues();v.savedAt=new Date().toISOString();save(longPlanKey(),v);$('lpSaveStatus').textContent='Piano salvato per '+activeProfile().name+' · '+new Date(v.savedAt).toLocaleString('it-IT');toast('Piano trimestrale / semestrale / annuale salvato')}
+function saveLongPlan(){const v=longPlanValues();v.savedAt=new Date().toISOString();save(longPlanKey(),v);$('lpSaveStatus').textContent='Piano salvato per '+activeProfile().name+' · '+new Date(v.savedAt).toLocaleString('it-IT');toast('Piano trimestrale / semestrale / annuale salvato')};renderLongOperations()
+
+// v0.13: Long plan uses an independent week/day namespace (1..52), preserving legacy 12-week history.
+function longSessionKey(){return scopedKey('long_sessions_v1')}
+function longRecords(){const x=load(longSessionKey());return Array.isArray(x)?x:[]}
+function longData(){return load(longPlanKey())?.duration ? load(longPlanKey()):null}
+function longActiveWeek(){return Math.max(1,Math.min(longData()?.duration||13,Number($('lpActiveWeek').value)||1))}
+function longDayISO(v,week,day){const d=new Date(v.start+'T12:00:00');d.setDate(d.getDate()+(week-1)*7 + (day-1));return localISO(d)}
+function longDayTemplates(v,week){const phase=longPlanPhases(v).find(p=>week>=p.start&&week<=p.end);const low=v.days===2,phaseName=phase?.name||'Preparazione';const deload=week%4===0||week===v.duration;const arr=[];
+ const add=(d,kind,title,dose)=>arr.push({day:d,kind,title,dose,date:longDayISO(v,week,d)});
+ add(1,'Tecnica','Tecnica: piedi, bacino e lettura',deload?'25–35 min controllati':'35–50 min, progressione facile');
+ add(2,'Boulder','Boulder: qualità del movimento',deload?'3–4 blocchi facili':'4–6 blocchi controllati, recupero completo');
+ if(v.days>=4)add(3,'Complementare','Core, mobilità e forza generale',deload?'20 min leggeri':'25–40 min, senza cedimento');
+ if(v.days>=3)add(4,'Lead','Lead: vie a vista e gestione dei riposi',deload?'2–3 vie facili':'3–5 vie progressive, qualità prima del volume');
+ if(v.days>=5)add(5,'Complementare','Resistenza tecnica facile',deload?'20 min facili':'20–35 min senza affaticamento elevato');
+ if(low)add(6,'Recupero','Recupero e mobilità','20–30 min facoltativi');else add(6,'Outdoor','Falesia o montagna: tecnica e lettura',deload?'Uscita facile o recupero':'Vie progressive, attenzione al recupero');
+ return {phaseName,deload,arr};
+}
+function longRecord(w,d){return longRecords().find(x=>+x.week===+w&&+x.day===+d)||null}
+function longCompletion(w,d,status){const v=longData();if(!v)return;const a=longRecords().filter(x=>!(+x.week===w&&+x.day===d));const entry=longDayTemplates(v,w).arr.find(x=>x.day===d);if(!entry)return;
+ const rpe=Number($('lsRpe'+d)?.value||0),fi=Number($('lsFi'+d)?.value||0),ff=Number($('lsFf'+d)?.value||0);
+ if([rpe,fi,ff].some(n=>n<0||n>10)){toast('Usa valori tra 0 e 10');return}
+ if(status==='completed'&&(!rpe||!fi||!ff)){toast('Per completare registra RPE e fatica iniziale/finale');return}
+ const x={week:w,day:d,date:entry.date,kind:entry.kind,title:entry.title,status,rpe,fi,ff,notes:($('lsNote'+d)?.value||'').trim(),updatedAt:new Date().toISOString()};a.push(x);save(longSessionKey(),a);renderLongOperations();toast(status==='completed'?'Seduta del piano lungo completata':'Seduta del piano lungo salvata');
+}
+function longReset(w,d){if(!confirm('Azzerare solo questa seduta del piano lungo? I dati delle altre sedute e del ciclo da 12 settimane non saranno modificati.'))return;save(longSessionKey(),longRecords().filter(x=>!(+x.week===w&&+x.day===d)));renderLongOperations();toast('Seduta azzerata')}
+function longAD(w){const v=longData();if(!v)return 'Salva un piano per attivare il monitoraggio.';const rows=longRecords().filter(x=>+x.week<=w&&x.status==='completed').sort((a,b)=>a.date.localeCompare(b.date));const recent=rows.slice(-4);
+ if(activePain())return 'Dolore attivo: nessun aumento proposto. Evita attività dolorose e chiedi una valutazione professionale se persiste.';
+ if(!recent.length)return 'Nessuna seduta completata: registra RPE e fatica iniziale/finale per ricevere una valutazione.';
+ const hot=recent.some(x=>x.rpe>=8||x.fi>=7||x.ff>=8);
+ if(hot)return 'Recupero prioritario: RPE o fatica elevati nelle ultime sedute. Valuta meno volume e più riposo; non aumentare i carichi.';
+ if(recent.length<3)return `Registrate ${recent.length} sedute completate: conserva i carichi. Servono più sedute comparabili per valutare una progressione.`;
+ const last=recent.slice(-3);const avg=(k)=>(last.reduce((a,x)=>a+x[k],0)/last.length).toFixed(1);
+ if(last.every(x=>x.rpe<=6&&x.fi<=4&&x.ff<=5))return `Buona tolleranza generale (RPE medio ${avg('rpe')}). Valuta un piccolo incremento solo dopo confronto fra sedute dello stesso tipo e senza dolore; nessuna modifica automatica.`;
+ return `RPE medio ${avg('rpe')}, fatica finale ${avg('ff')} (ultime 3 sedute). Mantieni il carico e prosegui con i controlli del piano.`;
+}
+function renderLongOperations(){if(!$('lpActiveWeek'))return;const v=longData();if(!v){$('lpOpsSummary').textContent='Salva prima il piano da 3, 6 o 12 mesi.';$('lpOpsDays').innerHTML='';$('lpOpsAD').textContent='Nessun piano salvato.';return}
+ const sel=$('lpActiveWeek'),w=Math.min(v.duration,Math.max(1,+sel.value||1));if(sel.options.length!==v.duration){sel.innerHTML=Array.from({length:v.duration},(_,i)=>`<option value="${i+1}">Settimana ${i+1}</option>`).join('')}sel.value=w;
+ const t=longDayTemplates(v,w),completed=t.arr.filter(e=>longRecord(w,e.day)?.status==='completed').length;
+ $('lpOpsSummary').textContent=`Settimana ${w}/${v.duration} · ${t.phaseName}${t.deload?' · Scarico':''} · ${completed}/${t.arr.length} sedute completate`;
+ $('lpOpsDays').innerHTML=t.arr.map(e=>{const x=longRecord(w,e.day),status=x?.status||'pending';return `<details class="library-item"><summary><b>${esc(e.date)} · ${esc(e.title)}</b> <span>${status==='completed'?'✓ Completata':status==='skipped'?'– Saltata':status==='partial'?'◐ Parziale':'○ Da fare'} ▾</span></summary><p class="small">${esc(e.dose)} · ${esc(t.phaseName)}</p><div class="row"><div><label>RPE (1–10)</label><input id="lsRpe${e.day}" type="number" min="1" max="10" value="${x?.rpe||''}"></div><div><label>Fatica iniziale</label><input id="lsFi${e.day}" type="number" min="1" max="10" value="${x?.fi||''}"></div><div><label>Fatica finale</label><input id="lsFf${e.day}" type="number" min="1" max="10" value="${x?.ff||''}"></div></div><label>Note</label><textarea id="lsNote${e.day}" rows="2">${esc(x?.notes||'')}</textarea><div class="wraprow"><button onclick="longCompletion(${w},${e.day},'completed')">Completa</button><button class="secondary" onclick="longCompletion(${w},${e.day},'partial')">Salva parziale</button><button class="secondary" onclick="longCompletion(${w},${e.day},'skipped')">Salta</button><button class="ghost" onclick="longReset(${w},${e.day})">Ripristina</button></div></details>`}).join('');
+ $('lpOpsAD').textContent=longAD(w);
+}
+function jumpLongDate(){const v=longData(),date=$('lpJumpDate').value;if(!v||!date)return;const start=new Date(v.start+'T12:00:00'),target=new Date(date+'T12:00:00');const diff=Math.floor((target-start)/86400000);if(diff<0||diff>=v.duration*7){toast('La data è fuori dal piano salvato');return}const w=Math.floor(diff/7)+1;$('lpActiveWeek').value=w;renderLongOperations();toast('Settimana '+w+' del piano')}
+
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"))}</script></body></html>
